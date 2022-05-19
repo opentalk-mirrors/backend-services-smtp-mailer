@@ -1,0 +1,20 @@
+{{fluent(key="invite", lang = language, name=event.name) }}
+
+{{ fluent(key="invite.p", lang = language, name=inviter.first_name) }} {{ event_link }}
+
+{{ fluent(key="meeting-information", lang = language) }}
+{{ fluent(key="meeting-information-title", lang = language) }}: {{ event.name }}
+{% if event.start_time is string -%}
+{% if event.end_time is string -%}
+{{ fluent(key="meeting-information-when", lang = language) }}: {{ event.start_time | date(format="%d.%m.%Y %H:%M")}}-{{ event.end_time | date(format="%H:%M")}}
+{%else -%}
+{{ fluent(key="meeting-information-when", lang = language) }}: {{ event.start_time | date(format="%d.%m.%Y %H:%M")}}
+{% endif -%}
+{% endif %}
+{{ fluent(key="meeting-information-link", lang = language) }}: {{ join_link }}
+{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}
+
+{{ fluent(key="questions", lang = language) }}
+{{ fluent(key="questions.p", lang = language) }}
+
+

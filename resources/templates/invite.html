@@ -1,0 +1,76 @@
+{% import "macros.html" as macros %}
+<html>
+    <style>
+        .btn {
+            background: #3498db;
+            background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+            background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+            background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+            background-image: -o-linear-gradient(top, #3498db, #2980b9);
+            background-image: linear-gradient(to bottom, #3498db, #2980b9);
+            -webkit-border-radius: 28;
+            -moz-border-radius: 28;
+            border-radius: 28px;
+            font-family: Arial;
+            color: #ffffff;
+            font-size: 20px;
+            padding: 10px 20px 10px 20px;
+            text-decoration: none;
+          }
+          
+          .btn:hover {
+            background: #3cb0fd;
+            background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+            text-decoration: none;
+          }
+    </style>
+    <body>
+        <div id="header">LOGO</div>
+        <div id="cta">
+            <h1>{{fluent(key="invite", lang = language, name=event.name) }}</h1>
+            <p>
+                {{ fluent(key="invite.p", lang = language, name=inviter.first_name) }}
+                {# Buttons probably dont work in emails, style a `a`link here #}
+                {{ macros::link(fluent_key = "view-in-dashboard-link", lang = language, href = event_link, class="btn") }}
+            </p>
+        </div>
+
+        <div id="details">
+            <h1>{{ fluent(key="meeting-information", lang = language) }}</h1>
+            <p>
+                {# Mixing html with i18n is always hard. This could be improved here #}
+                <b>{{ fluent(key="meeting-information-title", lang = language) }}:</b> {{ event.name}}
+                <br />
+                {# fluent-rs currently does not support the datetime stuff. So we hardcode the european format here#}
+                {# This should have more logic to allow for 24h+ events #}
+
+                {% if event.start_time is string -%}
+                    {% if event.end_time is string -%}
+                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time | date(format="%d.%m.%Y %H:%M")}}-{{ event.end_time | date(format="%H:%M")}}
+                    {%else -%}
+                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time | date(format="%d.%m.%Y %H:%M")}}
+                    {% endif -%}
+                    <br />
+                {% endif %}
+                <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = join_link) }}
+                <br/>
+
+                <b>{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}</b>
+            </p>
+            <h1>{{fluent(key="questions", lang = language)}}</h1>
+            <p>
+                {{fluent(key="questions.p", lang = language)}}
+            </p>
+        </div>
+        <div id="footer">
+            {{ fluent(key="join-directly-fallback", lang = language, link = join_link)|safe }}
+            {{ fluent(key="view-in-dashboard-fallback", lang = language, link = event_link)|safe }}
+        </div>
+    </body>
+</html>
+
+
