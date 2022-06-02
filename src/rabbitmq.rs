@@ -46,8 +46,4 @@ pub enum RabbitMqError {
     JsonWithoutPath(#[from] serde_json::Error),
     #[error(transparent)]
     Lapin(#[from] lapin::Error),
-    #[error(transparent)]
-    Other {
-        source: Box<dyn std::error::Error + Send + Sync>,
-    },
 }

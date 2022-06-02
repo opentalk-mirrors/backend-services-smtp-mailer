@@ -1,14 +1,15 @@
-use crate::{mail::MailBuilder, settings};
 use chrono::FixedOffset;
-use mail_worker_proto as proto;
-use proto::v1::{CallIn, Event, Room, Time};
+use mail_worker_proto as protocol;
+use protocol::v1::{CallIn, Event, Room, Time};
 use uuid::Uuid;
+
+use crate::{mail::MailBuilder, mail::MailTemplate, settings};
 
 pub fn preview_invite(settings: &settings::Settings, html: bool, lang: &str) -> String {
     let mail_builder = MailBuilder::new(settings).unwrap();
 
-    let demo_message = proto::v1::Message::RegisteredEventInvite {
-        invitee: proto::v1::User {
+    let demo_message = protocol::v1::RegisteredEventInvite {
+        invitee: protocol::v1::User {
             email: "receiver@example.org".into(),
             title: "10x developer".into(),
             first_name: "Alice".into(),
@@ -46,7 +47,7 @@ pub fn preview_invite(settings: &settings::Settings, html: bool, lang: &str) -> 
                 sip_password: None,
             },
         },
-        inviter: proto::v1::User {
+        inviter: protocol::v1::User {
             email: "sender@example.org".into(),
             title: "10x developer".into(),
             first_name: "Alice".into(),
@@ -56,16 +57,16 @@ pub fn preview_invite(settings: &settings::Settings, html: bool, lang: &str) -> 
     };
 
     if html {
-        return mail_builder
-            .generate_email_html(&demo_message)
+        return demo_message
+            .generate_email_html(&mail_builder)
             .unwrap_or_else(|e| {
                 log::error!("Error while generating html: {e:?}");
                 "".into()
             });
     }
 
-    mail_builder
-        .generate_email_body(&demo_message)
+    demo_message
+        .generate_email_plain(&mail_builder)
         .unwrap_or_else(|e| {
             log::error!("Error while generating plain text: {e:?}");
             "".into()

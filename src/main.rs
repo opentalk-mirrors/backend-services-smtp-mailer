@@ -1,7 +1,6 @@
-use std::process::exit;
-
 use clap::{ArgEnum, Parser, Subcommand};
-use mailer::{preview, run, settings};
+use smtp_mailer::{preview, run, settings};
+use std::process::exit;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
@@ -37,9 +36,9 @@ enum OutputVariant {
     Plain,
 }
 
-impl Into<bool> for &OutputVariant {
-    fn into(self) -> bool {
-        match self {
+impl From<&OutputVariant> for bool {
+    fn from(val: &OutputVariant) -> Self {
+        match val {
             OutputVariant::Html => true,
             OutputVariant::Plain => false,
         }
@@ -68,7 +67,7 @@ async fn main() -> anyhow::Result<()> {
             TemplateVariate::Invite => {
                 println!(
                     "{}",
-                    preview::preview_invite(&settings, type_.into(), &language)
+                    preview::preview_invite(&settings, type_.into(), language)
                 );
             }
         }

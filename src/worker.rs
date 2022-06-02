@@ -1,9 +1,9 @@
-use crate::{mail::MailBuilder, settings};
 use anyhow::Result;
 use futures::stream::StreamExt;
 use lapin::options::BasicRejectOptions;
-use lettre::message::{header, MultiPart, SinglePart};
 use mail_worker_proto as proto;
+
+use crate::{mail::MailBuilder, settings};
 
 pub struct Worker<T> {
     mail_backend: T,
@@ -59,7 +59,7 @@ where
     }
 
     async fn handler(&self, data: &[u8]) -> Result<()> {
-        let de = &mut serde_json::Deserializer::from_slice(&data);
+        let de = &mut serde_json::Deserializer::from_slice(data);
         let versioned_message: proto::MailTask = serde_path_to_error::deserialize(de)?;
 
         match versioned_message {
@@ -81,22 +81,6 @@ where
     anyhow::Error: From<T::Error>,
 {
     let email = mail_builder.generate_email(message)?;
-
-    let txt = mail_builder.generate_email_body(message)?;
-    let html = mail_builder.generate_email_html(message)?;
-    let email = email.multipart(
-        MultiPart::alternative()
-            .singlepart(
-                SinglePart::builder()
-                    .header(header::ContentType::TEXT_PLAIN)
-                    .body(txt),
-            )
-            .singlepart(
-                SinglePart::builder()
-                    .header(header::ContentType::TEXT_HTML)
-                    .body(html),
-            ),
-    )?;
 
     mail_backend.send(email).await?;
 

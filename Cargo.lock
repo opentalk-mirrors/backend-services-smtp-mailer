@@ -1531,43 +1531,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mailer"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "bytes",
- "chrono",
- "clap",
- "config",
- "css-inline",
- "env_logger",
- "fluent-templates",
- "futures",
- "http-body",
- "hyper",
- "hyper-rustls",
- "lapin",
- "lettre",
- "log",
- "mail-worker-proto",
- "percent-encoding",
- "pin-project",
- "pretty_assertions",
- "serde",
- "serde_json",
- "serde_path_to_error",
- "tera",
- "thiserror",
- "tokio",
- "tokio-tower",
- "tower",
- "tower-http",
- "url",
- "uuid",
-]
-
-[[package]]
 name = "maplit"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2570,6 +2533,43 @@ name = "smallvec"
 version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2dd574626839106c320a323308629dcb1acfc96e32a8cba364ddc61ac23ee83"
+
+[[package]]
+name = "smtp-mailer"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "bytes",
+ "chrono",
+ "clap",
+ "config",
+ "css-inline",
+ "env_logger",
+ "fluent-templates",
+ "futures",
+ "http-body",
+ "hyper",
+ "hyper-rustls",
+ "lapin",
+ "lettre",
+ "log",
+ "mail-worker-proto",
+ "percent-encoding",
+ "pin-project",
+ "pretty_assertions",
+ "serde",
+ "serde_json",
+ "serde_path_to_error",
+ "tera",
+ "thiserror",
+ "tokio",
+ "tokio-tower",
+ "tower",
+ "tower-http",
+ "url",
+ "uuid",
+]
 
 [[package]]
 name = "snafu"

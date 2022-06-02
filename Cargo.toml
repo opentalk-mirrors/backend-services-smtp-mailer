@@ -1,5 +1,5 @@
 [package]
-name = "mailer"
+name = "smtp-mailer"
 version = "0.1.0"
 edition = "2021"
 publish = false

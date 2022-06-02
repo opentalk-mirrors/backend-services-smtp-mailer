@@ -1,22 +1,29 @@
+use config::{Config, ConfigError, Environment, File, FileFormat};
+use percent_encoding::percent_decode_str;
+use serde::{de, Deserialize, Deserializer};
 use std::{
     path::{Path, PathBuf},
     str::FromStr,
 };
-
-use config::{Config, ConfigError, Environment, File, FileFormat};
-use percent_encoding::percent_decode_str;
-use serde::{de, Deserialize, Deserializer};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Settings {
     #[serde(default)]
     pub rabbit_mq: RabbitMqConfig,
 
+    #[serde(default)]
     pub smtp: SmtpConfig,
 
-    // #[serde(default)]
+    #[serde(default)]
     pub templates: Templates,
+
+    #[serde(default)]
     pub template_builder: TemplateBuilder,
+
+    #[serde(default)]
+    pub frontend: Frontend,
+
+    #[serde(default)]
     pub languages: Languages,
 }
 
@@ -34,6 +41,8 @@ impl Settings {
     }
 }
 
+/// RabbitMQ Config containing the url to connect to
+/// and the queue_name for incoming mail tasks
 #[derive(Debug, Clone, Deserialize)]
 pub struct RabbitMqConfig {
     #[serde(default = "rabbitmq_default_url")]
@@ -59,12 +68,9 @@ fn rabbitmq_default_queue_name() -> String {
     "opentalk_mailer".to_owned()
 }
 
-#[derive(Debug, Clone, Deserialize)]
-pub enum SmtpSecurity {
-    StartTls,
-    Tls,
-}
-
+/// A SMTP URI type
+///
+/// # Examples
 /// SMTP Cleartext: smtp://foo:bar@my-mailserver:1234/?disable_starttls=true
 /// SMTP with StartTLS: smtp://foo:bar@my-mailserver:1234/
 /// SMTP with implicit TLS: smtps://foo:bar@my-mailserver:1234/
@@ -105,7 +111,7 @@ impl SmtpUri {
 
     pub fn credentials(&self) -> anyhow::Result<(Option<String>, Option<String>)> {
         let username = self.0.username();
-        let res = if username.len() == 0 {
+        let res = if username.is_empty() {
             (
                 None,
                 self.0
@@ -139,29 +145,65 @@ where
     SmtpUri::from_str(&string).map_err(de::Error::custom)
 }
 
+/// SMTP Config
+///
+/// Configure with which SMTP server mails should be send.
 #[derive(Debug, Clone, Deserialize)]
 pub struct SmtpConfig {
-    #[serde(deserialize_with = "smtp_uri_desirializer")]
+    #[serde(
+        deserialize_with = "smtp_uri_desirializer",
+        default = "smtp_default_server"
+    )]
     pub smtp_server: SmtpUri,
 }
 
+impl Default for SmtpConfig {
+    fn default() -> Self {
+        Self {
+            smtp_server: smtp_default_server(),
+        }
+    }
+}
+
+fn smtp_default_server() -> SmtpUri {
+    SmtpUri::from_str("smtp://localhost:25").unwrap()
+}
+/// MailTemplate Config
+///
+/// Paths to a set of txt and html templates for a specific mail task
 #[derive(Debug, Clone, Deserialize)]
 struct MailTemplate {
     txt: PathBuf,
     html: PathBuf,
 }
 
+/// Mail Templates config
+///
+/// Uses MailTemplate to point to sets of templates for specific mail tasks
 #[derive(Debug, Clone, Deserialize)]
 pub struct Templates {
-    #[serde(default = "template_default_invite")]
-    invite: MailTemplate,
+    #[serde(default = "template_default_registered_invite")]
+    registered_invite: MailTemplate,
+    #[serde(default = "template_default_unregistered_invite")]
+    unregistered_invite: MailTemplate,
 }
 
 impl Templates {
     pub fn iter(&self) -> impl Iterator<Item = (&Path, &str)> {
         vec![
-            (self.invite.txt.as_ref(), "invite.txt"),
-            (self.invite.html.as_ref(), "invite.html"),
+            (self.registered_invite.txt.as_ref(), "registered_invite.txt"),
+            (
+                self.registered_invite.html.as_ref(),
+                "registered_invite.html",
+            ),
+            (
+                self.unregistered_invite.txt.as_ref(),
+                "registered_invite.txt",
+            ),
+            (
+                self.unregistered_invite.html.as_ref(),
+                "registered_invite.html",
+            ),
         ]
         .into_iter()
     }
@@ -170,18 +212,51 @@ impl Templates {
 impl Default for Templates {
     fn default() -> Self {
         Self {
-            invite: template_default_invite(),
+            registered_invite: template_default_registered_invite(),
+            unregistered_invite: template_default_unregistered_invite(),
         }
     }
 }
 
-fn template_default_invite() -> MailTemplate {
+fn template_default_registered_invite() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/invite.txt".into(),
-        html: "resources/templates/invite.html".into(),
+        txt: "resources/templates/registered_invite.txt".into(),
+        html: "resources/templates/registered_invite.html".into(),
     }
 }
 
+fn template_default_unregistered_invite() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/unregistered_invite.txt".into(),
+        html: "resources/templates/unregistered_invite.html".into(),
+    }
+}
+
+/// Language config
+///
+/// Currently only setting the default_language (a fallback) is suported
+#[derive(Debug, Clone, Deserialize)]
+pub struct Frontend {
+    #[serde(default = "frontend_default_base_url")]
+    pub base_url: String,
+}
+
+impl Default for Frontend {
+    fn default() -> Self {
+        Self {
+            base_url: frontend_default_base_url(),
+        }
+    }
+}
+
+fn frontend_default_base_url() -> String {
+    "https://opentalk.example.org/".into()
+}
+
+/// Template Builder Config
+///
+/// Some information is currently not present in the mail tasks, e.g. baseURLs
+/// This can be configured here.
 #[derive(Debug, Clone, Deserialize)]
 pub struct TemplateBuilder {
     #[serde(default = "email_default_dashboard_event_link_builder")]
@@ -205,16 +280,19 @@ impl Default for TemplateBuilder {
 }
 
 fn email_default_dashboard_event_link_builder() -> String {
-    "https://opentalk.example.org/dashboard/{event_id}".into()
+    "https://{base_url}dashboard/{event_id}".into()
 }
 fn email_default_join_link_builder() -> String {
-    "https://opentalk.example.org/lobby/{room_id}".into()
+    "https://{base_url}lobby/{room_id}".into()
 }
 
 fn email_default_guest_link_builder() -> String {
-    "https://opentalk.example.org/invite/{invite_id}".into()
+    "https://{base_url}invite/{invite_id}".into()
 }
 
+/// Language config
+///
+/// Currently only setting the default_language (a fallback) is suported
 #[derive(Debug, Clone, Deserialize)]
 pub struct Languages {
     #[serde(default = "languages_default_default_language")]
