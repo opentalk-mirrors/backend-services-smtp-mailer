@@ -6,8 +6,9 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# mail-worker-proto = { git = "https://git.heinlein-video.de/heinlein-video/k3k-controller" }
-mail-worker-proto = { path = "../controller/crates/mail-worker-proto", package = "mail-worker-proto" }
+# mail-worker-proto = { git = "https://git.heinlein-video.de/heinlein-video/k3k-controller", package = "mail-worker-proto"  }
+mail-worker-proto = { git = "ssh://git@git.heinlein-video.de:222/r.floren/k3k-controller.git", b = "mails", package = "mail-worker-proto" }
+# mail-worker-proto = { path = "../controller/crates/mail-worker-proto", package = "mail-worker-proto" }
 
 lapin = { version = "2.1.1" }
 hyper = { version = "0.14.18", features = ["full"] }
