@@ -16,5 +16,3 @@
 
 {{ fluent(key="questions", lang = language) }}
 {{ fluent(key="questions.p", lang = language) }}
-
-
