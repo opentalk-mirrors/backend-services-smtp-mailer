@@ -7,17 +7,11 @@ publish = false
 
 [dependencies]
 # mail-worker-proto = { git = "https://git.heinlein-video.de/heinlein-video/k3k-controller", package = "mail-worker-proto"  }
-mail-worker-proto = { git = "ssh://git@git.heinlein-video.de:222/r.floren/k3k-controller.git", b = "mails", package = "mail-worker-proto" }
-# mail-worker-proto = { path = "../controller/crates/mail-worker-proto", package = "mail-worker-proto" }
+# mail-worker-proto = { git = "ssh://git@git.heinlein-video.de:222/r.floren/k3k-controller.git", version = "0.1.0", branch = "mails", package = "mail-worker-proto" }
+mail-worker-proto = { path = "vendored/k3k-controller/crates/mail-worker-proto", package = "mail-worker-proto" }
 
 lapin = { version = "2.1.1" }
-hyper = { version = "0.14.18", features = ["full"] }
-hyper-rustls = { version = "0.23.0", features = ["http2"] }
-tower = { version = "0.4.12", features = ["buffer", "util", "make"] }
-tower-http = { version = "0.3.3", features = ["map-response-body"] }
-tokio-tower = "0.6.0"
 tokio = { version = "1.18.2", features = ["full"] }
-http-body = { version = "0.4.4" }
 
 clap = { version = "3.1.18", features = ["derive"] }
 config = "0.13.1"
@@ -36,6 +30,7 @@ pin-project = "1.0.10"
 futures = "0.3.21"
 bytes = "1.1.0"
 uuid = { version = "1.0.0", features = ["serde"] }
+
 percent-encoding = "2.1"
 tera = { version = "1.15.0", features = ["builtins"] }
 fluent-templates = { version = "0.7.1", features = ["tera"] }

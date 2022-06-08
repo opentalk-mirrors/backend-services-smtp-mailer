@@ -1,0 +1,4 @@
+[submodule "vendored/k3k-controller"]
+	path = vendored/k3k-controller
+	url = ../k3k-controller
+	branch = mails

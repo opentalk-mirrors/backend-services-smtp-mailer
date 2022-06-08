@@ -1,5 +1,8 @@
 image: git.heinlein-video.de:5050/heinlein-video/rust:1.59
 
+variables:
+  GIT_SUBMODULE_STRATEGY: normal
+
 stages:
   - lint
   - test
@@ -46,27 +49,8 @@ test:cargo_test:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_PIPELINE_SOURCE == 'schedule'
   stage: test
-  variables:
-    # Set ENV vars for services
-    POSTGRES_DB: feedback
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: password123
-    POSTGRES_HOST_AUTH_METHOD: trust
-  services:
-    - name: postgres:13-alpine
-      alias: postgres
   before_script:
     - rustup component add rustfmt
-    - cargo install diesel_cli --no-default-features --features="barrel-migrations,barrel/pg,postgres"
-    - |
-      echo "api_key = \"12345\"
-      [database]
-      url = \"postgres://postgres:password123@postgres:5432/feedback\"
-      [http]
-      port = 8000
-      cors.allowed_origin = [\"*\"]
-      " > config.toml
-    - cat config.toml
   script:
     - cargo test --workspace --locked
 

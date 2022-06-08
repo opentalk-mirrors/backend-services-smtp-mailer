@@ -14,7 +14,7 @@ impl MailTemplate for UnregisteredEventInvite {
         } else {
             &builder.default_language
         };
-        context.insert("language", &dbg!(language));
+        context.insert("language", &language);
 
         context.insert("invitee-email", &self.invitee);
         context.insert("inviter", &self.inviter);
@@ -56,7 +56,7 @@ impl MailTemplate for UnregisteredEventInvite {
     }
 
     fn generate_subject(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
-        let subject_args = subject_args(&self.event, &self.invitee, &self.inviter);
+        let subject_args = subject_args(&self.event, &self.inviter);
         let lang = if !self.inviter.language.is_empty() {
             self.inviter.language.parse()?
         } else {
@@ -73,7 +73,6 @@ impl MailTemplate for UnregisteredEventInvite {
 
 fn subject_args(
     event: &protocol::v1::Event,
-    invitee: &protocol::v1::Email,
     inviter: &protocol::v1::User,
 ) -> HashMap<String, FluentValue<'static>> {
     let mut args: HashMap<String, FluentValue<'static>> = HashMap::new();
