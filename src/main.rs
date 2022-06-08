@@ -47,7 +47,8 @@ impl From<&OutputVariant> for bool {
 
 #[derive(Debug, Clone, ArgEnum)]
 enum TemplateVariate {
-    Invite,
+    RegisteredInvite,
+    UnregisteredInvite,
 }
 
 #[tokio::main]
@@ -64,10 +65,16 @@ async fn main() -> anyhow::Result<()> {
     }) = &args.command
     {
         match template {
-            TemplateVariate::Invite => {
+            TemplateVariate::RegisteredInvite => {
                 println!(
                     "{}",
-                    preview::preview_invite(&settings, type_.into(), language)
+                    preview::preview_registered_invite(&settings, type_.into(), language)
+                );
+            }
+            TemplateVariate::UnregisteredInvite => {
+                println!(
+                    "{}",
+                    preview::preview_unregistered_invite(&settings, type_.into(), language)
                 );
             }
         }

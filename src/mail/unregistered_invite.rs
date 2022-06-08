@@ -27,7 +27,7 @@ impl MailTemplate for UnregisteredEventInvite {
 
         builder
             .tera
-            .render("invite.txt", &context)
+            .render("unregistered_invite.txt", &context)
             .map_err(Into::into)
     }
 
@@ -49,7 +49,7 @@ impl MailTemplate for UnregisteredEventInvite {
             &builder.create_dashboard_event_link(&self.event),
         );
 
-        let html = builder.tera.render("invite.html", &context)?;
+        let html = builder.tera.render("unregistered_invite.html", &context)?;
 
         let inliner = css_inline::CSSInliner::options().build();
         inliner.inline(&html).map_err(Into::into)

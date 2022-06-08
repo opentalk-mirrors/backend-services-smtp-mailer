@@ -198,11 +198,11 @@ impl Templates {
             ),
             (
                 self.unregistered_invite.txt.as_ref(),
-                "registered_invite.txt",
+                "unregistered_invite.txt",
             ),
             (
                 self.unregistered_invite.html.as_ref(),
-                "registered_invite.html",
+                "unregistered_invite.html",
             ),
         ]
         .into_iter()
