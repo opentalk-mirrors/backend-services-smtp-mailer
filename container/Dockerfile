@@ -2,6 +2,7 @@ FROM rust:slim AS builder
 
 WORKDIR /opt
 RUN USER=root cargo new --bin smtp-mailer
+RUN apt-get update && apt-get install -y git
 
 WORKDIR /opt/smtp-mailer
 COPY ./.cargo/config ./.cargo/config
