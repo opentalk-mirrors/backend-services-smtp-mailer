@@ -4,7 +4,7 @@ WORKDIR /opt
 RUN USER=root cargo new --bin smtp-mailer
 
 WORKDIR /opt/smtp-mailer
-COPY ./cargo/config ./.cargo/config
+COPY ./.cargo/config ./.cargo/config
 COPY ./vendored ./vendored
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
