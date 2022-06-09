@@ -21,7 +21,8 @@ mail_task_queue = "opentalk_mailer"
 
 
 # [templates]
-invite
+# registered_invite = {html = "resources/templates/registered_invite.html", txt = "resources/templates/registered_invite.html"}
+# unregistered_invite = {html = "resources/templates/unregistered_invite.html", txt = "resources/templates/unregistered_invite.html"}
 
 # [languages]
 # default_language = 'de-DE'
