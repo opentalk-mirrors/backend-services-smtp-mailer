@@ -1,7 +1,12 @@
 FROM rust:slim AS builder
 
+ARG GIT_SHA
+ARG GIT_REF
+ARG VERGEN_GIT_SHA=$GIT_SHA
+ARG VERGEN_GIT_BRANCH=$GIT_REF
+
 WORKDIR /opt
-RUN USER=root cargo new --bin smtp-mailer
+RUN USER=root cargo new --bin smtp-mailer --vcs none
 RUN apt-get update && apt-get install -y git
 
 WORKDIR /opt/smtp-mailer
