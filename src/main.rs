@@ -3,7 +3,8 @@ use smtp_mailer::{preview, run, settings};
 use std::process::exit;
 
 #[derive(Parser, Debug)]
-#[clap(author, version, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
+#[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
+#[clap(global_setting(clap::AppSettings::NoAutoVersion))]
 pub(crate) struct Args {
     /// Name of the person to greet
     #[clap(short, long, default_value = "config.toml")]
@@ -11,6 +12,9 @@ pub(crate) struct Args {
 
     #[clap(subcommand)]
     command: Option<Commands>,
+
+    #[clap(long)]
+    version: bool,
 }
 
 #[derive(Debug, Subcommand)]
@@ -54,6 +58,12 @@ enum TemplateVariate {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
+
+    if args.version {
+        print_version_info();
+        exit(0);
+    }
+
     env_logger::init();
 
     let settings = settings::Settings::load(&args.config)?;
@@ -84,4 +94,26 @@ async fn main() -> anyhow::Result<()> {
 
     run(settings).await?;
     Ok(())
+}
+
+const BUILD_INFO: [(&str, Option<&str>); 10] = [
+    ("Build Timestamp", option_env!("VERGEN_BUILD_TIMESTAMP")),
+    ("Build Version", option_env!("VERGEN_BUILD_SEMVER")),
+    ("Commit SHA", option_env!("VERGEN_GIT_SHA")),
+    ("Commit Date", option_env!("VERGEN_GIT_COMMIT_TIMESTAMP")),
+    ("Commit Branch", option_env!("VERGEN_GIT_BRANCH")),
+    ("rustc Version", option_env!("VERGEN_RUSTC_SEMVER")),
+    ("rustc Channel", option_env!("VERGEN_RUSTC_CHANNEL")),
+    ("rustc Host Triple", option_env!("VERGEN_RUSTC_HOST_TRIPLE")),
+    (
+        "cargo Target Triple",
+        option_env!("VERGEN_CARGO_TARGET_TRIPLE"),
+    ),
+    ("cargo Profile", option_env!("VERGEN_CARGO_PROFILE")),
+];
+
+fn print_version_info() {
+    for (label, value) in BUILD_INFO {
+        println!("{label}: {value}", value = value.unwrap_or("N/A"));
+    }
 }

@@ -3,7 +3,8 @@ name = "smtp-mailer"
 version = "0.1.0"
 edition = "2021"
 publish = false
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+build = "build.rs"
 
 [dependencies]
 # mail-worker-proto = { git = "https://git.heinlein-video.de/heinlein-video/k3k-controller", package = "mail-worker-proto"  }
@@ -46,3 +47,8 @@ css-inline = { version = "0.8.1" }
 
 [dev-dependencies]
 pretty_assertions = "1.2.1"
+
+
+[build-dependencies]
+vergen = "7.2.1"
+anyhow = "1.0"
