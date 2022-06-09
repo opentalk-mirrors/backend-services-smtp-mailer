@@ -1,7 +1,9 @@
 use crate::settings;
-use anyhow::Result;
+use anyhow::{Context, Result};
 use pin_project::pin_project;
 use thiserror::Error;
+use tokio_executor_trait::Tokio as TokioExecutor;
+use tokio_reactor_trait::Tokio as TokioReactor;
 
 #[pin_project]
 pub(crate) struct RabbitMqService {
@@ -13,9 +15,14 @@ pub(crate) struct RabbitMqService {
 
 impl RabbitMqService {
     pub async fn new(settings: &settings::RabbitMqConfig) -> Result<Self> {
-        let conn =
-            lapin::Connection::connect(&settings.url, lapin::ConnectionProperties::default())
-                .await?;
+        let conn = lapin::Connection::connect(
+            &settings.url,
+            lapin::ConnectionProperties::default()
+                .with_executor(TokioExecutor::current())
+                .with_reactor(TokioReactor),
+        )
+        .await
+        .context("lapin connect")?;
 
         let channel = conn.create_channel().await?;
         let queue = channel

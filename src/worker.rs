@@ -1,6 +1,7 @@
 use anyhow::Result;
 use futures::stream::StreamExt;
 use lapin::options::BasicRejectOptions;
+use lettre::message::header::{self, Header};
 use mail_worker_proto as proto;
 
 use crate::{mail::MailBuilder, settings};
@@ -81,8 +82,9 @@ where
     anyhow::Error: From<T::Error>,
 {
     let email = mail_builder.generate_email(message)?;
-
+    let to: Option<header::To> = email.headers().get();
     mail_backend.send(email).await?;
+    log::info!("Send mail to {:?}", to.map(|x| x.display()));
 
     Ok(())
 }
