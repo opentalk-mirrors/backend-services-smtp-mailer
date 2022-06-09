@@ -7,19 +7,19 @@ RUN apt-get update && apt-get install -y git
 WORKDIR /opt/smtp-mailer
 COPY ./.cargo/config ./.cargo/config
 COPY ./vendored ./vendored
+COPY ./resources ./resources
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
 RUN cargo build --release --locked
 RUN rm ./src/*.rs
-RUN rm ./target/release/deps/smtp-mailer*
+RUN rm ./target/release/deps/smtp_mailer*
 ADD ./src ./src
-ADD ./migrations ./migrations
 RUN cargo build --release --locked
 
 
 FROM debian:bullseye-slim
 WORKDIR /opt/smtp-mailer
-COPY /opt/smtp-mailer/resources ./resources
+COPY ./resources ./resources
 COPY --from=builder /opt/smtp-mailer/target/release/smtp-mailer .
 
 CMD ["/opt/smtp-mailer/smtp-mailer"]
