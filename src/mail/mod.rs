@@ -59,14 +59,14 @@ impl MailBuilder {
     fn create_join_link(&self, event: &proto::v1::Event) -> String {
         let template = &self.builder.join_link_builder;
         template
-            .replace("{base_url", &self.frontend.base_url)
+            .replace("{base_url}", &self.frontend.base_url)
             .replace("{room_id}", &event.room.id.to_string())
     }
 
     fn create_dashboard_event_link(&self, event: &proto::v1::Event) -> String {
         let template = &self.builder.dashboard_event_link_builder;
         template
-            .replace("{base_url", &self.frontend.base_url)
+            .replace("{base_url}", &self.frontend.base_url)
             .replace("{event_id}", &event.id.to_string())
     }
 

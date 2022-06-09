@@ -1,20 +1,25 @@
-greeting = Hello { $name }
-        .placeholder = Hello
+registered-event-invite-subject = OpenTalk Meeting-Invitation - {$event-name}
+unregistered-event-invite-subject = OpenTalk Meeting-Invitation - {$event-name}
 
-you-got-invited = You got invited the the meeting: { $name }
-        .placeholder = You got invited to a meeting
-
-
-join-directly = To join directly (after you logged in) click here: { $link }.
-join-directly-link = Open room in new tab/window now
-        .alt = Click to join room
-
-
-view-in-dashboard = You can open this meeting in the dashboard: { $link }
-# This is placed in link in view-in-dashboard
-view-in-dashboard-link = Open meeting in dashboard
+# Arguments name
+invite = OpenTalk Meeting-Invitation - { $name }
+        .p = {$name} invites you to an OpenTalk-Meeting. You can view this invite in OpenTalk.
+view-in-dashboard-link = View Invitation
         .alt = Click to view in dashboard
 
-join-directly-fallback = If you can't click the join link, try entering the following link directly into your browser: {$link}
+invite-unregistered = OpenTalk Meeting-Invitation - { $name }
+        .p = {$name} invites you to an OpenTalk-Meeting. You can login now at OpenTalk to view this invititation.
+view-in-dashboard-link-unregistered = Login and View Invitation
+        .alt = Click to view in dashboard
 
-view-in-dashboard-fallback = If you can't click on the dashboard link, try entering the following link directly into your browser: { $link }
+meeting-information = Meeting-Information
+meeting-information-title = Title
+meeting-information-when = Time
+meeting-information-link = Link to Meeting
+join-directly-link = Open the conference room in new tab/window
+        .alt = Click to open
+
+meeting-information-password = Meeting-Password
+
+questions = Questions? We are here to help!
+        .p = To talk to our help desk, give us a call via XXX. Alternativly, you can send us an email to YYY.
