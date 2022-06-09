@@ -26,7 +26,6 @@ impl TryFrom<settings::SmtpUri> for AsyncSmtpTransport<Tokio1Executor> {
     type Error = anyhow::Error;
     fn try_from(val: settings::SmtpUri) -> Result<AsyncSmtpTransport<Tokio1Executor>> {
         let host = val.host().context("SMTP Host")?;
-        dbg!(host);
 
         let mut builder = match val.scheme() {
             "smtp" => {
@@ -40,7 +39,7 @@ impl TryFrom<settings::SmtpUri> for AsyncSmtpTransport<Tokio1Executor> {
             _ => unreachable!(),
         };
 
-        match dbg!(val.credentials()?) {
+        match val.credentials()? {
             (Some(u), None) => {
                 let creds = Credentials::new(u, "".to_owned());
                 builder = builder.credentials(creds);
@@ -51,7 +50,6 @@ impl TryFrom<settings::SmtpUri> for AsyncSmtpTransport<Tokio1Executor> {
             }
             _ => {}
         }
-        dbg!(&builder);
 
         if let Some(port) = val.port() {
             builder = builder.port(port);

@@ -40,7 +40,7 @@ where
 
             // TODO add text_map_propagator::TextMapPropagator based tracing extraction here.
 
-            match dbg!(self.handler(data).await) {
+            match self.handler(data).await {
                 Result::Ok(_) => {
                     if let Err(e) = delivery.ack(Default::default()).await {
                         log::error!("Ack Error{}", e);

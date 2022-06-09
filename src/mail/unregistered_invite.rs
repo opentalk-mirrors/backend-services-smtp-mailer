@@ -38,7 +38,7 @@ impl MailTemplate for UnregisteredEventInvite {
         } else {
             &builder.default_language
         };
-        context.insert("language", &dbg!(language));
+        context.insert("language", &language);
 
         context.insert("invitee", &self.invitee);
         context.insert("inviter", &self.inviter);
