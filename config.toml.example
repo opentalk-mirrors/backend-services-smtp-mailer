@@ -9,20 +9,20 @@ mail_task_queue = "opentalk_mailer"
 # SMTP Cleartext: smtp://foo:bar@my-mailserver:1234/?disable_starttls=true
 # SMTP with StartTLS: smtp://foo:bar@my-mailserver:1234/
 # SMTP with implicit TLS: smtps://foo:bar@my-mailserver:1234/
-# smtp_server = "smtp://localhost:1025?disable_starttls=true"
+#smtp_server = "smtp://localhost:1025?disable_starttls=true"
 
 [template_builder]
 
-# join_link_builder = "https://{base_url}lobby/{room_id}"
-# guest_link_builder = "https://{base_url}invite/{invite_id}"
+#join_link_builder = "{base_url/}lobby/{room_id}"
+#guest_link_builder = "{base_url}/invite/{invite_id}"
 
-# [frontend]
-# base_url = "https://opentalk.mailbox.org"
+#[frontend]
+#base_url = "https://opentalk.mailbox.org"
 
 
-# [templates]
-# registered_invite = {html = "resources/templates/registered_invite.html", txt = "resources/templates/registered_invite.html"}
-# unregistered_invite = {html = "resources/templates/unregistered_invite.html", txt = "resources/templates/unregistered_invite.html"}
+#[templates]
+#registered_invite = {html = "resources/templates/registered_invite.html", txt = "resources/templates/registered_invite.html"}
+#unregistered_invite = {html = "resources/templates/unregistered_invite.html", txt = "resources/templates/unregistered_invite.html"}
 
-# [languages]
-# default_language = 'de-DE'
+#[languages]
+#default_language = 'de-DE'
