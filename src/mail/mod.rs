@@ -42,6 +42,8 @@ pub trait MailTemplate {
     fn generate_email_plain(&self, builder: &MailBuilder) -> Result<String>;
     fn generate_email_html(&self, builder: &MailBuilder) -> Result<String>;
     fn generate_subject(&self, builder: &MailBuilder) -> Result<String>;
+    fn generate_from_mbox(&self, builder: &MailBuilder) -> Result<Mailbox>;
+    fn generate_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox>;
 }
 
 impl MailBuilder {
@@ -71,26 +73,12 @@ impl MailBuilder {
     }
 
     pub(crate) fn generate_email(&self, message: &proto::v1::Message) -> Result<Message> {
+        // TODO Clean this up
         let (from_mb, to_mb, subject, txt, html) = match message {
             proto::v1::Message::RegisteredEventInvite(message) => {
-                // TODO Move this to the trait as well.
-                let from = Mailbox::new(
-                    Some(generate_mailbox_name(
-                        &message.inviter.title,
-                        &message.inviter.first_name,
-                        &message.inviter.last_name,
-                    )),
-                    message.inviter.email.as_ref().parse()?,
-                );
+                let from = message.generate_from_mbox(self)?;
 
-                let to = Mailbox::new(
-                    Some(generate_mailbox_name(
-                        &message.invitee.title,
-                        &message.invitee.first_name,
-                        &message.invitee.last_name,
-                    )),
-                    message.invitee.email.as_ref().parse()?,
-                );
+                let to = message.generate_to_mbox(self)?;
 
                 let subject = message.generate_subject(self)?;
                 let txt = message.generate_email_plain(self)?;
@@ -99,16 +87,9 @@ impl MailBuilder {
                 (from, to, subject, txt, html)
             }
             proto::v1::Message::UnregisteredEventInvite(message) => {
-                let from = Mailbox::new(
-                    Some(generate_mailbox_name(
-                        &message.inviter.title,
-                        &message.inviter.first_name,
-                        &message.inviter.last_name,
-                    )),
-                    message.inviter.email.as_ref().parse()?,
-                );
+                let from = message.generate_from_mbox(self)?;
 
-                let to = Mailbox::new(None, message.invitee.as_ref().parse()?);
+                let to = message.generate_to_mbox(self)?;
 
                 let subject = message.generate_subject(self)?;
                 let txt = message.generate_email_plain(self)?;
@@ -145,5 +126,42 @@ fn generate_mailbox_name(title: &str, first_name: &str, last_name: &str) -> Stri
         format!("{first_name} {last_name}")
     } else {
         format!("{title} {first_name} {last_name}")
+    }
+}
+
+impl MailTemplate for proto::v1::Message {
+    fn generate_email_plain(&self, builder: &MailBuilder) -> Result<String> {
+        match self {
+            proto::v1::Message::RegisteredEventInvite(x) => x.generate_email_plain(builder),
+            proto::v1::Message::UnregisteredEventInvite(x) => x.generate_email_plain(builder),
+        }
+    }
+
+    fn generate_email_html(&self, builder: &MailBuilder) -> Result<String> {
+        match self {
+            proto::v1::Message::RegisteredEventInvite(x) => x.generate_email_html(builder),
+            proto::v1::Message::UnregisteredEventInvite(x) => x.generate_email_html(builder),
+        }
+    }
+
+    fn generate_subject(&self, builder: &MailBuilder) -> Result<String> {
+        match self {
+            proto::v1::Message::RegisteredEventInvite(x) => x.generate_subject(builder),
+            proto::v1::Message::UnregisteredEventInvite(x) => x.generate_subject(builder),
+        }
+    }
+
+    fn generate_from_mbox(&self, builder: &MailBuilder) -> Result<Mailbox> {
+        match self {
+            proto::v1::Message::RegisteredEventInvite(x) => x.generate_from_mbox(builder),
+            proto::v1::Message::UnregisteredEventInvite(x) => x.generate_from_mbox(builder),
+        }
+    }
+
+    fn generate_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox> {
+        match self {
+            proto::v1::Message::RegisteredEventInvite(x) => x.generate_to_mbox(builder),
+            proto::v1::Message::UnregisteredEventInvite(x) => x.generate_to_mbox(builder),
+        }
     }
 }

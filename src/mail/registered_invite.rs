@@ -1,5 +1,6 @@
-use super::MailTemplate;
+use super::{generate_mailbox_name, MailTemplate};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
+use lettre::message::Mailbox;
 use mail_worker_proto as protocol;
 use protocol::v1::RegisteredEventInvite;
 use std::collections::HashMap;
@@ -68,6 +69,35 @@ impl MailTemplate for RegisteredEventInvite {
             "registered-event-invite-subject",
             Some(&subject_args),
         ))
+    }
+
+    fn generate_from_mbox(
+        &self,
+        builder: &super::MailBuilder,
+    ) -> anyhow::Result<lettre::message::Mailbox> {
+        let mbox = Mailbox::new(
+            Some(generate_mailbox_name(
+                &self.inviter.title,
+                &self.inviter.first_name,
+                &self.inviter.last_name,
+            )),
+            self.inviter.email.as_ref().parse()?,
+        );
+
+        Ok(mbox)
+    }
+
+    fn generate_to_mbox(&self, builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
+        let mbox = Mailbox::new(
+            Some(generate_mailbox_name(
+                &self.invitee.title,
+                &self.invitee.first_name,
+                &self.invitee.last_name,
+            )),
+            self.invitee.email.as_ref().parse()?,
+        );
+
+        Ok(mbox)
     }
 }
 

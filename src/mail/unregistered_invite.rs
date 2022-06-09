@@ -1,10 +1,13 @@
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
+use lettre::message::Mailbox;
 use mail_worker_proto as protocol;
 use protocol::v1::UnregisteredEventInvite;
 use std::collections::HashMap;
 
 use crate::i18n;
 use crate::mail::MailTemplate;
+
+use super::generate_mailbox_name;
 
 impl MailTemplate for UnregisteredEventInvite {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
@@ -68,6 +71,28 @@ impl MailTemplate for UnregisteredEventInvite {
             "unregistered-event-invite-subject",
             Some(&subject_args),
         ))
+    }
+
+    fn generate_from_mbox(
+        &self,
+        builder: &super::MailBuilder,
+    ) -> anyhow::Result<lettre::message::Mailbox> {
+        let mbox = Mailbox::new(
+            Some(generate_mailbox_name(
+                &self.inviter.title,
+                &self.inviter.first_name,
+                &self.inviter.last_name,
+            )),
+            self.inviter.email.as_ref().parse()?,
+        );
+
+        Ok(mbox)
+    }
+
+    fn generate_to_mbox(&self, builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
+        let mbox = Mailbox::new(None, self.invitee.as_ref().parse()?);
+
+        Ok(mbox)
     }
 }
 

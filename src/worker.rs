@@ -4,7 +4,10 @@ use lapin::options::BasicRejectOptions;
 use lettre::message::header::{self, Header};
 use mail_worker_proto as proto;
 
-use crate::{mail::MailBuilder, settings};
+use crate::{
+    mail::{MailBuilder, MailTemplate},
+    settings,
+};
 
 pub struct Worker<T> {
     mail_backend: T,
@@ -82,9 +85,15 @@ where
     anyhow::Error: From<T::Error>,
 {
     let email = mail_builder.generate_email(message)?;
-    let to: Option<header::To> = email.headers().get();
+    // Hack until lettre supports printing the To header
+    let to = message.generate_to_mbox(mail_builder);
     mail_backend.send(email).await?;
-    log::info!("Send mail to {:?}", to.map(|x| x.display()));
+
+    log::info!(
+        "Send mail to {}",
+        to.map(|mailbox| mailbox.to_string())
+            .unwrap_or("N/A".to_string())
+    );
 
     Ok(())
 }
