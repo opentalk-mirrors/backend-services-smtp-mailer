@@ -10,6 +10,7 @@ COPY ./vendored ./vendored
 COPY ./resources ./resources
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
+ADD ./build.rs ./build.rs
 RUN cargo build --release --locked
 RUN rm ./src/*.rs
 RUN rm ./target/release/deps/smtp_mailer*
