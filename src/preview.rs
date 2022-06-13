@@ -1,9 +1,8 @@
+use crate::{mail::MailBuilder, mail::MailTemplate, settings};
 use chrono::FixedOffset;
-use mail_worker_proto as protocol;
+use mail_worker_protocol as protocol;
 use protocol::v1::{CallIn, Event, Room, Time};
 use uuid::Uuid;
-
-use crate::{mail::MailBuilder, mail::MailTemplate, settings};
 
 pub fn preview_unregistered_invite(
     settings: &settings::Settings,

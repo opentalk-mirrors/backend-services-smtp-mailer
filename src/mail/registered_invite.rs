@@ -1,11 +1,10 @@
 use super::{generate_mailbox_name, MailTemplate};
+use crate::i18n;
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::Mailbox;
-use mail_worker_proto as protocol;
+use mail_worker_protocol as protocol;
 use protocol::v1::RegisteredEventInvite;
 use std::collections::HashMap;
-
-use crate::i18n;
 
 impl MailTemplate for RegisteredEventInvite {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
@@ -73,7 +72,7 @@ impl MailTemplate for RegisteredEventInvite {
 
     fn generate_from_mbox(
         &self,
-        builder: &super::MailBuilder,
+        _builder: &super::MailBuilder,
     ) -> anyhow::Result<lettre::message::Mailbox> {
         let mbox = Mailbox::new(
             Some(generate_mailbox_name(
@@ -87,7 +86,7 @@ impl MailTemplate for RegisteredEventInvite {
         Ok(mbox)
     }
 
-    fn generate_to_mbox(&self, builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
+    fn generate_to_mbox(&self, _builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
         let mbox = Mailbox::new(
             Some(generate_mailbox_name(
                 &self.invitee.title,
