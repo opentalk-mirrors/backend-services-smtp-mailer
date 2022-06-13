@@ -13,8 +13,9 @@ mail_task_queue = "opentalk_mailer"
 
 [template_builder]
 
-#join_link_builder = "{base_url/}lobby/{room_id}"
+#join_link_builder = "{base_url}lobby/{room_id}"
 #guest_link_builder = "{base_url}/invite/{invite_id}"
+#dashboard_event_link_builder = "{base_url}/dashboard/meetings/view/{event_id}"
 
 #[frontend]
 #base_url = "https://opentalk.mailbox.org"
