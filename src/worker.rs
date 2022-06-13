@@ -1,8 +1,7 @@
 use anyhow::Result;
 use futures::stream::StreamExt;
 use lapin::options::BasicRejectOptions;
-use lettre::message::header::{self, Header};
-use mail_worker_proto as proto;
+use mail_worker_protocol as proto;
 
 use crate::{
     mail::{MailBuilder, MailTemplate},
@@ -92,7 +91,7 @@ where
     log::info!(
         "Send mail to {}",
         to.map(|mailbox| mailbox.to_string())
-            .unwrap_or("N/A".to_string())
+            .unwrap_or_else(|_| "N/A".to_string())
     );
 
     Ok(())

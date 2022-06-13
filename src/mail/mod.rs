@@ -4,7 +4,7 @@ use lettre::{
     message::{header, Mailbox, MultiPart, SinglePart},
     Message,
 };
-use mail_worker_proto as proto;
+use mail_worker_protocol as proto;
 use tera::Tera;
 
 use crate::settings;
