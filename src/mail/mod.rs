@@ -1,3 +1,4 @@
+use crate::settings;
 use anyhow::Result;
 use fluent_templates::FluentLoader;
 use lettre::{
@@ -6,8 +7,6 @@ use lettre::{
 };
 use mail_worker_protocol as proto;
 use tera::Tera;
-
-use crate::settings;
 
 mod registered_invite;
 mod unregistered_invite;
@@ -31,6 +30,7 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
     Ok(tera)
 }
 
+/// A builder that contains everything needed to render and create a Mail
 pub struct MailBuilder {
     frontend: settings::Frontend,
     builder: settings::TemplateBuilder,
@@ -38,6 +38,7 @@ pub struct MailBuilder {
     tera: Tera,
 }
 
+/// Trait to render the different tasks
 pub trait MailTemplate {
     fn generate_email_plain(&self, builder: &MailBuilder) -> Result<String>;
     fn generate_email_html(&self, builder: &MailBuilder) -> Result<String>;
@@ -73,7 +74,6 @@ impl MailBuilder {
     }
 
     pub(crate) fn generate_email(&self, message: &proto::v1::Message) -> Result<Message> {
-        // TODO Clean this up
         let (from_mb, to_mb, subject, txt, html) = match message {
             proto::v1::Message::RegisteredEventInvite(message) => {
                 let from = message.generate_from_mbox(self)?;

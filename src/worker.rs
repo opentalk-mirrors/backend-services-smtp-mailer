@@ -1,13 +1,13 @@
+use crate::{
+    mail::{MailBuilder, MailTemplate},
+    settings,
+};
 use anyhow::Result;
 use futures::stream::StreamExt;
 use lapin::options::BasicRejectOptions;
 use mail_worker_protocol as proto;
 
-use crate::{
-    mail::{MailBuilder, MailTemplate},
-    settings,
-};
-
+/// A Mail Worker
 pub struct Worker<T> {
     mail_backend: T,
     mail_builder: MailBuilder,
@@ -19,7 +19,6 @@ where
     anyhow::Error: From<T::Error>,
 {
     /// Creates a new Worker instance
-    ///
     pub fn new(mail_backend: T, settings: &settings::Settings) -> Result<Self> {
         let mail_builder = MailBuilder::new(settings)?;
 
@@ -29,6 +28,9 @@ where
         })
     }
 
+    /// Starts the worker loop
+    ///
+    /// Yields when the rabbitMQ queue yields None
     pub async fn start(&self, settings: &settings::RabbitMqConfig) -> Result<()> {
         let mut rabbitmq = crate::rabbitmq::RabbitMqService::new(settings).await?;
 

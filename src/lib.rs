@@ -9,15 +9,16 @@ mod rabbitmq;
 pub mod settings;
 mod worker;
 
+/// Entry point of the library part of smtp-mailer
 pub async fn run(settings: settings::Settings) -> Result<()> {
     let smtp_client: AsyncSmtpTransport<Tokio1Executor> =
         settings.smtp.smtp_server.clone().try_into()?;
 
-    let server = Worker::new(smtp_client, &settings)?
+    let worker = Worker::new(smtp_client, &settings)?
         .start(&settings.rabbit_mq)
         .await;
 
-    server.expect("Error initializing worker");
+    worker.expect("Error initializing worker");
 
     Ok(())
 }

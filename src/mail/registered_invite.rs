@@ -1,11 +1,10 @@
 use super::{generate_mailbox_name, MailTemplate};
+use crate::i18n;
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::Mailbox;
 use mail_worker_protocol as protocol;
 use protocol::v1::RegisteredEventInvite;
 use std::collections::HashMap;
-
-use crate::i18n;
 
 impl MailTemplate for RegisteredEventInvite {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {

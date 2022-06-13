@@ -1,11 +1,10 @@
+use crate::i18n;
+use crate::mail::MailTemplate;
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::Mailbox;
 use mail_worker_protocol as protocol;
 use protocol::v1::UnregisteredEventInvite;
 use std::collections::HashMap;
-
-use crate::i18n;
-use crate::mail::MailTemplate;
 
 use super::generate_mailbox_name;
 

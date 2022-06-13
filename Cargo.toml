@@ -3,7 +3,7 @@ name = "smtp-mailer"
 version = "0.1.0"
 edition = "2021"
 publish = false
-
+description = "Mail Worker that takes mail send tasks from a queue, renders them, and sends them out via SMTP"
 build = "build.rs"
 
 [dependencies]
