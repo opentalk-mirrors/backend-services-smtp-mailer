@@ -35,6 +35,7 @@ pub struct MailBuilder {
     frontend: settings::Frontend,
     builder: settings::TemplateBuilder,
     default_language: String,
+    support_contact: Option<settings::SupportContact>,
     tera: Tera,
 }
 
@@ -55,6 +56,7 @@ impl MailBuilder {
             frontend: settings.frontend.to_owned(),
             builder: settings.template_builder.to_owned(),
             default_language: settings.languages.default_language.to_owned(),
+            support_contact: settings.support_contact.to_owned(),
             tera,
         })
     }

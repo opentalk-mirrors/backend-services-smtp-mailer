@@ -9,6 +9,7 @@ use std::collections::HashMap;
 impl MailTemplate for RegisteredEventInvite {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let mut context = tera::Context::new();
+
         let language = if !self.invitee.language.is_empty() {
             &self.invitee.language
         } else {
@@ -24,6 +25,7 @@ impl MailTemplate for RegisteredEventInvite {
             "event_link",
             &builder.create_dashboard_event_link(&self.event),
         );
+        context.insert("support", &builder.support_contact);
 
         builder
             .tera
@@ -48,6 +50,7 @@ impl MailTemplate for RegisteredEventInvite {
             "event_link",
             &builder.create_dashboard_event_link(&self.event),
         );
+        context.insert("support", &builder.support_contact);
 
         let html = builder.tera.render("registered_invite.html", &context)?;
 

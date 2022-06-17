@@ -1,6 +1,6 @@
 use config::{Config, ConfigError, Environment, File, FileFormat};
 use percent_encoding::percent_decode_str;
-use serde::{de, Deserialize, Deserializer};
+use serde::{de, Deserialize, Deserializer, Serialize};
 use std::{
     path::{Path, PathBuf},
     str::FromStr,
@@ -25,6 +25,8 @@ pub struct Settings {
 
     #[serde(default)]
     pub languages: Languages,
+
+    pub support_contact: Option<SupportContact>,
 }
 
 impl Settings {
@@ -309,4 +311,10 @@ impl Default for Languages {
 
 fn languages_default_default_language() -> String {
     "en-US".into()
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SupportContact {
+    pub phone: String,
+    pub mail: String,
 }

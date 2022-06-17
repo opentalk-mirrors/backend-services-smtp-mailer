@@ -124,10 +124,12 @@
                     <b>{{ fluent(key="meeting-information-call-in", lang = language) }}:</b><a href="tel:{{ call_in }}">{{ call_in }}</a>
                 {% endif %}
             </p>
+            {% if support -%}
             <h1>{{fluent(key="questions", lang = language)}}</h1>
             <p>
-                {{fluent(key="questions.p", lang = language)}}
+                {{fluent(key="questions.p", lang = language, phone=support.phone, mail=support.mail)}}
             </p>
+            {% endif %}
         </div>
         <div id="footer" class="footer">
             {{ fluent(key="join-directly-fallback-unregistered", lang = language, link = join_link)|safe }}
