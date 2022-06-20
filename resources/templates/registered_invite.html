@@ -116,6 +116,12 @@
                     <br/>
 
                     <b>{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}</b>
+                    <br>
+
+                    {% if event.call_in -%}
+                        {% set call_in = event.call_in.sip_tel ~ "," ~ event.call_in.sip_id ~ "," ~ event.call_in.sip_password %}
+                        <b>{{ fluent(key="meeting-information-call-in", lang = language) }}:</b><a href="tel:{{ call_in }}">{{ call_in }}</a>
+                    {% endif %}
                 </p>
                 <h2 class="margin-top-40">{{fluent(key="questions", lang = language)}}</h2>
                 <p>
