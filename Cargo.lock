@@ -2567,7 +2567,6 @@ dependencies = [
  "lettre",
  "log",
  "percent-encoding",
- "pin-project",
  "pretty_assertions",
  "serde",
  "serde_json",

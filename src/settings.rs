@@ -139,7 +139,7 @@ impl SmtpUri {
     }
 }
 
-fn smtp_uri_desirializer<'de, D>(d: D) -> Result<SmtpUri, D::Error>
+fn smtp_uri_deserializer<'de, D>(d: D) -> Result<SmtpUri, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -153,7 +153,7 @@ where
 #[derive(Debug, Clone, Deserialize)]
 pub struct SmtpConfig {
     #[serde(
-        deserialize_with = "smtp_uri_desirializer",
+        deserialize_with = "smtp_uri_deserializer",
         default = "smtp_default_server"
     )]
     pub smtp_server: SmtpUri,
@@ -248,7 +248,7 @@ fn template_default_external_invite() -> MailTemplate {
 
 /// Language config
 ///
-/// Currently only setting the default_language (a fallback) is suported
+/// Currently only setting the default_language (a fallback) is supported
 #[derive(Debug, Clone, Deserialize)]
 pub struct Frontend {
     #[serde(default = "frontend_default_base_url")]

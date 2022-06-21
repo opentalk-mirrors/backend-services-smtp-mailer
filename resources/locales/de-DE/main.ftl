@@ -28,7 +28,7 @@ meeting-information-call-in = Telefoneinwahl
 questions = Noch Fragen? Wir helfen Ihnen Gerne!
         .p = Um mit einem unserer Mitarbeiter in Kontakt zu treten, rufen Sie uns einfach kostenfrei unter { $phone } an. Alternativ können Sie auch gerne eine E-Mail mit ihrem Anliegen an { $mail } schicken.
 
-join-directly-fallback = Solten Sie den 'Jetzt beitreten' Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
-view-in-dashboard-fallback = Solten Sie den Dashboard Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
-join-directly-fallback-unregistered = Solten Sie den Jetzt beitreten Link nicht anklicken könnten, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
-view-in-dashboard-fallback-unregistered = Solten Sie den Dashboard Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
+join-directly-fallback = Sollten Sie den 'Jetzt beitreten' Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
+view-in-dashboard-fallback = Sollten Sie den Dashboard Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
+join-directly-fallback-unregistered = Sollten Sie den Jetzt beitreten Link nicht anklicken könnten, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
+view-in-dashboard-fallback-unregistered = Sollten Sie den Dashboard Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }

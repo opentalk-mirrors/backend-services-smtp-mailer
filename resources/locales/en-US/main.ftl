@@ -8,7 +8,7 @@ view-in-dashboard-link = View Invitation
         .alt = Click to view in dashboard
 
 invite-unregistered = OpenTalk Meeting-Invitation - { $name }
-        .p = {$name} invites you to an OpenTalk-Meeting. You can login now at OpenTalk to view this invititation.
+        .p = {$name} invites you to an OpenTalk-Meeting. You can login now at OpenTalk to view this invitation.
 view-in-dashboard-link-unregistered = Login and View Invitation
         .alt = Click to view in dashboard
 
@@ -26,7 +26,7 @@ meeting-information-password = Meeting-Password
 meeting-information-call-in = Call-in
 
 questions = Questions? We are here to help!
-        .p = To talk to our help desk, give us a call via { $phone }. Alternativly, you can send us an email to { $mail }.
+        .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
 
 
 join-directly-fallback = If you can't click the join link, try entering the following link directly into your browser: { $link }
