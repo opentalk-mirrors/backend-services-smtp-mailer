@@ -16,7 +16,7 @@
 {{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}
 {% endif -%}
 {% if event.call_in -%}
-{{ fluent(key="meeting-information-call-in", lang = language) }}: {{ event.call_in.sip_tel }}
+{{ fluent(key="meeting-information-call-in", lang = language) }}: {{ event.call_in.sip_tel }},{{ event.call_in.sip_id }},{{ event.call_in.sip_password }}
 {% endif -%}
 
 {% if support %}
