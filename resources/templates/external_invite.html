@@ -112,12 +112,14 @@
                     <br />
                 {% endif %}
                 <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = invite_link) }}
+                
+                {% if event.room.password -%}
                 <br/>
-
                 <b>{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}</b>
-                <br/>
+                {% endif %}
 
                 {% if event.call_in -%}
+                    <br/>
                     {% set call_in = event.call_in.sip_tel ~ "," ~ event.call_in.sip_id ~ "," ~ event.call_in.sip_password %}
                     <b>{{ fluent(key="meeting-information-call-in", lang = language) }}:</b> <a href="tel:{{ call_in }}">{{ call_in }}</a>
                 {% endif %}
