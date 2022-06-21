@@ -20,6 +20,7 @@ join-directly-link = Open the conference room in new tab/window
         .alt = Click to open
 
 meeting-information-password = Meeting-Password
+meeting-information-call-in = Call-in
 
 questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via XXX. Alternativly, you can send us an email to YYY.

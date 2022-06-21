@@ -20,6 +20,7 @@ join-directly-link = Öffne den Raum in einem neuen Tab/Fenster
         .alt = Klicken um zu öffnen
 
 meeting-information-password = Meeting-Password
+meeting-information-call-in = Telefoneinwahl
 
 questions = Noch Fragen? Wir helfen Ihnen Gerne!
         .p = Um mit einem unserer Mitarbeiter in Kontakt zu treten, rufen Sie uns einfach kostenfrei unter XXX an. Alternativ können Sie auch gerne eine E-Mail mit ihrem Anliegen an XXX schicken.
