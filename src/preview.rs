@@ -19,7 +19,7 @@ pub fn preview_unregistered_invite(
             description: "You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
-                password: "".into(),
+                password: Some("password123".into()),
             },
             start_time: Some(Time {
                 time: chrono::DateTime::<FixedOffset>::parse_from_rfc3339(
@@ -38,11 +38,11 @@ pub fn preview_unregistered_invite(
                 timezone: "Europe/Berlin".into(),
             }),
             rrule: None,
-            call_in: CallIn {
-                sip_tel: None,
-                sip_id: None,
-                sip_password: None,
-            },
+            call_in: Some(CallIn {
+                sip_tel: "+4912332112".into(),
+                sip_id: "1234567890".into(),
+                sip_password: "1234567890".into(),
+            }),
         },
         inviter: protocol::v1::User {
             email: "sender@example.org".into(),
@@ -87,7 +87,7 @@ pub fn preview_registered_invite(settings: &settings::Settings, html: bool, lang
             description: "You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
-                password: "".into(),
+                password: Some("password123".into()),
             },
             start_time: Some(Time {
                 time: chrono::DateTime::<FixedOffset>::parse_from_rfc3339(
@@ -106,11 +106,11 @@ pub fn preview_registered_invite(settings: &settings::Settings, html: bool, lang
                 timezone: "Europe/Berlin".into(),
             }),
             rrule: None,
-            call_in: CallIn {
-                sip_tel: None,
-                sip_id: None,
-                sip_password: None,
-            },
+            call_in: Some(CallIn {
+                sip_tel: "+4912332112".into(),
+                sip_id: "1234567890".into(),
+                sip_password: "1234567890".into(),
+            }),
         },
         inviter: protocol::v1::User {
             email: "sender@example.org".into(),
