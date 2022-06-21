@@ -4,10 +4,15 @@ use lettre::{transport::smtp::authentication::Credentials, AsyncSmtpTransport, T
 
 pub mod i18n;
 pub(crate) mod mail;
-pub mod preview;
+
+mod ics;
 mod rabbitmq;
 pub mod settings;
 mod worker;
+
+pub use mail::MailBuilder;
+pub use mail::MailTemplate;
+pub use worker::send_mail_v1;
 
 /// Entry point of the library part of smtp-mailer
 pub async fn run(settings: settings::Settings) -> Result<()> {

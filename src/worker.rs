@@ -76,7 +76,7 @@ where
     }
 }
 
-async fn send_mail_v1<T>(
+pub async fn send_mail_v1<T>(
     mail_backend: &T,
     mail_builder: &MailBuilder,
     message: &proto::v1::Message,
