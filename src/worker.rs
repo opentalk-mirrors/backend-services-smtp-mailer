@@ -38,7 +38,7 @@ where
         // TODO refactor this in a way, that we here have a generic stream.
         // Maybe try the Pipeline Server Pattern from tokio-tower
         while let Some(delivery) = rabbitmq.consumer.next().await {
-            log::trace!("Recevied new mail task");
+            log::trace!("Received new mail task");
 
             let delivery = delivery?;
             let data = &delivery.data;

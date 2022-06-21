@@ -1,15 +1,12 @@
 use crate::settings;
 use anyhow::{Context, Result};
-use pin_project::pin_project;
 use thiserror::Error;
 use tokio_executor_trait::Tokio as TokioExecutor;
 use tokio_reactor_trait::Tokio as TokioReactor;
 
-#[pin_project]
 pub(crate) struct RabbitMqService {
     _conn: lapin::Connection,
     _channel: lapin::Channel,
-    #[pin]
     pub consumer: lapin::Consumer,
 }
 
