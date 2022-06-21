@@ -1,8 +1,11 @@
-use crate::settings;
+use crate::{ics::create_ics_v1, settings};
 use anyhow::Result;
 use fluent_templates::FluentLoader;
 use lettre::{
-    message::{header, Mailbox, MultiPart, SinglePart},
+    message::{
+        header::{self, ContentType},
+        Attachment, Mailbox, MultiPart, SinglePart,
+    },
     Message,
 };
 use mail_worker_protocol as proto;
@@ -92,23 +95,33 @@ impl MailBuilder {
         let txt = message.generate_email_plain(self)?;
         let html = message.generate_email_html(self)?;
 
+        let mut mail_content = MultiPart::alternative()
+            .singlepart(
+                SinglePart::builder()
+                    .header(header::ContentType::TEXT_PLAIN)
+                    .body(txt),
+            )
+            .singlepart(
+                SinglePart::builder()
+                    .header(header::ContentType::TEXT_HTML)
+                    .body(html),
+            );
+
+        if let Some(attachments) = create_attachments(message)? {
+            let mut builder = MultiPart::mixed().multipart(mail_content);
+
+            for (name, content_type, body) in attachments.into_iter() {
+                let file = Attachment::new(name).body(body, content_type);
+                builder = builder.singlepart(file);
+            }
+            mail_content = builder;
+        }
+
         let email = lettre::Message::builder()
             .from(from_mb)
             .to(to_mb)
             .subject(subject)
-            .multipart(
-                MultiPart::alternative()
-                    .singlepart(
-                        SinglePart::builder()
-                            .header(header::ContentType::TEXT_PLAIN)
-                            .body(txt),
-                    )
-                    .singlepart(
-                        SinglePart::builder()
-                            .header(header::ContentType::TEXT_HTML)
-                            .body(html),
-                    ),
-            )?;
+            .multipart(mail_content)?;
 
         Ok(email)
     }
@@ -119,6 +132,57 @@ fn generate_mailbox_name(title: &str, first_name: &str, last_name: &str) -> Stri
         format!("{first_name} {last_name}")
     } else {
         format!("{title} {first_name} {last_name}")
+    }
+}
+
+fn create_attachments(
+    message: &proto::v1::Message,
+) -> Result<Option<impl IntoIterator<Item = (String, ContentType, Vec<u8>)>>> {
+    match message {
+        proto::v1::Message::RegisteredEventInvite(message) => {
+            let name = format!(
+                "{} {}",
+                &message.invitee.first_name, &message.invitee.last_name
+            );
+            let invitee = crate::ics::Invitee::WithName {
+                email: message.invitee.email.as_ref(),
+                name: &name,
+            };
+
+            let body = create_ics_v1(&message.inviter, &message.event, invitee)?;
+            if let Some(body) = body {
+                return Ok(Some(vec![(
+                    "invite.ics".to_string(),
+                    ContentType::parse("text/calendar").unwrap(),
+                    body,
+                )]));
+            }
+            Ok(None)
+        }
+        proto::v1::Message::UnregisteredEventInvite(message) => {
+            let invitee = crate::ics::Invitee::WithoutName(message.invitee.as_ref());
+            let body = create_ics_v1(&message.inviter, &message.event, invitee)?;
+            if let Some(body) = body {
+                return Ok(Some(vec![(
+                    "invite.ics".to_string(),
+                    ContentType::parse("text/calendar").unwrap(),
+                    body,
+                )]));
+            }
+            Ok(None)
+        }
+        proto::v1::Message::ExternalEventInvite(message) => {
+            let invitee = crate::ics::Invitee::WithoutName(message.invitee.as_ref());
+            let body = create_ics_v1(&message.inviter, &message.event, invitee)?;
+            if let Some(body) = body {
+                return Ok(Some(vec![(
+                    "invite.ics".to_string(),
+                    ContentType::parse("text/calendar").unwrap(),
+                    body,
+                )]));
+            }
+            Ok(None)
+        }
     }
 }
 

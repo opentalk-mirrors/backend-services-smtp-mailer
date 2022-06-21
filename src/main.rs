@@ -1,6 +1,9 @@
 use clap::{ArgEnum, Parser, Subcommand};
-use smtp_mailer::{preview, run, settings};
+use preview::preview_send_mail;
+use smtp_mailer::{run, settings};
 use std::process::exit;
+
+pub mod preview;
 
 #[derive(Parser, Debug)]
 #[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
@@ -27,10 +30,19 @@ enum Commands {
         type_: OutputVariant,
         /// Template to preview
         #[clap(arg_enum)]
-        template: TemplateVariate,
+        template: TemplateVariant,
         /// Language Code
         #[clap()]
         language: String,
+    },
+    #[clap()]
+    PreviewSend {
+        /// Template to preview
+        #[clap(arg_enum)]
+        template: TemplateVariant,
+
+        /// To Email
+        to: String,
     },
 }
 
@@ -49,9 +61,9 @@ impl From<&OutputVariant> for bool {
     }
 }
 
-#[derive(Debug, Clone, ArgEnum)]
+#[derive(Debug, Clone, Copy, ArgEnum)]
 #[allow(clippy::enum_variant_names)]
-enum TemplateVariate {
+pub enum TemplateVariant {
     RegisteredInvite,
     UnregisteredInvite,
     ExternalInvite,
@@ -77,25 +89,30 @@ async fn main() -> anyhow::Result<()> {
     }) = &args.command
     {
         match template {
-            TemplateVariate::RegisteredInvite => {
+            TemplateVariant::RegisteredInvite => {
                 println!(
                     "{}",
                     preview::preview_registered_invite(&settings, type_.into(), language)
                 );
             }
-            TemplateVariate::UnregisteredInvite => {
+            TemplateVariant::UnregisteredInvite => {
                 println!(
                     "{}",
                     preview::preview_unregistered_invite(&settings, type_.into(), language)
                 );
             }
-            TemplateVariate::ExternalInvite => {
+            TemplateVariant::ExternalInvite => {
                 println!(
                     "{}",
                     preview::preview_external_invite(&settings, type_.into(), language)
                 );
             }
         }
+
+        exit(0);
+    }
+    if let Some(Commands::PreviewSend { template, to }) = &args.command {
+        preview_send_mail(&settings, *template, to.clone()).await;
 
         exit(0);
     }
