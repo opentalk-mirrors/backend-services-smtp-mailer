@@ -88,11 +88,9 @@
             </div>
 
             <div class="meeting-description" id="cta">
-            <h2>{{fluent(key="invite-unregistered", lang = language, name=event.name) }}</h2>
+            <h2>{{fluent(key="invite-external", lang = language, name=event.name) }}</h2>
             <p>
-                {{ fluent(key="invite-unregistered.p", lang = language, name=inviter.first_name) }}
-                {# Buttons probably dont work in emails, style a `a`link here #}
-                {{ macros::link(fluent_key = "view-in-dashboard-link-unregistered", lang = language, href = event_link, class="btn") }}
+                {{ fluent(key="invite-external.p", lang = language, name=inviter.first_name) }}
             </p>
         </div>
 
@@ -113,27 +111,26 @@
                     {% endif -%}
                     <br />
                 {% endif %}
-                <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = join_link) }}
+                <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = invite_link) }}
                 <br/>
 
                 <b>{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}</b>
-                <br>
-                
+                <br/>
+
                 {% if event.call_in -%}
                     {% set call_in = event.call_in.sip_tel ~ "," ~ event.call_in.sip_id ~ "," ~ event.call_in.sip_password %}
                     <b>{{ fluent(key="meeting-information-call-in", lang = language) }}:</b> <a href="tel:{{ call_in }}">{{ call_in }}</a>
                 {% endif %}
             </p>
             {% if support -%}
-            <h1>{{fluent(key="questions", lang = language)}}</h1>
+            <h2 class="margin-top-40">{{fluent(key="questions", lang = language)}}</h2>
             <p>
                 {{fluent(key="questions.p", lang = language, phone=support.phone, mail=support.mail)}}
             </p>
             {% endif %}
         </div>
         <div id="footer" class="footer">
-            {{ fluent(key="join-directly-fallback-unregistered", lang = language, link = join_link)|safe }}
-            {{ fluent(key="view-in-dashboard-fallback-unregistered", lang = language, link = event_link)|safe }}
+            {{ fluent(key="join-directly-fallback", lang = language, link = invite_link)|safe }}
         </div>
     </body>
 </html>

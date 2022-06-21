@@ -12,6 +12,9 @@ invite-unregistered = OpenTalk Meeting-Invitation - { $name }
 view-in-dashboard-link-unregistered = Login and View Invitation
         .alt = Click to view in dashboard
 
+invite-external = OpenTalk Meeting-Invitation - { $name }
+        .p = {$name} invites you to an OpenTalk-Meeting.
+
 meeting-information = Meeting-Information
 meeting-information-title = Title
 meeting-information-when = Time
