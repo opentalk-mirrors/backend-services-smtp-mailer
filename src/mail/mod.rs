@@ -8,6 +8,7 @@ use lettre::{
 use mail_worker_protocol as proto;
 use tera::Tera;
 
+mod external_invite;
 mod registered_invite;
 mod unregistered_invite;
 
@@ -75,6 +76,13 @@ impl MailBuilder {
             .replace("{event_id}", &event.id.to_string())
     }
 
+    fn create_room_invite_link(&self, invite_id: &str) -> String {
+        let template = &self.builder.guest_link_builder;
+        template
+            .replace("{base_url}", &self.frontend.base_url)
+            .replace("{invite_id}", invite_id)
+    }
+
     pub(crate) fn generate_email(&self, message: &proto::v1::Message) -> Result<Message> {
         let from_mb = message.generate_from_mbox(self)?;
 
@@ -119,6 +127,7 @@ macro_rules! forward {
         match $self {
             ::mail_worker_protocol::v1::Message::RegisteredEventInvite(x) => x.$fn($($arg)*),
             ::mail_worker_protocol::v1::Message::UnregisteredEventInvite(x) => x.$fn($($arg)*),
+            ::mail_worker_protocol::v1::Message::ExternalEventInvite(x) => x.$fn($($arg)*),
         }
     };
 }

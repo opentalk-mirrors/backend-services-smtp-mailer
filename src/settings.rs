@@ -188,6 +188,8 @@ pub struct Templates {
     registered_invite: MailTemplate,
     #[serde(default = "template_default_unregistered_invite")]
     unregistered_invite: MailTemplate,
+    #[serde(default = "template_default_external_invite")]
+    external_invite: MailTemplate,
 }
 
 impl Templates {
@@ -206,6 +208,8 @@ impl Templates {
                 self.unregistered_invite.html.as_ref(),
                 "unregistered_invite.html",
             ),
+            (self.external_invite.txt.as_ref(), "external_invite.txt"),
+            (self.external_invite.html.as_ref(), "external_invite.html"),
         ]
         .into_iter()
     }
@@ -216,6 +220,7 @@ impl Default for Templates {
         Self {
             registered_invite: template_default_registered_invite(),
             unregistered_invite: template_default_unregistered_invite(),
+            external_invite: template_default_external_invite(),
         }
     }
 }
@@ -231,6 +236,13 @@ fn template_default_unregistered_invite() -> MailTemplate {
     MailTemplate {
         txt: "resources/templates/unregistered_invite.txt".into(),
         html: "resources/templates/unregistered_invite.html".into(),
+    }
+}
+
+fn template_default_external_invite() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/external_invite.txt".into(),
+        html: "resources/templates/external_invite.html".into(),
     }
 }
 

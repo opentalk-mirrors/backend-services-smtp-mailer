@@ -50,9 +50,11 @@ impl From<&OutputVariant> for bool {
 }
 
 #[derive(Debug, Clone, ArgEnum)]
+#[allow(clippy::enum_variant_names)]
 enum TemplateVariate {
     RegisteredInvite,
     UnregisteredInvite,
+    ExternalInvite,
 }
 
 #[tokio::main]
@@ -85,6 +87,12 @@ async fn main() -> anyhow::Result<()> {
                 println!(
                     "{}",
                     preview::preview_unregistered_invite(&settings, type_.into(), language)
+                );
+            }
+            TemplateVariate::ExternalInvite => {
+                println!(
+                    "{}",
+                    preview::preview_external_invite(&settings, type_.into(), language)
                 );
             }
         }
