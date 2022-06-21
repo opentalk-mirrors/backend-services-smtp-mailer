@@ -2,30 +2,32 @@
 [rabbit_mq]
 # The URL to use to connect to the rabbit mq broker
 url = "amqp://guest:guest@localhost/%2F"
+# The queue to subscribe to
 mail_task_queue = "opentalk_mailer"
 
 [smtp]
-
 # SMTP Cleartext: smtp://foo:bar@my-mailserver:1234/?disable_starttls=true
 # SMTP with StartTLS: smtp://foo:bar@my-mailserver:1234/
 # SMTP with implicit TLS: smtps://foo:bar@my-mailserver:1234/
 #smtp_server = "smtp://localhost:1025?disable_starttls=true"
 
 [template_builder]
+# Link builder templates. `base_url` and `x_id` will be replaced. Need when the frontend uses different paths.
 
-#join_link_builder = "{base_url}lobby/{room_id}"
+#join_link_builder = "{base_url}/lobby/{room_id}"
 #guest_link_builder = "{base_url}/invite/{invite_id}"
-#dashboard_event_link_builder = "{base_url}/dashboard/meetings/view/{event_id}"
+#dashboard_event_link_builder = "{base_url}/dashboard/meetings/{event_id}"
 
-#[frontend]
+[frontend]
 #base_url = "https://opentalk.mailbox.org"
 
 
-#[templates]
+[templates]
+# Path to templates. These are loaded at runtime and are not compiled in.
 #registered_invite = {html = "resources/templates/registered_invite.html", txt = "resources/templates/registered_invite.html"}
 #unregistered_invite = {html = "resources/templates/unregistered_invite.html", txt = "resources/templates/unregistered_invite.html"}
 
-#[languages]
+[languages]
 #default_language = 'de-DE'
 
 # Optional support contact information
