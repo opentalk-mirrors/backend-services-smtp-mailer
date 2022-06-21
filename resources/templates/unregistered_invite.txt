@@ -17,5 +17,7 @@
 {{ fluent(key="meeting-information-call-in", lang = language) }}: {{ event.call_in.sip_tel }}
 {% endif %}
 
+{% if support -%}
 {{ fluent(key="questions", lang = language) }}
-{{ fluent(key="questions.p", lang = language) }}
+{{ fluent(key="questions.p", lang = language, phone=support.phone, mail=support.mail) }}
+{% endif %}

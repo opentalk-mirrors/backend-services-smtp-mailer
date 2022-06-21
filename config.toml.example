@@ -27,3 +27,11 @@ mail_task_queue = "opentalk_mailer"
 
 #[languages]
 #default_language = 'de-DE'
+
+# Optional support contact information
+# Adds a support contact section to the template
+[support_contact]
+# Support phone contact
+phone = "+49123321123"
+# Support mail contact
+mail = "support@example.com"

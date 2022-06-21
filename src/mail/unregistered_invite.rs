@@ -26,6 +26,7 @@ impl MailTemplate for UnregisteredEventInvite {
             "event_link",
             &builder.create_dashboard_event_link(&self.event),
         );
+        context.insert("support", &builder.support_contact);
 
         builder
             .tera
@@ -50,6 +51,7 @@ impl MailTemplate for UnregisteredEventInvite {
             "event_link",
             &builder.create_dashboard_event_link(&self.event),
         );
+        context.insert("support", &builder.support_contact);
 
         let html = builder.tera.render("unregistered_invite.html", &context)?;
 
