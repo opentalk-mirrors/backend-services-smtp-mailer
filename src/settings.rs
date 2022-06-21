@@ -294,7 +294,7 @@ impl Default for TemplateBuilder {
 }
 
 fn email_default_dashboard_event_link_builder() -> String {
-    "{base_url}/dashboard/{event_id}".into()
+    "{base_url}/dashboard/meetings/{event_id}".into()
 }
 fn email_default_join_link_builder() -> String {
     "{base_url}/lobby/{room_id}".into()
