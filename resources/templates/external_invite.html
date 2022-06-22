@@ -115,13 +115,24 @@
                 
                 {% if event.room.password -%}
                 <br/>
-                <b>{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}</b>
+                <b>{{ fluent(key="meeting-information-password", lang = language) }}:</b> {{ event.room.password}}
                 {% endif %}
 
                 {% if event.call_in -%}
+                    <h2 class="margin-top-40">{{ fluent(key="call-in-header", lang = language) }}</h2>
+                    <b>{{ fluent(key="call-in-hint", lang = language) }}</b>
+
+                    <p><b>{{ fluent(key="call-in-desc", lang = language) }}</b></p>
+
+                    <b>{{ fluent(key="call-in-number", lang = language) }}:</b> {{ event.call_in.sip_tel }}
                     <br/>
-                    {% set call_in = event.call_in.sip_tel ~ "," ~ event.call_in.sip_id ~ "," ~ event.call_in.sip_password %}
-                    <b>{{ fluent(key="meeting-information-call-in", lang = language) }}:</b> <a href="tel:{{ call_in }}">{{ call_in }}</a>
+                    <b>{{ fluent(key="call-in-id", lang = language) }}:</b> {{ event.call_in.sip_id }}
+                    <br/>
+                    <b>{{ fluent(key="call-in-pw", lang = language) }}:</b> {{ event.call_in.sip_password }}
+                    <br/>
+
+                    {% set call_in = event.call_in.sip_tel ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password %}
+                    <b>{{ fluent(key="call-in-quick-dial", lang = language) }}:</b> <a href="tel:{{ call_in }}">{{call_in}}</a>
                 {% endif %}
             </p>
             {% if support -%}

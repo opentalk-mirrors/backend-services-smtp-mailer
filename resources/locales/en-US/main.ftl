@@ -23,7 +23,15 @@ join-directly-link = Open the conference room in new tab/window
         .alt = Click to open
 
 meeting-information-password = Meeting-Password
-meeting-information-call-in = Call-in
+
+call-in-header = Participate via Phone
+call-in-hint = You can use your phone to participate in this meeting.
+call-in-desc = Just dial in the following number and enter the givin Call-In-ID and Call-In-Password, or click the quick dial number on your phone.
+
+call-in-number = Number
+call-in-id = Call-In ID
+call-in-pw = Call-In Password
+call-in-quick-dial = Quick-Dial
 
 questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
