@@ -26,8 +26,8 @@ meeting-information-password = Meeting-Passwort
 meeting-information-call-in = Telefoneinwahl
 
 call-in-header = Via Telefon beitreten
-call-in-hint = Sie können Ihr Telefon verwenden um diesen meeting beizutreten.
-call-in-desc = Einfach die unten angegebene Nummer wählen und Call-In ID sowie Call-In Password angeben. Alternativ direkt mit dem Mobiltelefon auf die Quick-Dial Nummer klicken und direkt loslegen.
+call-in-hint = Sie können Ihr Telefon verwenden um diesem Meeting beizutreten.
+call-in-desc = Einfach die unten angegebene Nummer wählen und Call-In ID sowie Call-In Password angeben. Alternativ direkt mit dem Mobiltelefon auf die Schnelleinwahl klicken und direkt loslegen.
 
 call-in-number = Telefonnummer
 call-in-id = Call-In ID

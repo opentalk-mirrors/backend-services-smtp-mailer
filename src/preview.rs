@@ -30,7 +30,7 @@ fn default_unregistered_invite(
             }),
             rrule: None,
             call_in: Some(CallIn {
-                sip_tel: "+4912332112".into(),
+                sip_tel: "+4930405051330".into(),
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
@@ -77,7 +77,7 @@ fn default_registered_invite(
             }),
             rrule: Some("RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1".to_owned()),
             call_in: Some(CallIn {
-                sip_tel: "+4980011880".to_owned(),
+                sip_tel: "+4930405051330".to_owned(),
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
@@ -118,7 +118,7 @@ fn default_external_invite(
             }),
             rrule: None,
             call_in: Some(CallIn {
-                sip_tel: "+4912332112".into(),
+                sip_tel: "+4930405051330".into(),
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
