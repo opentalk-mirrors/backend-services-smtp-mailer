@@ -9,7 +9,9 @@ use lettre::{
     Message,
 };
 use mail_worker_protocol as proto;
-use tera::Tera;
+use serde_json::{to_value, Value};
+use std::collections::HashMap;
+use tera::{try_get_value, Tera};
 
 mod external_invite;
 mod registered_invite;
@@ -21,6 +23,10 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         "macros.html",
         include_str!("../../resources/templates/macros.html"),
     )?;
+    tera.add_raw_template(
+        "common_styles.css",
+        include_str!("../../resources/templates/common_styles.css"),
+    )?;
     tera.add_template_files(
         settings
             .templates
@@ -30,6 +36,9 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
     tera.build_inheritance_chains()?;
 
     tera.register_function("fluent", FluentLoader::new(&*crate::i18n::LOCALES));
+
+    tera.register_filter("space_groups", space_groups_filter);
+    tera.register_filter("format_telephone_number", format_telephone_number_filter);
 
     Ok(tera)
 }
@@ -216,4 +225,58 @@ impl MailTemplate for proto::v1::Message {
     fn generate_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox> {
         forward!(self, generate_to_mbox, builder)
     }
+}
+
+pub fn space_groups_filter(value: &Value, _: &HashMap<String, Value>) -> tera::Result<Value> {
+    let s = try_get_value!("space_groups", "value", String, value);
+
+    let grouped_string = s
+        .chars()
+        .enumerate()
+        .fold(String::new(), |mut acc, (index, c)| {
+            acc.push(c);
+            if index % 4 == 3 {
+                acc.push(' ');
+            };
+
+            acc
+        });
+    Ok(to_value(&grouped_string).unwrap())
+}
+
+pub fn format_telephone_number_filter(
+    value: &Value,
+    args: &HashMap<String, Value>,
+) -> tera::Result<Value> {
+    let input = try_get_value!("format_telephone_number", "value", String, value);
+
+    let mode = match args.get("mode") {
+        Some(val) => try_get_value!("format_telephone_number", "mode", String, val),
+        None => "e164".to_owned(),
+    };
+
+    let mode = match mode.as_str() {
+        "international" => phonenumber::Mode::International,
+        "national" => phonenumber::Mode::National,
+        "e164" => phonenumber::Mode::E164,
+        "rfc3966" => phonenumber::Mode::Rfc3966,
+        _ => phonenumber::Mode::E164,
+    };
+
+    let number = input.clone();
+    let result = std::panic::catch_unwind(move || phonenumber::parse(None, number));
+
+    let formatted_telehpone_number = match result {
+        Ok(Ok(number)) => number.format().mode(mode).to_string(),
+        e if mode == phonenumber::Mode::Rfc3966 => {
+            log::warn!(" Failed to parse phone number {:?}", e);
+            format!("tel:{input}")
+        }
+        e => {
+            log::warn!(" Failed to parse phone number {:?}", e);
+            input
+        }
+    };
+
+    Ok(to_value(&formatted_telehpone_number).unwrap())
 }

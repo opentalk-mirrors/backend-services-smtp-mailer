@@ -264,7 +264,7 @@ impl Default for Frontend {
 }
 
 fn frontend_default_base_url() -> String {
-    "https://opentalk.example.org/".into()
+    "https://opentalk.example.org".into()
 }
 
 /// Template Builder Config

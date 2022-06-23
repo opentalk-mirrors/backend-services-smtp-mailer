@@ -37,6 +37,7 @@ uuid = { version = "1.0.0", features = ["serde", "v4"] }
 percent-encoding = "2.1"
 tera = { version = "1.15.0", features = ["builtins"] }
 fluent-templates = { version = "0.7.1", features = ["tera"] }
+phonenumber = "0.3"
 
 lettre = { version = "0.10.0-rc.6", default-features = false, features = [
   "builder",

@@ -15,7 +15,7 @@ fn default_unregistered_invite(
         event: Event {
             id: Uuid::new_v4(),
             name: "This is a Preview Event".into(),
-            description: "You can safely ignore this description".into(),
+            description: "This event is a dummy event, and you should have got this invite as a keycloak user. You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),
@@ -30,7 +30,7 @@ fn default_unregistered_invite(
             }),
             rrule: None,
             call_in: Some(CallIn {
-                sip_tel: "+4912332112".into(),
+                sip_tel: "+4930405051330".into(),
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
@@ -62,7 +62,7 @@ fn default_registered_invite(
         event: Event {
             id: Uuid::new_v4(),
             name: "This is a Preview Event".into(),
-            description: "You can safely ignore this description".into(),
+            description: "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".to_owned()),
@@ -77,7 +77,7 @@ fn default_registered_invite(
             }),
             rrule: Some("RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1".to_owned()),
             call_in: Some(CallIn {
-                sip_tel: "+4980011880".to_owned(),
+                sip_tel: "+4930405051330".to_owned(),
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
@@ -103,7 +103,7 @@ fn default_external_invite(
         event: Event {
             id: Uuid::from_u128(1),
             name: "This is a Preview Event".into(),
-            description: "You can safely ignore this description".into(),
+            description: "This event is a dummy event, and you should have got this invite as a external user. You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),
@@ -118,7 +118,7 @@ fn default_external_invite(
             }),
             rrule: None,
             call_in: Some(CallIn {
-                sip_tel: "+4912332112".into(),
+                sip_tel: "+4930405051330".into(),
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),

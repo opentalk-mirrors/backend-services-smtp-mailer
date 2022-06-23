@@ -23,13 +23,20 @@ join-directly-link = Open the conference room in new tab/window
         .alt = Click to open
 
 meeting-information-password = Meeting-Password
-meeting-information-call-in = Call-in
+
+call-in-header = Participate via Phone
+call-in-hint = You can use your phone to participate in this meeting.
+call-in-desc = Just dial in the following number and enter the given Call-In-ID and Call-In-Password, or click the Quick-Dial number on your phone.
+
+call-in-number = Number
+call-in-id = Call-In ID
+call-in-pw = Call-In Password
+call-in-quick-dial = Quick-Dial
 
 questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
 
 
-join-directly-fallback = If you can't click the join link, try entering the following link directly into your browser: { $link }
-view-in-dashboard-fallback = If you can't click on the dashboard link, try entering the following link directly into your browser: { $link }
-join-directly-fallback-unregistered = If you can't click the join link, try entering the following link directly into your browser: { $link }
-view-in-dashboard-fallback-unregistered = If you can't click on the dashboard link, try entering the following link directly into your browser: { $link }
+fallback-footer = If the buttons or links dont’t work open your browser and type in the following links:
+join-directly-fallback = Join Meeting: { $link }
+view-in-dashboard-fallback = Meeting Details: { $link }
