@@ -14,7 +14,7 @@
             <div class="meeting-description" id="cta">
             <h2>{{fluent(key="invite-unregistered", lang = language, name=event.name) }}</h2>
             <p>
-                {{ fluent(key="invite-unregistered.p", lang = language, name=inviter.first_name) }}
+                {{ fluent(key="invite-unregistered.p", lang = language, name=inviter.first_name) }}<br/>
                 {# Buttons probably dont work in emails, style a `a`link here #}
                 {{ macros::link(fluent_key = "view-in-dashboard-link-unregistered", lang = language, href = event_link, class="btn") }}
             </p>
@@ -43,29 +43,33 @@
                 <br/>
                 <b>{{ fluent(key="meeting-information-password", lang = language) }}:</b> {{ event.room.password}}
                 {% endif %}
-                
-                {% if event.call_in -%}
-                    <h2 class="margin-top-40">{{ fluent(key="call-in-header", lang = language) }}</h2>
-                    <b>{{ fluent(key="call-in-hint", lang = language) }}</b>
-
-                    <p><b>{{ fluent(key="call-in-desc", lang = language) }}</b></p>
-
-                    <b>{{ fluent(key="call-in-number", lang = language) }}:</b> {{ event.call_in.sip_tel | format_telephone_number(mode = "international") }}
-                    <br/>
-                    <b>{{ fluent(key="call-in-id", lang = language) }}:</b> {{ event.call_in.sip_id | space_groups }}
-                    <br/>
-                    <b>{{ fluent(key="call-in-pw", lang = language) }}:</b> {{ event.call_in.sip_password | space_groups }}
-                    <br/>
-
-                    {% set e164 =  event.call_in.sip_tel | format_telephone_number(mode = "e164") %}
-                    {% set quick_dial = e164 ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password %}
-                    
-                    {% set rfc3966 =  event.call_in.sip_tel | format_telephone_number(mode = "rfc3966") %}
-                    {% set quick_dial_href = rfc3966 ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password %}
-                    
-                    <b>{{ fluent(key="call-in-quick-dial", lang = language) }}:</b> <a href="{{ quick_dial_href }}">{{ quick_dial }}</a>
-                {% endif %}
             </p>
+            {% if event.call_in -%}
+                <h2 class="margin-top-40">{{ fluent(key="call-in-header", lang = language) }}</h2>
+                <p>
+                    <b>{{ fluent(key="call-in-hint", lang = language) }}</b><br/>
+                    {{ fluent(key="call-in-desc", lang = language) }}
+                </p>
+                <div>
+                    <b>{{ fluent(key="call-in-number", lang = language) }}:</b> {{ event.call_in.sip_tel | format_telephone_number(mode = "international") }}
+                </div>
+                <div>
+                    <b>{{ fluent(key="call-in-id", lang = language) }}:</b> {{ event.call_in.sip_id | space_groups }}
+                </div>
+                <div>
+                    <b>{{ fluent(key="call-in-pw", lang = language) }}:</b> {{ event.call_in.sip_password | space_groups }}
+                </div>
+
+                {% set e164 =  event.call_in.sip_tel | format_telephone_number(mode = "e164") %}
+                {% set quick_dial = e164 ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password %}
+
+                {% set rfc3966 =  event.call_in.sip_tel | format_telephone_number(mode = "rfc3966") %}
+                {% set quick_dial_href = rfc3966 ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password %}
+                <div>
+                    <b>{{ fluent(key="call-in-quick-dial", lang = language) }}:</b> <a href="{{ quick_dial_href }}">{{ quick_dial }}</a>
+                </div>
+            {% endif %}
+
             {% if support -%}
             <h2 class="margin-top-40">{{fluent(key="questions", lang = language)}}</h2>
             <p>
