@@ -1,5 +1,7 @@
 {% import "macros.html" as macros %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
+    <meta charset="UTF-8">
     <style>
        {% include "common_styles.css" %}
     </style>
@@ -72,8 +74,11 @@
             {% endif %}
         </div>
         <div id="footer" class="footer">
-            {{ fluent(key="join-directly-fallback-unregistered", lang = language, link = join_link)|safe }}
-            {{ fluent(key="view-in-dashboard-fallback-unregistered", lang = language, link = event_link)|safe }}
+            <p>
+                {{ fluent(key="fallback-footer", lang = language) }}<br/>
+                {{ fluent(key="join-directly-fallback", lang = language, link = join_link)|safe }}<br/>
+                {{ fluent(key="view-in-dashboard-fallback", lang = language, link = event_link)|safe }}
+            </p>
         </div>
     </body>
 </html>

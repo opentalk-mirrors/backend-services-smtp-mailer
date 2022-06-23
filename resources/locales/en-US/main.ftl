@@ -37,7 +37,6 @@ questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
 
 
-join-directly-fallback = If you can't click the join link, try entering the following link directly into your browser: { $link }
-view-in-dashboard-fallback = If you can't click on the dashboard link, try entering the following link directly into your browser: { $link }
-join-directly-fallback-unregistered = If you can't click the join link, try entering the following link directly into your browser: { $link }
-view-in-dashboard-fallback-unregistered = If you can't click on the dashboard link, try entering the following link directly into your browser: { $link }
+fallback-footer = If the buttons or links dont’t work open your browser and type in the following links:
+join-directly-fallback = Join Meeting: { $link }
+view-in-dashboard-fallback = Meeting Details: { $link }

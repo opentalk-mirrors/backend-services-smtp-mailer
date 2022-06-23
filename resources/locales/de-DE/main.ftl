@@ -25,7 +25,7 @@ join-directly-link = Öffne den Raum in einem neuen Tab/Fenster
 meeting-information-password = Meeting-Passwort
 meeting-information-call-in = Telefoneinwahl
 
-call-in-header = Via Telefon beitreten
+call-in-header = Beitritt via Telefon
 call-in-hint = Sie können Ihr Telefon verwenden um diesem Meeting beizutreten.
 call-in-desc = Einfach die unten angegebene Nummer wählen und Call-In ID sowie Call-In Password angeben. Alternativ direkt mit dem Mobiltelefon auf die Schnelleinwahl klicken und direkt loslegen.
 
@@ -37,7 +37,6 @@ call-in-quick-dial = Schnelleinwahl
 questions = Noch Fragen? Wir helfen Ihnen Gerne!
         .p = Um mit einem unserer Mitarbeiter in Kontakt zu treten, rufen Sie uns einfach kostenfrei unter { $phone } an. Alternativ können Sie auch gerne eine E-Mail mit ihrem Anliegen an { $mail } schicken.
 
-join-directly-fallback = Sollten Sie den 'Jetzt beitreten' Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
-view-in-dashboard-fallback = Sollten Sie den Dashboard Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
-join-directly-fallback-unregistered = Sollten Sie den Jetzt beitreten Link nicht anklicken könnten, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
-view-in-dashboard-fallback-unregistered = Sollten Sie den Dashboard Link nicht anklicken können, versuchen Sie die folgende URL in ihre Browserleiste einzugeben: { $link }
+fallback-footer = Sollten die Buttons oder Links nicht funktionieren, können Sie die folgenden URLs in ihrem Browser eingeben:
+join-directly-fallback = Meeting beitreten: { $link }
+view-in-dashboard-fallback = Meeting details: { $link }

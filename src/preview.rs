@@ -15,7 +15,7 @@ fn default_unregistered_invite(
         event: Event {
             id: Uuid::new_v4(),
             name: "This is a Preview Event".into(),
-            description: "You can safely ignore this description".into(),
+            description: "This event is a dummy event, and you should have got this invite as a keycloak user. You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),
@@ -62,7 +62,7 @@ fn default_registered_invite(
         event: Event {
             id: Uuid::new_v4(),
             name: "This is a Preview Event".into(),
-            description: "You can safely ignore this description".into(),
+            description: "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".to_owned()),
@@ -103,7 +103,7 @@ fn default_external_invite(
         event: Event {
             id: Uuid::from_u128(1),
             name: "This is a Preview Event".into(),
-            description: "You can safely ignore this description".into(),
+            description: "This event is a dummy event, and you should have got this invite as a external user. You can safely ignore this description".into(),
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),

@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::{ics::create_ics_v1, settings};
 use anyhow::Result;
 use fluent_templates::FluentLoader;
@@ -12,6 +10,7 @@ use lettre::{
 };
 use mail_worker_protocol as proto;
 use serde_json::{to_value, Value};
+use std::collections::HashMap;
 use tera::{try_get_value, Tera};
 
 mod external_invite;
