@@ -105,11 +105,11 @@
                 {# fluent-rs currently does not support the datetime stuff. So we hardcode the european format here#}
                 {# This should have more logic to allow for 24h+ events #}
 
-                {% if event.start_time is string -%}
-                    {% if event.end_time is string -%}
-                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time | date(format="%d.%m.%Y %H:%M")}}-{{ event.end_time | date(format="%H:%M")}}
+                {% if event.start_time -%}
+                    {% if event.end_time -%}
+                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time.time | date(format="%d.%m.%Y %H:%M")}}-{{ event.end_time.time | date(format="%H:%M")}}
                     {%else -%}
-                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time | date(format="%d.%m.%Y %H:%M")}}
+                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time.time | date(format="%d.%m.%Y %H:%M")}}
                     {% endif -%}
                     <br />
                 {% endif %}
