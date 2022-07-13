@@ -1,9 +1,10 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
 use chrono_tz::Tz;
 use ics::components::Property;
 use ics::properties::{Attendee, Description, ExDate, Organizer, RDate, RRule, Summary};
 use ics::{escape_text, parameters, Event, ICalendar};
+use ics_chrono_tz::ToIcsTimeZone;
 use mail_worker_protocol::v1;
 
 pub enum Invitee<'a> {
@@ -16,13 +17,22 @@ pub(crate) fn create_ics_v1(
     event: &v1::Event,
     invitee: Invitee,
 ) -> Result<Option<Vec<u8>>> {
-    let start = if let Some(start) = &event.start_time {
-        start
+    let (start, end) = if let (Some(start), Some(end)) = (&event.start_time, &event.end_time) {
+        (start, end)
     } else {
         return Ok(None);
     };
 
     let mut calendar = ICalendar::new("2.0", "-//OpenTalk GmbH//NONSGML smtp-mailer v1.0//EN");
+
+    let start_tz: Tz = start.timezone.parse().ok().context("start timezone")?;
+    let end_tz: Tz = end.timezone.parse().ok().context("end timezone")?;
+
+    calendar.add_timezone(ToIcsTimeZone::to_latest_ics_timezone(&start_tz));
+
+    if start_tz != end_tz {
+        calendar.add_timezone(ToIcsTimeZone::to_latest_ics_timezone(&end_tz));
+    }
 
     // create event which contains the information regarding the conference
     let mut event_obj = Event::new(

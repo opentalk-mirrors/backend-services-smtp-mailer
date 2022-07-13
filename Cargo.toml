@@ -11,6 +11,9 @@ build = "build.rs"
 # mail-worker-proto = { git = "ssh://git@git.heinlein-video.de:222/r.floren/k3k-controller.git", version = "0.1.0", branch = "mails", package = "mail-worker-proto" }
 mail-worker-protocol = { path = "vendored/k3k-controller/crates/mail-worker-protocol", package = "k3k-mail-worker-protocol" }
 
+# ics-chrono-tz = { git = "ssh://git@git.heinlein-video.de:222/k.baltruschat/ics-timezones.git", branch = "main" }
+ics-chrono-tz = { path = "vendored/ics-chrono-tz" }
+
 lapin = { version = "2.1.1" }
 tokio-reactor-trait = "1"
 tokio-executor-trait = "2"
