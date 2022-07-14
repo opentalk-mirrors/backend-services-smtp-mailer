@@ -31,9 +31,9 @@
 
                 {% if event.start_time -%}
                     {% if event.end_time -%}
-                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time.time | date(format="%d.%m.%Y %H:%M")}}-{{ event.end_time.time | date(format="%H:%M")}}
+                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time.time | date(timezone = event.start_time.timezone, format="%d.%m.%Y %H:%M")}}-{{ event.end_time.time | date(timezone = event.end_time.timezone, format="%H:%M")}}
                     {%else -%}
-                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time.time | date(format="%d.%m.%Y %H:%M")}}
+                        <b>{{ fluent(key="meeting-information-when", lang = language) }}:</b> {{ event.start_time.time | date(timezone = event.start_time.timezone, format="%d.%m.%Y %H:%M")}}
                     {% endif -%}
                     <br />
                 {% endif %}
