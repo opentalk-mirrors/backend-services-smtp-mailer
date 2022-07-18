@@ -1272,6 +1272,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b891481ef6353e3b97118d4650469e379a39e4373a66908c12f99763182826b1"
 
 [[package]]
+name = "ics-chrono-tz"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "chrono-tz",
+ "ics",
+ "parse-zoneinfo",
+]
+
+[[package]]
 name = "idna"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2666,6 +2676,7 @@ dependencies = [
  "fluent-templates",
  "futures",
  "ics",
+ "ics-chrono-tz",
  "k3k-mail-worker-protocol",
  "lapin",
  "lettre",
