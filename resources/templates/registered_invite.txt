@@ -25,7 +25,7 @@
 {{ fluent(key="call-in-id", lang = language) }}: {{ event.call_in.sip_id | space_groups }}
 {{ fluent(key="call-in-pw", lang = language) }}: {{ event.call_in.sip_password | space_groups }}
 {%- set e164 =  event.call_in.sip_tel | format_telephone_number(mode = "e164") -%}
-{%- set quick_dial = e164 ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password -%}
+{% set quick_dial = e164 ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password %}
 {{ fluent(key="call-in-quick-dial", lang = language) }}: {{ quick_dial }}
 {% endif %}
 {% if support %}
