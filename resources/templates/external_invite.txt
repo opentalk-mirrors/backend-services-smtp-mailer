@@ -6,9 +6,9 @@
 {{ fluent(key="meeting-information-title", lang = language) }}: {{ event.name }}
 {% if event.start_time -%}
 {% if event.end_time -%}
-{{ fluent(key="meeting-information-when", lang = language) }}: {{ event.start_time.time | date(format="%d.%m.%Y %H:%M")}}-{{ event.end_time.time | date(format="%H:%M")}}
+{{ fluent(key="meeting-information-when", lang = language) }}: {{ event.start_time.time | date(timezone = event.start_time.timezone, format="%d.%m.%Y %H:%M")}}-{{ event.end_time.time | date(timezone = event.start_time.timezone, format="%H:%M")}}
 {%else -%}
-{{ fluent(key="meeting-information-when", lang = language) }}: {{ event.start_time.time | date(format="%d.%m.%Y %H:%M")}}
+{{ fluent(key="meeting-information-when", lang = language) }}: {{ event.start_time.time | date(timezone = event.start_time.timezone, format="%d.%m.%Y %H:%M")}}
 {% endif -%}
 {% endif %}
 {{ fluent(key="meeting-information-link", lang = language) }}: {{ invite_link }}
