@@ -16,6 +16,7 @@ pub(crate) fn create_ics_v1(
     inviter: &v1::User,
     event: &v1::Event,
     invitee: Invitee,
+    description: &str,
 ) -> Result<Option<Vec<u8>>> {
     let (start, end) = if let (Some(start), Some(end)) = (&event.start_time, &event.end_time) {
         (start, end)
@@ -42,7 +43,8 @@ pub(crate) fn create_ics_v1(
 
     // add properties
     event_obj.push(Summary::new(escape_text(event.name.clone())));
-    event_obj.push(Description::new(escape_text(event.description.clone())));
+
+    event_obj.push(Description::new(escape_text(description)));
 
     let mut organizer_property = Organizer::new(format!("mailto:{}", inviter.email.as_ref()));
     organizer_property
@@ -152,7 +154,7 @@ mod test {
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
-            description: "Lel".to_owned(),
+            description: "Very descriptive".to_owned(),
             room: Room {
                 id: Uuid::from_u128(3),
                 password: Some("ddd".to_owned()),
@@ -163,7 +165,11 @@ mod test {
             email: "g@example.org",
             name: "G. G.",
         };
-        let ics = create_ics_v1(&user, &event, invitee).unwrap().unwrap();
+
+        let ics = create_ics_v1(&user, &event, invitee, &event.description)
+            .expect("Failed to create ics file")
+            .expect("No ics file for this event");
+
         let ics_str = String::from_utf8_lossy(&ics);
         let to_test = ics_str.lines().collect::<Vec<_>>();
 
@@ -171,7 +177,7 @@ mod test {
         assert!(to_test.contains(&"ATTENDEE;CN=G. G.:mailto:g@example.org"));
         assert!(to_test.contains(&"ORGANIZER;CN=Klaus Doktor:mailto:klaus@example.org"));
         assert!(to_test.contains(&"SUMMARY:Test"));
-        assert!(to_test.contains(&"DESCRIPTION:Lel"));
+        assert!(to_test.contains(&"DESCRIPTION:Very descriptive"));
         assert!(to_test.contains(&"DTSTART;TZID=Europe/Berlin:20220620T020000"));
         assert!(to_test.contains(&"DTEND;TZID=Europe/Berlin:20220620T120000"));
         assert!(to_test.contains(&"RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1"));
