@@ -1,7 +1,7 @@
 use super::{generate_mailbox_name, MailTemplate};
-use crate::i18n;
+use crate::{i18n, ics::create_ics_v1};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
-use lettre::message::Mailbox;
+use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
 use protocol::v1::RegisteredEventInvite;
 use std::collections::HashMap;
@@ -100,6 +100,43 @@ impl MailTemplate for RegisteredEventInvite {
         );
 
         Ok(mbox)
+    }
+
+    fn generate_attachments(
+        &self,
+        builder: &crate::MailBuilder,
+    ) -> anyhow::Result<Vec<SinglePart>> {
+        let language = if !self.inviter.language.is_empty() {
+            &self.inviter.language
+        } else {
+            &builder.default_language
+        };
+
+        let mut context = tera::Context::new();
+        context.insert("meeting_link", &builder.create_join_link(&self.event));
+        context.insert("language", &language);
+        context.insert("event", &self.event);
+
+        let description = builder.tera.render("ics_description.txt", &context)?;
+
+        let name = format!("{} {}", &self.invitee.first_name, &self.invitee.last_name);
+        let invitee = crate::ics::Invitee::WithName {
+            email: self.invitee.email.as_ref(),
+            name: &name,
+        };
+
+        let ics = create_ics_v1(&self.inviter, &self.event, invitee, &description)?;
+
+        let mut attachments = vec![];
+
+        if let Some(ics) = ics {
+            let ics = Attachment::new("invite.ics".into())
+                .body(ics, ContentType::parse("text/calendar").unwrap());
+
+            attachments.push(ics);
+        }
+
+        Ok(attachments)
     }
 }
 

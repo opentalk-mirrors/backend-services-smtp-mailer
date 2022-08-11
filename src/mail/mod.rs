@@ -1,10 +1,10 @@
-use crate::{ics::create_ics_v1, settings};
+use crate::settings;
 use anyhow::Result;
 use fluent_templates::FluentLoader;
 use lettre::{
     message::{
-        header::{self, ContentType},
-        Attachment, Mailbox, MultiPart, SinglePart,
+        header::{self},
+        Mailbox, MultiPart, SinglePart,
     },
     Message,
 };
@@ -26,6 +26,10 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
     tera.add_raw_template(
         "common_styles.css",
         include_str!("../../resources/templates/common_styles.css"),
+    )?;
+    tera.add_raw_template(
+        "ics_description.txt",
+        include_str!("../../resources/templates/ics_description.txt"),
     )?;
     tera.add_template_files(
         settings
@@ -59,6 +63,7 @@ pub trait MailTemplate {
     fn generate_subject(&self, builder: &MailBuilder) -> Result<String>;
     fn generate_from_mbox(&self, builder: &MailBuilder) -> Result<Mailbox>;
     fn generate_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox>;
+    fn generate_attachments(&self, builder: &MailBuilder) -> Result<Vec<SinglePart>>;
 }
 
 impl MailBuilder {
@@ -116,13 +121,11 @@ impl MailBuilder {
                     .body(html),
             );
 
-        if let Some(attachments) = create_attachments(message)? {
+        for attachment in message.generate_attachments(self)? {
             let mut builder = MultiPart::mixed().multipart(mail_content);
 
-            for (name, content_type, body) in attachments.into_iter() {
-                let file = Attachment::new(name).body(body, content_type);
-                builder = builder.singlepart(file);
-            }
+            builder = builder.singlepart(attachment);
+
             mail_content = builder;
         }
 
@@ -141,57 +144,6 @@ fn generate_mailbox_name(title: &str, first_name: &str, last_name: &str) -> Stri
         format!("{first_name} {last_name}")
     } else {
         format!("{title} {first_name} {last_name}")
-    }
-}
-
-fn create_attachments(
-    message: &proto::v1::Message,
-) -> Result<Option<impl IntoIterator<Item = (String, ContentType, Vec<u8>)>>> {
-    match message {
-        proto::v1::Message::RegisteredEventInvite(message) => {
-            let name = format!(
-                "{} {}",
-                &message.invitee.first_name, &message.invitee.last_name
-            );
-            let invitee = crate::ics::Invitee::WithName {
-                email: message.invitee.email.as_ref(),
-                name: &name,
-            };
-
-            let body = create_ics_v1(&message.inviter, &message.event, invitee)?;
-            if let Some(body) = body {
-                return Ok(Some(vec![(
-                    "invite.ics".to_string(),
-                    ContentType::parse("text/calendar").unwrap(),
-                    body,
-                )]));
-            }
-            Ok(None)
-        }
-        proto::v1::Message::UnregisteredEventInvite(message) => {
-            let invitee = crate::ics::Invitee::WithoutName(message.invitee.as_ref());
-            let body = create_ics_v1(&message.inviter, &message.event, invitee)?;
-            if let Some(body) = body {
-                return Ok(Some(vec![(
-                    "invite.ics".to_string(),
-                    ContentType::parse("text/calendar").unwrap(),
-                    body,
-                )]));
-            }
-            Ok(None)
-        }
-        proto::v1::Message::ExternalEventInvite(message) => {
-            let invitee = crate::ics::Invitee::WithoutName(message.invitee.as_ref());
-            let body = create_ics_v1(&message.inviter, &message.event, invitee)?;
-            if let Some(body) = body {
-                return Ok(Some(vec![(
-                    "invite.ics".to_string(),
-                    ContentType::parse("text/calendar").unwrap(),
-                    body,
-                )]));
-            }
-            Ok(None)
-        }
     }
 }
 
@@ -224,6 +176,10 @@ impl MailTemplate for proto::v1::Message {
 
     fn generate_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox> {
         forward!(self, generate_to_mbox, builder)
+    }
+
+    fn generate_attachments(&self, builder: &MailBuilder) -> Result<Vec<SinglePart>> {
+        forward!(self, generate_attachments, builder)
     }
 }
 
