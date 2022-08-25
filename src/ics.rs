@@ -13,7 +13,7 @@ pub enum Invitee<'a> {
 }
 
 pub(crate) fn create_ics_v1(
-    inviter: &v1::User,
+    inviter: &v1::RegisteredUser,
     event: &v1::Event,
     invitee: Invitee,
     description: &str,
@@ -124,12 +124,12 @@ fn create_time_property<'a>(
 mod test {
     use super::{create_ics_v1, Invitee};
     use chrono::{TimeZone, Utc};
-    use mail_worker_protocol::v1::{CallIn, Event, Room, Time, User};
+    use mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
     use uuid::Uuid;
 
     #[test]
     fn test_ics() {
-        let user = User {
+        let user = RegisteredUser {
             email: "klaus@example.org".into(),
             title: "Dr.".to_owned(),
             first_name: "Klaus".to_owned(),

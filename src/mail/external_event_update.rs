@@ -3,15 +3,15 @@ use crate::{i18n, ics::create_ics_v1};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
-use protocol::v1::ExternalEventInvite;
+use protocol::v1::ExternalEventUpdate;
 use std::collections::HashMap;
 
-fn language(obj: &ExternalEventInvite) -> &String {
+fn language(obj: &ExternalEventUpdate) -> &String {
     &obj.inviter.language
 }
 
 fn build_template_context(
-    obj: &ExternalEventInvite,
+    obj: &ExternalEventUpdate,
     builder: &super::MailBuilder,
 ) -> tera::Context {
     let mut context = tera::Context::new();
@@ -34,20 +34,22 @@ fn build_template_context(
     context
 }
 
-impl MailTemplate for ExternalEventInvite {
+impl MailTemplate for ExternalEventUpdate {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
         builder
             .tera
-            .render("external_invite.txt", &context)
+            .render("external_event_update.txt", &context)
             .map_err(Into::into)
     }
 
     fn generate_email_html(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
-        let html = builder.tera.render("external_invite.html", &context)?;
+        let html = builder
+            .tera
+            .render("external_event_update.html", &context)?;
 
         let inliner = css_inline::CSSInliner::options().build();
         inliner.inline(&html).map_err(Into::into)
@@ -63,11 +65,7 @@ impl MailTemplate for ExternalEventInvite {
             builder.default_language.parse()?
         };
 
-        Ok(i18n::LOCALES.lookup_complete(
-            &lang,
-            "unregistered-event-invite-subject",
-            Some(&subject_args),
-        ))
+        Ok(i18n::LOCALES.lookup_complete(&lang, "event-update-subject", Some(&subject_args)))
     }
 
     fn generate_from_mbox(

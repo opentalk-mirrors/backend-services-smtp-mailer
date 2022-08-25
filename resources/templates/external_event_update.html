@@ -16,9 +16,9 @@
             </div>
 
             <div class="meeting-description" id="cta">
-                <h2>{{fluent(key="invite-external", lang = language, name=event.name) }}</h2>
+                <h2>{{fluent(key="event_update", lang = language, name=event.name) }}</h2>
                 <p>
-                    {{ fluent(key="invite-external.p", lang = language, name=inviter.first_name) }}
+                {{ fluent(key="event_update.p", lang = language, name=inviter.first_name) }}
                 </p>
             </div>
 
@@ -47,7 +47,7 @@
                     {% endif %}
                 </p>
                 {% include "callin_html.include" %}
-
+                
                 {% if support -%}
                 <h2 class="margin-top-40">{{fluent(key="questions", lang = language)}}</h2>
                 <p>
@@ -58,7 +58,7 @@
             <div id="footer" class="footer">
                 <p>
                     {{ fluent(key="fallback-footer", lang = language) }}<br/>
-                    {{ fluent(key="join-directly-fallback", lang = language, link = invite_link)|safe }}
+                    {{ fluent(key="join-directly-fallback", lang = language, link = invite_link)|safe }}<br/>
                 </p>
             </div>
         </div>

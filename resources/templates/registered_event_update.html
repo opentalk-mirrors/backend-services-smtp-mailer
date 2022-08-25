@@ -16,9 +16,12 @@
             </div>
 
             <div class="meeting-description" id="cta">
-                <h2>{{fluent(key="invite-external", lang = language, name=event.name) }}</h2>
+                <h2>{{fluent(key="event_update", lang = language, name=event.name) }}</h2>
                 <p>
-                    {{ fluent(key="invite-external.p", lang = language, name=inviter.first_name) }}
+                {{ fluent(key="event_update.p", lang = language, name=inviter.first_name) }}
+                <br/>
+                {# Buttons probably dont work in emails, style a `a`link here #}
+                {{ macros::link(fluent_key = "view-in-dashboard-link", lang = language, href = event_link, class="btn") }}
                 </p>
             </div>
 
@@ -39,7 +42,7 @@
                         {% endif -%}
                         <br />
                     {% endif %}
-                    <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = invite_link) }}
+                    <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = join_link) }}
 
                     {% if event.room.password -%}
                     <br/>
@@ -58,7 +61,8 @@
             <div id="footer" class="footer">
                 <p>
                     {{ fluent(key="fallback-footer", lang = language) }}<br/>
-                    {{ fluent(key="join-directly-fallback", lang = language, link = invite_link)|safe }}
+                    {{ fluent(key="join-directly-fallback", lang = language, link = join_link)|safe }}<br/>
+                    {{ fluent(key="view-in-dashboard-fallback", lang = language, link = event_link)|safe }}
                 </p>
             </div>
         </div>

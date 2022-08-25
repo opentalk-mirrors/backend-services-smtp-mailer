@@ -9,9 +9,13 @@ fn default_unregistered_invite(
     to_overwrite: Option<String>,
 ) -> protocol::v1::UnregisteredEventInvite {
     protocol::v1::UnregisteredEventInvite {
-        invitee: to_overwrite
+        invitee: protocol::v1::UnregisteredUser{
+            email: to_overwrite
             .unwrap_or_else(|| "receiver@example.org".into())
             .into(),
+            first_name: "".to_string(),
+            last_name: "".to_string(),
+        },
         event: Event {
             id: Uuid::new_v4(),
             name: "This is a Preview Event".into(),
@@ -35,7 +39,7 @@ fn default_unregistered_invite(
                 sip_password: "1234567890".into(),
             }),
         },
-        inviter: protocol::v1::User {
+        inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
             title: "10x developer".into(),
             first_name: "Alice".into(),
@@ -50,7 +54,7 @@ fn default_registered_invite(
     to_overwrite: Option<String>,
 ) -> protocol::v1::RegisteredEventInvite {
     protocol::v1::RegisteredEventInvite {
-        invitee: protocol::v1::User {
+        invitee: protocol::v1::RegisteredUser {
             email: to_overwrite
                 .unwrap_or_else(|| "receiver@example.org".into())
                 .into(),
@@ -82,7 +86,7 @@ fn default_registered_invite(
                 sip_password: "555NASE".to_owned(),
             }),
         },
-        inviter: protocol::v1::User {
+        inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
             title: "10x developer".into(),
             first_name: "Alice".into(),
@@ -97,9 +101,11 @@ fn default_external_invite(
     to_overwrite: Option<String>,
 ) -> protocol::v1::ExternalEventInvite {
     protocol::v1::ExternalEventInvite {
-        invitee: to_overwrite
-            .unwrap_or_else(|| "invitee@example.org".into())
+        invitee: protocol::v1::ExternalUser{
+            email: to_overwrite
+            .unwrap_or_else(|| "receiver@example.org".into())
             .into(),
+        },
         event: Event {
             id: Uuid::from_u128(1),
             name: "This is a Preview Event".into(),
@@ -123,7 +129,7 @@ fn default_external_invite(
                 sip_password: "1234567890".into(),
             }),
         },
-        inviter: protocol::v1::User {
+        inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
             title: "10x developer".into(),
             first_name: "Alice".into(),

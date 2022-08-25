@@ -16,9 +16,9 @@
             </div>
 
             <div class="meeting-description" id="cta">
-                <h2>{{fluent(key="invite-external", lang = language, name=event.name) }}</h2>
+                <h2>{{fluent(key="event_cancellation", lang = language, name=event.name) }}</h2>
                 <p>
-                    {{ fluent(key="invite-external.p", lang = language, name=inviter.first_name) }}
+                {{ fluent(key="event_cancellation.p", lang = language, name=inviter.first_name) }}
                 </p>
             </div>
 
@@ -39,7 +39,7 @@
                         {% endif -%}
                         <br />
                     {% endif %}
-                    <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = invite_link) }}
+                    <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = join_link) }}
 
                     {% if event.room.password -%}
                     <br/>
@@ -58,7 +58,7 @@
             <div id="footer" class="footer">
                 <p>
                     {{ fluent(key="fallback-footer", lang = language) }}<br/>
-                    {{ fluent(key="join-directly-fallback", lang = language, link = invite_link)|safe }}
+                    {{ fluent(key="join-directly-fallback", lang = language, link = join_link)|safe }}<br/>
                 </p>
             </div>
         </div>
