@@ -15,8 +15,7 @@ pub struct Worker<T> {
 
 impl<T> Worker<T>
 where
-    T: lettre::AsyncTransport + Sync,
-    anyhow::Error: From<T::Error>,
+    T: lettre::AsyncTransport<Error = lettre::transport::smtp::Error> + Sync,
 {
     /// Creates a new Worker instance
     pub fn new(mail_backend: T, settings: &settings::Settings) -> Result<Self> {
@@ -52,10 +51,32 @@ where
                     }
                 }
                 Result::Err(e) => {
-                    if let Err(e) = delivery.reject(BasicRejectOptions { requeue: true }).await {
+                    // check if the error is a smtp error and a requeue/exit is applicable
+                    let (requeue, exit) = if let Some(smtp_error) =
+                        e.downcast_ref::<lettre::transport::smtp::Error>()
+                    {
+                        if smtp_error.is_timeout() {
+                            (true, true)
+                        } else {
+                            (
+                                !(smtp_error.is_permanent() || smtp_error.is_client()),
+                                false,
+                            )
+                        }
+                    } else {
+                        (false, false)
+                    };
+
+                    if let Err(e) = delivery.reject(BasicRejectOptions { requeue }).await {
                         log::error!("Ack Error{}", e);
                     }
-                    log::error!("Handler Error: {}", e);
+
+                    log::debug!("Handler Error: {}", e);
+
+                    if exit {
+                        return Err(e);
+                    }
+
                     continue;
                 }
             }
@@ -82,8 +103,7 @@ pub async fn send_mail_v1<T>(
     message: &proto::v1::Message,
 ) -> Result<()>
 where
-    T: lettre::AsyncTransport + Sync,
-    anyhow::Error: From<T::Error>,
+    T: lettre::AsyncTransport<Error = lettre::transport::smtp::Error> + Sync,
 {
     let email = mail_builder.generate_email(message)?;
     // Hack until lettre supports printing the To header
