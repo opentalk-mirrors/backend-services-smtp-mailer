@@ -1,6 +1,6 @@
 use crate::settings;
 use anyhow::Result;
-use fluent_templates::FluentLoader;
+use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
 use lettre::{
     message::{
         header::{self},
@@ -13,8 +13,14 @@ use serde_json::{to_value, Value};
 use std::collections::HashMap;
 use tera::{try_get_value, Tera};
 
+mod external_event_cancellation;
+mod external_event_update;
 mod external_invite;
+mod registered_event_cancellation;
+mod registered_event_update;
 mod registered_invite;
+mod unregistered_event_cancellation;
+mod unregistered_event_update;
 mod unregistered_invite;
 
 pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Tera> {
@@ -26,6 +32,18 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
     tera.add_raw_template(
         "common_styles.css",
         include_str!("../../resources/templates/common_styles.css"),
+    )?;
+    tera.add_raw_template(
+        "header_logo.include",
+        include_str!("../../resources/templates/header_logo.include"),
+    )?;
+    tera.add_raw_template(
+        "callin_txt.include",
+        include_str!("../../resources/templates/callin_txt.include"),
+    )?;
+    tera.add_raw_template(
+        "callin_html.include",
+        include_str!("../../resources/templates/callin_html.include"),
     )?;
     tera.add_raw_template(
         "ics_description.txt",
@@ -150,9 +168,18 @@ fn generate_mailbox_name(title: &str, first_name: &str, last_name: &str) -> Stri
 macro_rules! forward {
     ($self:ident, $fn:ident, $($arg:ident),*) => {
         match $self {
+            // Invites
             ::mail_worker_protocol::v1::Message::RegisteredEventInvite(x) => x.$fn($($arg)*),
             ::mail_worker_protocol::v1::Message::UnregisteredEventInvite(x) => x.$fn($($arg)*),
             ::mail_worker_protocol::v1::Message::ExternalEventInvite(x) => x.$fn($($arg)*),
+            // Updates
+            ::mail_worker_protocol::v1::Message::RegisteredEventUpdate(x) => x.$fn($($arg)*),
+            ::mail_worker_protocol::v1::Message::UnregisteredEventUpdate(x) => x.$fn($($arg)*),
+            ::mail_worker_protocol::v1::Message::ExternalEventUpdate(x) => x.$fn($($arg)*),
+            // Cancellations
+            ::mail_worker_protocol::v1::Message::RegisteredEventCancellation(x) => x.$fn($($arg)*),
+            ::mail_worker_protocol::v1::Message::UnregisteredEventCancellation(x) => x.$fn($($arg)*),
+            ::mail_worker_protocol::v1::Message::ExternalEventCancellation(x) => x.$fn($($arg)*),
         }
     };
 }
@@ -235,4 +262,64 @@ pub fn format_telephone_number_filter(
     };
 
     Ok(to_value(&formatted_telehpone_number).unwrap())
+}
+
+fn common_subject_args(
+    event: &proto::v1::Event,
+    inviter: &proto::v1::RegisteredUser,
+) -> HashMap<String, FluentValue<'static>> {
+    let mut args: HashMap<String, FluentValue<'static>> = HashMap::new();
+    args.insert(
+        "inviter-first_name".to_owned(),
+        inviter.first_name.clone().into(),
+    );
+    args.insert(
+        "inviter-last_name".to_owned(),
+        inviter.last_name.clone().into(),
+    );
+    args.insert("inviter-title".to_owned(), inviter.title.clone().into());
+    args.insert("event-name".to_owned(), event.name.clone().into());
+    args
+}
+
+fn registered_invitee_subject_args(
+    event: &proto::v1::Event,
+    invitee: &proto::v1::RegisteredUser,
+    inviter: &proto::v1::RegisteredUser,
+) -> HashMap<String, FluentValue<'static>> {
+    let mut args = common_subject_args(event, inviter);
+    args.insert(
+        "invitee-first_name".to_owned(),
+        invitee.first_name.clone().into(),
+    );
+    args.insert(
+        "invitee-last_name".to_owned(),
+        invitee.last_name.clone().into(),
+    );
+    args.insert("invitee-title".to_owned(), invitee.title.clone().into());
+    args
+}
+
+fn unregistered_invitee_subject_args(
+    event: &proto::v1::Event,
+    invitee: &proto::v1::UnregisteredUser,
+    inviter: &proto::v1::RegisteredUser,
+) -> HashMap<String, FluentValue<'static>> {
+    let mut args = common_subject_args(event, inviter);
+    args.insert(
+        "invitee-first_name".to_owned(),
+        invitee.first_name.clone().into(),
+    );
+    args.insert(
+        "invitee-last_name".to_owned(),
+        invitee.last_name.clone().into(),
+    );
+    args
+}
+
+fn external_invitee_subject_args(
+    event: &proto::v1::Event,
+    inviter: &proto::v1::RegisteredUser,
+) -> HashMap<String, FluentValue<'static>> {
+    common_subject_args(event, inviter)
 }

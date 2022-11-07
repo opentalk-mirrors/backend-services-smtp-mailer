@@ -3,6 +3,12 @@ Changelog
 
 ## Unreleased
 
+### Added
+
+- Added support for `...EventUpdate` and `...EventCancellation` messages
+- First name and last name are now available for unregistered users as well
+- Template variables for unregistered and external invitees changed
+
 ## 1.0.0-rc.2 (20 July, 2022)
 
 ### Fixed

@@ -3,15 +3,15 @@ use crate::{i18n, ics::create_ics_v1};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
-use protocol::v1::ExternalEventInvite;
+use protocol::v1::ExternalEventCancellation;
 use std::collections::HashMap;
 
-fn language(obj: &ExternalEventInvite) -> &String {
+fn language(obj: &ExternalEventCancellation) -> &String {
     &obj.inviter.language
 }
 
 fn build_template_context(
-    obj: &ExternalEventInvite,
+    obj: &ExternalEventCancellation,
     builder: &super::MailBuilder,
 ) -> tera::Context {
     let mut context = tera::Context::new();
@@ -26,28 +26,26 @@ fn build_template_context(
     context.insert("invitee", &obj.invitee);
     context.insert("inviter", &obj.inviter);
     context.insert("event", &obj.event);
-    context.insert(
-        "invite_link",
-        &builder.create_room_invite_link(&obj.invite_code),
-    );
     context.insert("support", &builder.support_contact);
     context
 }
 
-impl MailTemplate for ExternalEventInvite {
+impl MailTemplate for ExternalEventCancellation {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
         builder
             .tera
-            .render("external_invite.txt", &context)
+            .render("external_event_cancellation.txt", &context)
             .map_err(Into::into)
     }
 
     fn generate_email_html(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
-        let html = builder.tera.render("external_invite.html", &context)?;
+        let html = builder
+            .tera
+            .render("external_event_cancellation.html", &context)?;
 
         let inliner = css_inline::CSSInliner::options().build();
         inliner.inline(&html).map_err(Into::into)
@@ -63,11 +61,7 @@ impl MailTemplate for ExternalEventInvite {
             builder.default_language.parse()?
         };
 
-        Ok(i18n::LOCALES.lookup_complete(
-            &lang,
-            "unregistered-event-invite-subject",
-            Some(&subject_args),
-        ))
+        Ok(i18n::LOCALES.lookup_complete(&lang, "event-cancellation-subject", Some(&subject_args)))
     }
 
     fn generate_from_mbox(
@@ -103,10 +97,6 @@ impl MailTemplate for ExternalEventInvite {
         };
 
         let mut context = tera::Context::new();
-        context.insert(
-            "meeting_link",
-            &builder.create_room_invite_link(&self.invite_code),
-        );
         context.insert("language", &language);
         context.insert("event", &self.event);
 

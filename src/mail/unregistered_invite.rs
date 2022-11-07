@@ -1,33 +1,43 @@
-use crate::mail::MailTemplate;
+use super::{generate_mailbox_name, MailTemplate};
 use crate::{i18n, ics::create_ics_v1};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
-use lettre::message::header::ContentType;
-use lettre::message::{Attachment, Mailbox, SinglePart};
+use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
 use protocol::v1::UnregisteredEventInvite;
 use std::collections::HashMap;
 
-use super::generate_mailbox_name;
+fn language(obj: &UnregisteredEventInvite) -> &String {
+    &obj.inviter.language
+}
+
+fn build_template_context(
+    obj: &UnregisteredEventInvite,
+    builder: &super::MailBuilder,
+) -> tera::Context {
+    let mut context = tera::Context::new();
+
+    let language = language(obj);
+    let language = if !language.is_empty() {
+        language
+    } else {
+        &builder.default_language
+    };
+    context.insert("language", &language);
+    context.insert("invitee", &obj.invitee);
+    context.insert("inviter", &obj.inviter);
+    context.insert("event", &obj.event);
+    context.insert("join_link", &builder.create_join_link(&obj.event));
+    context.insert(
+        "event_link",
+        &builder.create_dashboard_event_link(&obj.event),
+    );
+    context.insert("support", &builder.support_contact);
+    context
+}
 
 impl MailTemplate for UnregisteredEventInvite {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
-        let mut context = tera::Context::new();
-        let language = if !self.inviter.language.is_empty() {
-            &self.inviter.language
-        } else {
-            &builder.default_language
-        };
-        context.insert("language", &language);
-
-        context.insert("invitee-email", &self.invitee);
-        context.insert("inviter", &self.inviter);
-        context.insert("event", &self.event);
-        context.insert("join_link", &builder.create_join_link(&self.event));
-        context.insert(
-            "event_link",
-            &builder.create_dashboard_event_link(&self.event),
-        );
-        context.insert("support", &builder.support_contact);
+        let context = build_template_context(self, builder);
 
         builder
             .tera
@@ -36,23 +46,7 @@ impl MailTemplate for UnregisteredEventInvite {
     }
 
     fn generate_email_html(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
-        let mut context = tera::Context::new();
-        let language = if !self.inviter.language.is_empty() {
-            &self.inviter.language
-        } else {
-            &builder.default_language
-        };
-        context.insert("language", &language);
-
-        context.insert("invitee", &self.invitee);
-        context.insert("inviter", &self.inviter);
-        context.insert("event", &self.event);
-        context.insert("join_link", &builder.create_join_link(&self.event));
-        context.insert(
-            "event_link",
-            &builder.create_dashboard_event_link(&self.event),
-        );
-        context.insert("support", &builder.support_contact);
+        let context = build_template_context(self, builder);
 
         let html = builder.tera.render("unregistered_invite.html", &context)?;
 
@@ -61,9 +55,11 @@ impl MailTemplate for UnregisteredEventInvite {
     }
 
     fn generate_subject(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
-        let subject_args = subject_args(&self.event, &self.inviter);
-        let lang = if !self.inviter.language.is_empty() {
-            self.inviter.language.parse()?
+        let subject_args = subject_args(&self.event, &self.invitee, &self.inviter);
+
+        let language = language(self);
+        let lang = if !language.is_empty() {
+            language.parse()?
         } else {
             builder.default_language.parse()?
         };
@@ -92,7 +88,14 @@ impl MailTemplate for UnregisteredEventInvite {
     }
 
     fn generate_to_mbox(&self, _builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
-        let mbox = Mailbox::new(None, self.invitee.as_ref().parse()?);
+        let mbox = Mailbox::new(
+            Some(generate_mailbox_name(
+                "",
+                &self.invitee.first_name,
+                &self.invitee.last_name,
+            )),
+            self.invitee.email.as_ref().parse()?,
+        );
 
         Ok(mbox)
     }
@@ -114,7 +117,11 @@ impl MailTemplate for UnregisteredEventInvite {
 
         let description = builder.tera.render("ics_description.txt", &context)?;
 
-        let invitee = crate::ics::Invitee::WithoutName(self.invitee.as_ref());
+        let name = format!("{} {}", &self.invitee.first_name, &self.invitee.last_name);
+        let invitee = crate::ics::Invitee::WithName {
+            email: self.invitee.email.as_ref(),
+            name: &name,
+        };
 
         let ics = create_ics_v1(&self.inviter, &self.event, invitee, &description)?;
 
@@ -133,22 +140,8 @@ impl MailTemplate for UnregisteredEventInvite {
 
 fn subject_args(
     event: &protocol::v1::Event,
-    inviter: &protocol::v1::User,
+    invitee: &protocol::v1::UnregisteredUser,
+    inviter: &protocol::v1::RegisteredUser,
 ) -> HashMap<String, FluentValue<'static>> {
-    let mut args: HashMap<String, FluentValue<'static>> = HashMap::new();
-    args.insert(
-        "inviter-first_name".to_owned(),
-        inviter.first_name.clone().into(),
-    );
-    args.insert(
-        "inviter-last_name".to_owned(),
-        inviter.first_name.clone().into(),
-    );
-    args.insert(
-        "inviter-title".to_owned(),
-        inviter.first_name.clone().into(),
-    );
-
-    args.insert("event-name".to_owned(), event.name.clone().into());
-    args
+    super::unregistered_invitee_subject_args(event, invitee, inviter)
 }

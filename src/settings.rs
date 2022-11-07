@@ -190,6 +190,20 @@ pub struct Templates {
     unregistered_invite: MailTemplate,
     #[serde(default = "template_default_external_invite")]
     external_invite: MailTemplate,
+    //
+    #[serde(default = "template_default_event_update")]
+    registered_event_update: MailTemplate,
+    #[serde(default = "template_default_unregistered_event_update")]
+    unregistered_event_update: MailTemplate,
+    #[serde(default = "template_default_external_event_update")]
+    external_event_update: MailTemplate,
+    //
+    #[serde(default = "template_default_event_cancellation")]
+    registered_event_cancellation: MailTemplate,
+    #[serde(default = "template_default_unregistered_event_cancellation")]
+    unregistered_event_cancellation: MailTemplate,
+    #[serde(default = "template_default_external_event_cancellation")]
+    external_event_cancellation: MailTemplate,
 }
 
 impl Templates {
@@ -210,6 +224,56 @@ impl Templates {
             ),
             (self.external_invite.txt.as_ref(), "external_invite.txt"),
             (self.external_invite.html.as_ref(), "external_invite.html"),
+            //
+            (
+                self.registered_event_update.txt.as_ref(),
+                "registered_event_update.txt",
+            ),
+            (
+                self.registered_event_update.html.as_ref(),
+                "registered_event_update.html",
+            ),
+            (
+                self.unregistered_event_update.txt.as_ref(),
+                "unregistered_event_update.txt",
+            ),
+            (
+                self.unregistered_event_update.html.as_ref(),
+                "unregistered_event_update.html",
+            ),
+            (
+                self.external_event_update.txt.as_ref(),
+                "external_event_update.txt",
+            ),
+            (
+                self.external_event_update.html.as_ref(),
+                "external_event_update.html",
+            ),
+            //
+            (
+                self.registered_event_cancellation.txt.as_ref(),
+                "registered_event_cancellation.txt",
+            ),
+            (
+                self.registered_event_cancellation.html.as_ref(),
+                "registered_event_cancellation.html",
+            ),
+            (
+                self.unregistered_event_cancellation.txt.as_ref(),
+                "unregistered_event_cancellation.txt",
+            ),
+            (
+                self.unregistered_event_cancellation.html.as_ref(),
+                "unregistered_event_cancellation.html",
+            ),
+            (
+                self.external_event_cancellation.txt.as_ref(),
+                "external_event_cancellation.txt",
+            ),
+            (
+                self.external_event_cancellation.html.as_ref(),
+                "external_event_cancellation.html",
+            ),
         ]
         .into_iter()
     }
@@ -221,6 +285,14 @@ impl Default for Templates {
             registered_invite: template_default_registered_invite(),
             unregistered_invite: template_default_unregistered_invite(),
             external_invite: template_default_external_invite(),
+            //
+            registered_event_update: template_default_event_update(),
+            unregistered_event_update: template_default_unregistered_event_update(),
+            external_event_update: template_default_external_event_update(),
+            //
+            registered_event_cancellation: template_default_event_cancellation(),
+            unregistered_event_cancellation: template_default_unregistered_event_cancellation(),
+            external_event_cancellation: template_default_external_event_cancellation(),
         }
     }
 }
@@ -243,6 +315,48 @@ fn template_default_external_invite() -> MailTemplate {
     MailTemplate {
         txt: "resources/templates/external_invite.txt".into(),
         html: "resources/templates/external_invite.html".into(),
+    }
+}
+
+fn template_default_event_update() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/registered_event_update.txt".into(),
+        html: "resources/templates/registered_event_update.html".into(),
+    }
+}
+
+fn template_default_unregistered_event_update() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/unregistered_event_update.txt".into(),
+        html: "resources/templates/unregistered_event_update.html".into(),
+    }
+}
+
+fn template_default_unregistered_event_cancellation() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/unregistered_event_cancellation.txt".into(),
+        html: "resources/templates/unregistered_event_cancellation.html".into(),
+    }
+}
+
+fn template_default_event_cancellation() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/registered_event_cancellation.txt".into(),
+        html: "resources/templates/registered_event_cancellation.html".into(),
+    }
+}
+
+fn template_default_external_event_update() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/external_event_update.txt".into(),
+        html: "resources/templates/external_event_update.html".into(),
+    }
+}
+
+fn template_default_external_event_cancellation() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/external_event_cancellation.txt".into(),
+        html: "resources/templates/external_event_cancellation.html".into(),
     }
 }
 

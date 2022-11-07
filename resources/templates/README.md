@@ -6,7 +6,7 @@ We have a tera macro for creating links. The output is an `a` tag.
 
 # Templates
 
-The following Templates are currently supported.
+The following templates are currently supported.
 
 ## Registered Invite
 
@@ -61,7 +61,10 @@ Variables:
 | Variable name              | Type           | Description                                            |
 | -------------------------- | -------------- | ------------------------------------------------------ |
 | language                   | string         |                                                        |
-| invitee-email              | object         | The email of the person which got invited to the event |
+| invitee                    | object         | The person which got invited to the event              |
+| invitee.email              | string         | Email of the invitee                                   |
+| invitee.first_name         | string         | first name of the invitee                              |
+| invitee.last_name          | string         | last name of the invitee                               |
 | inviter                    | object         | The person which invited the invitee to the event      |
 | inviter.email              | string         | Email of the inviter                                   |
 | inviter.title              | string         | Title of the inviter                                   |
@@ -100,7 +103,8 @@ Variables:
 | Variable name              | Type           | Description                                            |
 | -------------------------- | -------------- | ------------------------------------------------------ |
 | language                   | string         |                                                        |
-| invitee-email              | object         | The email of the person which got invited to the event |
+| invitee                    | object         | The person which got invited to the event              |
+| invitee.email              | string         | Email of the invitee                                   |
 | inviter                    | object         | The person which invited the invitee to the event      |
 | inviter.email              | string         | Email of the inviter                                   |
 | inviter.title              | string         | Title of the inviter                                   |

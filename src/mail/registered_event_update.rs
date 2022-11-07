@@ -3,15 +3,15 @@ use crate::{i18n, ics::create_ics_v1};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
-use protocol::v1::ExternalEventInvite;
+use protocol::v1::RegisteredEventUpdate;
 use std::collections::HashMap;
 
-fn language(obj: &ExternalEventInvite) -> &String {
-    &obj.inviter.language
+fn language(obj: &RegisteredEventUpdate) -> &String {
+    &obj.invitee.language
 }
 
 fn build_template_context(
-    obj: &ExternalEventInvite,
+    obj: &RegisteredEventUpdate,
     builder: &super::MailBuilder,
 ) -> tera::Context {
     let mut context = tera::Context::new();
@@ -26,35 +26,38 @@ fn build_template_context(
     context.insert("invitee", &obj.invitee);
     context.insert("inviter", &obj.inviter);
     context.insert("event", &obj.event);
+    context.insert("join_link", &builder.create_join_link(&obj.event));
     context.insert(
-        "invite_link",
-        &builder.create_room_invite_link(&obj.invite_code),
+        "event_link",
+        &builder.create_dashboard_event_link(&obj.event),
     );
     context.insert("support", &builder.support_contact);
     context
 }
 
-impl MailTemplate for ExternalEventInvite {
+impl MailTemplate for RegisteredEventUpdate {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
         builder
             .tera
-            .render("external_invite.txt", &context)
+            .render("registered_event_update.txt", &context)
             .map_err(Into::into)
     }
 
     fn generate_email_html(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
-        let html = builder.tera.render("external_invite.html", &context)?;
+        let html = builder
+            .tera
+            .render("registered_event_update.html", &context)?;
 
         let inliner = css_inline::CSSInliner::options().build();
         inliner.inline(&html).map_err(Into::into)
     }
 
     fn generate_subject(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
-        let subject_args = subject_args(&self.event, &self.inviter);
+        let subject_args = subject_args(&self.event, &self.invitee, &self.inviter);
 
         let language = language(self);
         let lang = if !language.is_empty() {
@@ -63,11 +66,7 @@ impl MailTemplate for ExternalEventInvite {
             builder.default_language.parse()?
         };
 
-        Ok(i18n::LOCALES.lookup_complete(
-            &lang,
-            "unregistered-event-invite-subject",
-            Some(&subject_args),
-        ))
+        Ok(i18n::LOCALES.lookup_complete(&lang, "event-update-subject", Some(&subject_args)))
     }
 
     fn generate_from_mbox(
@@ -87,7 +86,14 @@ impl MailTemplate for ExternalEventInvite {
     }
 
     fn generate_to_mbox(&self, _builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
-        let mbox = Mailbox::new(None, self.invitee.email.as_ref().parse()?);
+        let mbox = Mailbox::new(
+            Some(generate_mailbox_name(
+                &self.invitee.title,
+                &self.invitee.first_name,
+                &self.invitee.last_name,
+            )),
+            self.invitee.email.as_ref().parse()?,
+        );
 
         Ok(mbox)
     }
@@ -103,16 +109,17 @@ impl MailTemplate for ExternalEventInvite {
         };
 
         let mut context = tera::Context::new();
-        context.insert(
-            "meeting_link",
-            &builder.create_room_invite_link(&self.invite_code),
-        );
+        context.insert("meeting_link", &builder.create_join_link(&self.event));
         context.insert("language", &language);
         context.insert("event", &self.event);
 
         let description = builder.tera.render("ics_description.txt", &context)?;
 
-        let invitee = crate::ics::Invitee::WithoutName(self.invitee.email.as_ref());
+        let name = format!("{} {}", &self.invitee.first_name, &self.invitee.last_name);
+        let invitee = crate::ics::Invitee::WithName {
+            email: self.invitee.email.as_ref(),
+            name: &name,
+        };
 
         let ics = create_ics_v1(&self.inviter, &self.event, invitee, &description)?;
 
@@ -131,7 +138,8 @@ impl MailTemplate for ExternalEventInvite {
 
 fn subject_args(
     event: &protocol::v1::Event,
+    invitee: &protocol::v1::RegisteredUser,
     inviter: &protocol::v1::RegisteredUser,
 ) -> HashMap<String, FluentValue<'static>> {
-    super::external_invitee_subject_args(event, inviter)
+    super::registered_invitee_subject_args(event, invitee, inviter)
 }

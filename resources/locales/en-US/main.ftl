@@ -1,28 +1,38 @@
-registered-event-invite-subject = OpenTalk Meeting-Invitation - {$event-name}
-unregistered-event-invite-subject = OpenTalk Meeting-Invitation - {$event-name}
+registered-event-invite-subject = OpenTalk Meeting Invitation - {$event-name}
+unregistered-event-invite-subject = OpenTalk Meeting Invitation - {$event-name}
+event-update-subject = OpenTalk Meeting was updated - {$event-name}
+event-cancellation-subject = OpenTalk Meeting was cancelled - {$event-name}
 
 # Arguments name
-invite = OpenTalk Meeting-Invitation - { $name }
-        .p = {$name} invites you to an OpenTalk-Meeting. You can view this invite in OpenTalk.
+invite = OpenTalk Meeting Invitation - { $name }
+        .p = {$name} invites you to an OpenTalk Meeting. You can view this invite in OpenTalk.
+
 view-in-dashboard-link = View Invitation
         .alt = Click to view in dashboard
 
-invite-unregistered = OpenTalk Meeting-Invitation - { $name }
-        .p = {$name} invites you to an OpenTalk-Meeting. You can login now at OpenTalk to view this invitation.
+invite-unregistered = OpenTalk Meeting Invitation - { $name }
+        .p = {$name} invites you to an OpenTalk Meeting. You can login now at OpenTalk to view this invitation.
+
 view-in-dashboard-link-unregistered = Login and View Invitation
         .alt = Click to view in dashboard
 
-invite-external = OpenTalk Meeting-Invitation - { $name }
-        .p = {$name} invites you to an OpenTalk-Meeting.
+invite-external = OpenTalk Meeting Invitation - { $name }
+        .p = {$name} invites you to an OpenTalk Meeting.
 
-meeting-information = Meeting-Information
+event_update = OpenTalk Meeting was updated - { $name }
+        .p = {$name} updated an OpenTalk Meeting. You can view this invite in OpenTalk.
+
+event_cancellation = OpenTalk Meeting was cancelled - { $name }
+        .p = {$name} cancelled an OpenTalk Meeting.
+
+meeting-information = Meeting Information
 meeting-information-title = Title
 meeting-information-when = Time
 meeting-information-link = Link to Meeting
 join-directly-link = Open the conference room in new tab/window
         .alt = Click to open
 
-meeting-information-password = Meeting-Password
+meeting-information-password = Meeting Password
 
 call-in-header = Participate via Phone
 call-in-hint = You can use your phone to participate in this meeting.
