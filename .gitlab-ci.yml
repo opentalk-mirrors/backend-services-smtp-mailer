@@ -1,4 +1,4 @@
-image: git.heinlein-video.de:5050/heinlein-video/rust:1.60
+image: git.opentalk.dev:5050/heinlein-video/rust:1.60
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
@@ -37,7 +37,7 @@ lint:doc:
   script: cargo doc --workspace --no-deps
 
 lint:dependency_check:
-  image: git.heinlein-video.de:5050/heinlein-video/cargo-deny:latest
+  image: git.opentalk.dev:5050/heinlein-video/cargo-deny:latest
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_PIPELINE_SOURCE == 'schedule'
