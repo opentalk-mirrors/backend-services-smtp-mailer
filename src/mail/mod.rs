@@ -224,7 +224,7 @@ pub fn space_groups_filter(value: &Value, _: &HashMap<String, Value>) -> tera::R
 
             acc
         });
-    Ok(to_value(&grouped_string).unwrap())
+    Ok(to_value(grouped_string).unwrap())
 }
 
 pub fn format_telephone_number_filter(
@@ -261,7 +261,7 @@ pub fn format_telephone_number_filter(
         }
     };
 
-    Ok(to_value(&formatted_telehpone_number).unwrap())
+    Ok(to_value(formatted_telehpone_number).unwrap())
 }
 
 fn common_subject_args(
