@@ -35,7 +35,11 @@ impl Settings {
     pub fn load(file_name: &str) -> Result<Settings, ConfigError> {
         let settings = Config::builder()
             .add_source(File::new(file_name, FileFormat::Toml))
-            .add_source(Environment::with_prefix("MAILER").separator("__"))
+            .add_source(
+                Environment::with_prefix("MAILER")
+                    .prefix_separator("_")
+                    .separator("__"),
+            )
             .build()?
             .try_deserialize()?;
 
@@ -443,4 +447,34 @@ fn languages_default_default_language() -> String {
 pub struct SupportContact {
     pub phone: String,
     pub mail: String,
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use std::env;
+
+    #[test]
+    fn settings_env_vars_overwite_config() -> Result<(), ConfigError> {
+        // Sanity check
+        let settings = Settings::load("./config.toml.example")?;
+        let support_contact = settings.support_contact.unwrap();
+
+        assert_eq!(support_contact.phone, "+49123321123".to_string());
+        assert_eq!(support_contact.mail, "support@example.com".to_string());
+
+        // Set environment variables to overwrite default config file
+        let env_support_phone = "+49777666555".to_string();
+        let env_support_mail = "support@newexample.com".to_string();
+        env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
+        env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
+
+        let settings = Settings::load("./config.toml.example")?;
+        let support_contact = settings.support_contact.unwrap();
+
+        assert_eq!(support_contact.phone, env_support_phone);
+        assert_eq!(support_contact.mail, env_support_mail);
+
+        Ok(())
+    }
 }
