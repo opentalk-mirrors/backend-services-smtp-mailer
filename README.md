@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 # SMTP Mailer
 
 [![Pipeline status](https://git.heinlein-video.de/r.floren/smtp-mailer/badges/main/pipeline.svg)](https://git.heinlein-video.de/r.floren/smtp-mailer/-/pipelines)

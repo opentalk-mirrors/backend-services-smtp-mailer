@@ -1,0 +1,16 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://git.opentalk.dev/opentalk/smtp-mailer
+Upstream-Name: OpenTalk SMTP Mailer
+Upstream-Contact: OpenTalk GmbH <mail@opentalk.eu>
+
+Files:
+ config.toml.example
+ Cargo.lock
+ CHANGELOG.md
+ resources/templates/README.md
+ resources/templates/*.css
+ resources/templates/*.html
+ resources/templates/*.include
+ resources/templates/*.txt
+Copyright: OpenTalk GmbH <mail@opentalk.eu>
+License: EUPL-1.2

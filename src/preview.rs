@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 use lettre::{AsyncSmtpTransport, Tokio1Executor};
 use mail_worker_protocol as protocol;
 use protocol::v1::{CallIn, Event, Room, Time};

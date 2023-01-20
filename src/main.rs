@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 use clap::{ArgEnum, Parser, Subcommand};
 use preview::preview_send_mail;
 use smtp_mailer::{run, settings};

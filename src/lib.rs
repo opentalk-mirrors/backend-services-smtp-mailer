@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 use crate::worker::Worker;
 use anyhow::{Context, Result};
 use lettre::{transport::smtp::authentication::Credentials, AsyncSmtpTransport, Tokio1Executor};

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 use fluent_templates::fluent_bundle::FluentValue;
 use fluent_templates::static_loader;
 
