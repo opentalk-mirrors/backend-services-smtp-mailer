@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+//
+// SPDX-License-Identifier: EUPL-1.2
+
 use super::{generate_mailbox_name, MailTemplate};
 use crate::{i18n, ics::create_ics_v1};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
