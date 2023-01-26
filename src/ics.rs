@@ -145,11 +145,11 @@ mod test {
             id: Uuid::from_u128(2),
             name: "Test".to_owned(),
             start_time: Some(Time {
-                time: Utc.ymd(2022, 6, 20).and_hms(0, 0, 0),
+                time: Utc.with_ymd_and_hms(2022, 6, 20, 0, 0, 0).unwrap(),
                 timezone: "Europe/Berlin".to_owned(),
             }),
             end_time: Some(Time {
-                time: Utc.ymd(2022, 6, 20).and_hms(10, 0, 0),
+                time: Utc.with_ymd_and_hms(2022, 6, 20, 10, 0, 0).unwrap(),
                 timezone: "Europe/Berlin".to_owned(),
             }),
             rrule: Some("RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1".to_owned()),

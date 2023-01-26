@@ -1,9 +1,3 @@
-<#--
-SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
-
-SPDX-License-Identifier: EUPL-1.2
--->
-
 registered-event-invite-subject = Einladung zum OpenTalk-Meeting - {$event-name}
 unregistered-event-invite-subject = Einladung zum OpenTalk-Meeting - {$event-name}
 event-update-subject = OpenTalk-Meeting wurde geändert - {$event-name}
