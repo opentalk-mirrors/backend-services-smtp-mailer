@@ -12,5 +12,6 @@ Files:
  resources/templates/*.html
  resources/templates/*.include
  resources/templates/*.txt
+ resources/locales/*/*.ftl
 Copyright: OpenTalk GmbH <mail@opentalk.eu>
 License: EUPL-1.2
