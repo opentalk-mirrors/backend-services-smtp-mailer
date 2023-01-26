@@ -8,4 +8,4 @@
 	branch = main
 [submodule "vendored/ics-chrono-tz"]
 	path = vendored/ics-chrono-tz
-	url = ../../k.baltruschat/ics-timezones
+	url = ../backend/ics-timezones
