@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0-rc.4] 2022-11-10
+## [0.1.0-rc.1] - 2023-01-30
+
+### Added
+
+- Add license information
+
+### Fixed
+
+- fixed a bug where environment variables did not overwrite config values
+
+## [0.0.0-internal-release.4] - 2022-11-10
 
 ### Added
 
@@ -23,28 +33,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - do not requeue emails when encountering permanent errors
 
-## [1.0.0-rc.3] 2022-07-20
+## [0.0.0-internal-release.3] - 2022-07-20
 
 ### Changed
 
 - internal dependency updates
 
-## [1.0.0-rc.2] 2022-07-20
+## [0.0.0-internal-release.2] - 2022-07-20
 
 ### Fixed
 
-- Improved outlook support by fixing the head section and adding special http-equiv meta tags (heinlein-video/smtp-mailer!18)
+- Improved outlook support by fixing the head section and adding special http-equiv meta tags (opentalk/smtp-mailer!18)
 - Added timezone information to ics files
 - Fixed missing newline in call-in sections
 - Added timezone to dateformatter to return the correct time
 - disabled bidi isolation unicode characters in fluent output
 
-## [1.0.0-rc.1] 2022-06-23
+## [0.0.0-internal-release.1] - 2022-06-23
 
 initial release candidate
 
-[Unreleased]: https://git.heinlein-video.de/heinlein-video/smtp-mailer/-/compare/v1.0.0-rc.4...main
-[1.0.0-rc.4]: https://git.heinlein-video.de/heinlein-video/smtp-mailer/-/compare/v1.0.0-rc.3...v1.0.0-rc.4
-[1.0.0-rc.3]: https://git.heinlein-video.de/heinlein-video/smtp-mailer/-/compare/v1.0.0-rc.2...v1.0.0-rc.3
-[1.0.0-rc.2]: https://git.heinlein-video.de/heinlein-video/smtp-mailer/-/compare/v1.0.0-rc.1...v1.0.0-rc.2
-[1.0.0-rc.1]: https://git.heinlein-video.de/heinlein-video/smtp-mailer/-/commits/v1.0.0-rc.1
+[Unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.1.0-rc.1...main
+[0.1.0-rc.1]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/14c20df5d3a54c39332287ebf719ec04b49d4bab...v0.1.0-rc.1
+[0.0.0-internal-release.4]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/7579c621c3b08c086974e7ccf4365345762e69c8...14c20df5d3a54c39332287ebf719ec04b49d4bab
+[0.0.0-internal-release.3]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/8f7edbcb83ac2b38402ebc951f76b75ddc51043d...7579c621c3b08c086974e7ccf4365345762e69c8
+[0.0.0-internal-release.2]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/5de6fd35a071b05cd05fd03838d436bd9c79db53...8f7edbcb83ac2b38402ebc951f76b75ddc51043d
+[0.0.0-internal-release.1]: https://git.opentalk.dev/opentalk/smtp-mailer/-/commits/5de6fd35a071b05cd05fd03838d436bd9c79db53
