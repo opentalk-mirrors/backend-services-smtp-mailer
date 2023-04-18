@@ -10,17 +10,18 @@ mail_task_queue = "opentalk_mailer"
 # SMTP with StartTLS: smtp://foo:bar@my-mailserver:1234/
 # SMTP with implicit TLS: smtps://foo:bar@my-mailserver:1234/
 #smtp_server = "smtp://localhost:1025?disable_starttls=true"
+# Set the From email address according to the requirements of your SMTP server.
+#from_name = "OpenTalk"
+#from_email = "no-reply@example.org"
 
 [template_builder]
 # Link builder templates. `base_url` and `x_id` will be replaced. Need when the frontend uses different paths.
-
 #join_link_builder = "{base_url}/lobby/{room_id}"
 #guest_link_builder = "{base_url}/invite/{invite_id}"
 #dashboard_event_link_builder = "{base_url}/dashboard/meetings/{event_id}"
 
 [frontend]
 #base_url = "https://opentalk.mailbox.org"
-
 
 [templates]
 # Path to templates. These are loaded at runtime and are not compiled in.

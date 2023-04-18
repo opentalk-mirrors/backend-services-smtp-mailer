@@ -74,7 +74,7 @@ impl MailTemplate for ExternalEventInvite {
         ))
     }
 
-    fn generate_from_mbox(
+    fn generate_reply_to_mbox(
         &self,
         _builder: &super::MailBuilder,
     ) -> anyhow::Result<lettre::message::Mailbox> {

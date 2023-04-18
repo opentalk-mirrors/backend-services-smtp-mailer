@@ -72,7 +72,7 @@ impl MailTemplate for ExternalEventUpdate {
         Ok(i18n::LOCALES.lookup_complete(&lang, "event-update-subject", Some(&subject_args)))
     }
 
-    fn generate_from_mbox(
+    fn generate_reply_to_mbox(
         &self,
         _builder: &super::MailBuilder,
     ) -> anyhow::Result<lettre::message::Mailbox> {

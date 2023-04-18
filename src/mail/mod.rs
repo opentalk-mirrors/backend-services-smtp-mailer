@@ -75,6 +75,8 @@ pub struct MailBuilder {
     builder: settings::TemplateBuilder,
     default_language: String,
     support_contact: Option<settings::SupportContact>,
+    from_name: String,
+    from_email: String,
     tera: Tera,
 }
 
@@ -83,7 +85,7 @@ pub trait MailTemplate {
     fn generate_email_plain(&self, builder: &MailBuilder) -> Result<String>;
     fn generate_email_html(&self, builder: &MailBuilder) -> Result<String>;
     fn generate_subject(&self, builder: &MailBuilder) -> Result<String>;
-    fn generate_from_mbox(&self, builder: &MailBuilder) -> Result<Mailbox>;
+    fn generate_reply_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox>;
     fn generate_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox>;
     fn generate_attachments(&self, builder: &MailBuilder) -> Result<Vec<SinglePart>>;
 }
@@ -97,6 +99,8 @@ impl MailBuilder {
             builder: settings.template_builder.to_owned(),
             default_language: settings.languages.default_language.to_owned(),
             support_contact: settings.support_contact.to_owned(),
+            from_name: settings.smtp.from_name.to_owned(),
+            from_email: settings.smtp.from_email.to_owned(),
             tera,
         })
     }
@@ -123,8 +127,9 @@ impl MailBuilder {
     }
 
     pub(crate) fn generate_email(&self, message: &proto::v1::Message) -> Result<Message> {
-        let from_mb = message.generate_from_mbox(self)?;
+        let from_mb = generate_from_mbox(self.from_name.clone(), self.from_email.as_ref())?;
 
+        let reply_to_mb = message.generate_reply_to_mbox(self)?;
         let to_mb = message.generate_to_mbox(self)?;
 
         let subject = message.generate_subject(self)?;
@@ -153,6 +158,7 @@ impl MailBuilder {
 
         let email = lettre::Message::builder()
             .from(from_mb)
+            .reply_to(reply_to_mb)
             .to(to_mb)
             .subject(subject)
             .multipart(mail_content)?;
@@ -162,11 +168,9 @@ impl MailBuilder {
 }
 
 fn generate_mailbox_name(title: &str, first_name: &str, last_name: &str) -> String {
-    if title.is_empty() {
-        format!("{first_name} {last_name}")
-    } else {
-        format!("{title} {first_name} {last_name}")
-    }
+    format!("{title} {first_name} {last_name}")
+        .trim()
+        .to_string()
 }
 
 macro_rules! forward {
@@ -188,6 +192,10 @@ macro_rules! forward {
     };
 }
 
+fn generate_from_mbox(name: String, email: &str) -> anyhow::Result<lettre::message::Mailbox> {
+    Ok(Mailbox::new(Some(name), email.parse()?))
+}
+
 impl MailTemplate for proto::v1::Message {
     fn generate_email_plain(&self, builder: &MailBuilder) -> Result<String> {
         forward!(self, generate_email_plain, builder)
@@ -201,8 +209,8 @@ impl MailTemplate for proto::v1::Message {
         forward!(self, generate_subject, builder)
     }
 
-    fn generate_from_mbox(&self, builder: &MailBuilder) -> Result<Mailbox> {
-        forward!(self, generate_from_mbox, builder)
+    fn generate_reply_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox> {
+        forward!(self, generate_reply_to_mbox, builder)
     }
 
     fn generate_to_mbox(&self, builder: &MailBuilder) -> Result<Mailbox> {
