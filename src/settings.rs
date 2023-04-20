@@ -165,12 +165,18 @@ pub struct SmtpConfig {
         default = "smtp_default_server"
     )]
     pub smtp_server: SmtpUri,
+    #[serde(default = "smtp_default_from_name")]
+    pub from_name: String,
+    #[serde(default = "smtp_default_from_email")]
+    pub from_email: String,
 }
 
 impl Default for SmtpConfig {
     fn default() -> Self {
         Self {
             smtp_server: smtp_default_server(),
+            from_name: smtp_default_from_name(),
+            from_email: smtp_default_from_email(),
         }
     }
 }
@@ -178,6 +184,15 @@ impl Default for SmtpConfig {
 fn smtp_default_server() -> SmtpUri {
     SmtpUri::from_str("smtp://localhost:25").unwrap()
 }
+
+fn smtp_default_from_name() -> String {
+    "OpenTalk".to_string()
+}
+
+fn smtp_default_from_email() -> String {
+    "no-reply@example.org".to_string()
+}
+
 /// MailTemplate Config
 ///
 /// Paths to a set of txt and html templates for a specific mail task
@@ -418,6 +433,7 @@ impl Default for TemplateBuilder {
 fn email_default_dashboard_event_link_builder() -> String {
     "{base_url}/dashboard/meetings/{event_id}".into()
 }
+
 fn email_default_join_link_builder() -> String {
     "{base_url}/lobby/{room_id}".into()
 }
