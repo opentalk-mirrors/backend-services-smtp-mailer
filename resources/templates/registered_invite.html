@@ -18,7 +18,7 @@
             <div class="meeting-description" id="cta">
                 <h2>{{fluent(key="invite", lang = language, name=event.name) }}</h2>
                 <p>
-                {{ fluent(key="invite.p", lang = language, name=inviter.first_name) }}
+                {{ fluent(key="invite.p", lang = language, firstname=inviter.first_name, lastname=inviter.last_name) }}
                 <br/>
                 {# Buttons probably dont work in emails, style a `a`link here #}
                 {{ macros::link(fluent_key = "view-in-dashboard-link", lang = language, href = event_link, class="btn") }}

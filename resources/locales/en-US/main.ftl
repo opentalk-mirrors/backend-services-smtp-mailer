@@ -5,25 +5,25 @@ event-cancellation-subject = OpenTalk Meeting was cancelled - {$event-name}
 
 # Arguments name
 invite = OpenTalk Meeting Invitation - { $name }
-        .p = {$name} invites you to an OpenTalk Meeting. You can view this invite in OpenTalk.
+        .p = {$firstname} {$lastname} invites you to an OpenTalk Meeting. You can view this invite in OpenTalk.
 
 view-in-dashboard-link = View Invitation
         .alt = Click to view in dashboard
 
 invite-unregistered = OpenTalk Meeting Invitation - { $name }
-        .p = {$name} invites you to an OpenTalk Meeting. You can login now at OpenTalk to view this invitation.
+        .p = {$firstname} {$lastname} invites you to an OpenTalk Meeting. You can login now at OpenTalk to view this invitation.
 
 view-in-dashboard-link-unregistered = Login and View Invitation
         .alt = Click to view in dashboard
 
 invite-external = OpenTalk Meeting Invitation - { $name }
-        .p = {$name} invites you to an OpenTalk Meeting.
+        .p = {$firstname} {$lastname} invites you to an OpenTalk Meeting.
 
 event_update = OpenTalk Meeting was updated - { $name }
-        .p = {$name} updated an OpenTalk Meeting. You can view this invite in OpenTalk.
+        .p = {$firstname} {$lastname} updated an OpenTalk Meeting. You can view this invite in OpenTalk.
 
 event_cancellation = OpenTalk Meeting was cancelled - { $name }
-        .p = {$name} cancelled an OpenTalk Meeting.
+        .p = {$firstname} {$lastname} cancelled an OpenTalk Meeting.
 
 meeting-information = Meeting Information
 meeting-information-title = Title
