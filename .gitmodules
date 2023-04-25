@@ -4,8 +4,8 @@
 
 [submodule "vendored/k3k-controller"]
 	path = vendored/k3k-controller
-	url = ../k3k-controller
+	url = ../controller
 	branch = main
 [submodule "vendored/ics-chrono-tz"]
 	path = vendored/ics-chrono-tz
-	url = ../backend/ics-timezones
+	url = ../../libs/ics-timezones
