@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The creator is now referenced via Reply-To instead of From header field, From is configurable ([#33](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/33))
 
+### Fixed
+
+- Show the inviter's full name, not just the first name ([#31](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/31))
+
 ## [0.1.0-rc.1] - 2023-01-30
 
 ### Added

@@ -5,25 +5,25 @@ event-cancellation-subject = OpenTalk-Meeting wurde abgesagt - {$event-name}
 
 # Arguments name
 invite = Einladung zum OpenTalk-Meeting - { $name }
-        .p = {$name} lädt Sie zu einem OpenTalk-Meeting ein. Sie können diese Einladung bei OpenTalk ansehen.
+        .p = {$firstname} {$lastname} lädt Sie zu einem OpenTalk-Meeting ein. Sie können diese Einladung bei OpenTalk ansehen.
 
 view-in-dashboard-link = Einladung ansehen
         .alt = Klicken um im Dashboard zu öffnen
 
 invite-unregistered = Einladung zum OpenTalk-Meeting - { $name }
-        .p = {$name} lädt Sie zu einem OpenTalk-Meeting ein. Sie können sich einmalig bei OpenTalk einloggen sind, um diese Einladung dort ansehen zu können.
+        .p = {$firstname} {$lastname} lädt Sie zu einem OpenTalk-Meeting ein. Sie können sich einmalig bei OpenTalk einloggen sind, um diese Einladung dort ansehen zu können.
 
 view-in-dashboard-link-unregistered = Anmelden und Einladung ansehen
         .alt = Klicken um im Dashboard zu öffnen
 
 invite-external = Einladung zum OpenTalk-Meeting - { $name }
-        .p = {$name} lädt Sie zu einem OpenTalk-Meeting ein.
+        .p = {$firstname} {$lastname} lädt Sie zu einem OpenTalk-Meeting ein.
 
 event_update = OpenTalk-Meeting wurde geändert - { $name }
-        .p = {$name} hat ein OpenTalk-Meeting geändert. Sie können diese Einladung bei OpenTalk ansehen.
+        .p = {$firstname} {$lastname} hat ein OpenTalk-Meeting geändert. Sie können diese Einladung bei OpenTalk ansehen.
 
 event_cancellation = OpenTalk-Meeting wurde abgesagt - { $name }
-        .p = {$name} hat ein OpenTalk-Meeting abgesagt.
+        .p = {$firstname} {$lastname} hat ein OpenTalk-Meeting abgesagt.
 
 meeting-information = Meeting-Information
 meeting-information-title = Titel

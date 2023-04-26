@@ -18,7 +18,7 @@
             <div class="meeting-description" id="cta">
                 <h2>{{fluent(key="event_update", lang = language, name=event.name) }}</h2>
                 <p>
-                {{ fluent(key="event_update.p", lang = language, name=inviter.first_name) }}
+                {{ fluent(key="event_update.p", lang = language, firstname=inviter.first_name, lastname=inviter.last_name) }}
                 </p>
             </div>
 
