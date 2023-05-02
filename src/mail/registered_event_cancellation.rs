@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 use super::{generate_mailbox_name, MailTemplate};
-use crate::{i18n, ics::create_ics_v1};
+use crate::{
+    i18n,
+    ics::{create_ics_v1, EventStatus},
+};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
@@ -125,12 +128,18 @@ impl MailTemplate for RegisteredEventCancellation {
             name: &name,
         };
 
-        let ics = create_ics_v1(&self.inviter, &self.event, invitee, &description)?;
+        let ics = create_ics_v1(
+            &self.inviter,
+            &self.event,
+            invitee,
+            &description,
+            EventStatus::Cancelled,
+        )?;
 
         let mut attachments = vec![];
 
         if let Some(ics) = ics {
-            let ics = Attachment::new("invite.ics".into())
+            let ics = Attachment::new("cancel.ics".into())
                 .body(ics, ContentType::parse("text/calendar").unwrap());
 
             attachments.push(ics);

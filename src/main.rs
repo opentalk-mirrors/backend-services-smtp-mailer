@@ -71,6 +71,9 @@ pub enum TemplateVariant {
     RegisteredInvite,
     UnregisteredInvite,
     ExternalInvite,
+    RegisteredCancellation,
+    UnregisteredCancellation,
+    ExternalCancellation,
 }
 
 #[tokio::main]
@@ -109,6 +112,24 @@ async fn main() -> anyhow::Result<()> {
                 println!(
                     "{}",
                     preview::preview_external_invite(&settings, type_.into(), language)
+                );
+            }
+            TemplateVariant::RegisteredCancellation => {
+                println!(
+                    "{}",
+                    preview::preview_registered_cancellation(&settings, type_.into(), language)
+                );
+            }
+            TemplateVariant::UnregisteredCancellation => {
+                println!(
+                    "{}",
+                    preview::preview_registered_cancellation(&settings, type_.into(), language)
+                );
+            }
+            TemplateVariant::ExternalCancellation => {
+                println!(
+                    "{}",
+                    preview::preview_registered_cancellation(&settings, type_.into(), language)
                 );
             }
         }

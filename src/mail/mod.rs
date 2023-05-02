@@ -6,10 +6,7 @@ use crate::settings;
 use anyhow::Result;
 use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
 use lettre::{
-    message::{
-        header::{self},
-        Mailbox, MultiPart, SinglePart,
-    },
+    message::{header, Mailbox, MultiPart, SinglePart},
     Message,
 };
 use mail_worker_protocol as proto;

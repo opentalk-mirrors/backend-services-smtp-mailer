@@ -6,7 +6,10 @@ use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
 use chrono_tz::Tz;
 use ics::components::Property;
-use ics::properties::{Attendee, Description, ExDate, Organizer, RDate, RRule, Summary};
+use ics::properties::{
+    Attendee, Description, ExDate, LastModified, Method, Organizer, RDate, RRule, Sequence, Status,
+    Summary,
+};
 use ics::{escape_text, parameters, Event, ICalendar};
 use ics_chrono_tz::ToIcsTimeZone;
 use mail_worker_protocol::v1;
@@ -16,11 +19,18 @@ pub enum Invitee<'a> {
     WithoutName(&'a str),
 }
 
+pub enum EventStatus {
+    Created,
+    Updated,
+    Cancelled,
+}
+
 pub(crate) fn create_ics_v1(
     inviter: &v1::RegisteredUser,
     event: &v1::Event,
     invitee: Invitee,
     description: &str,
+    status: EventStatus,
 ) -> Result<Option<Vec<u8>>> {
     let (start, end) = if let (Some(start), Some(end)) = (&event.start_time, &event.end_time) {
         (start, end)
@@ -50,6 +60,23 @@ pub(crate) fn create_ics_v1(
 
     event_obj.push(Description::new(escape_text(description)));
 
+    event_obj.push(LastModified::new(
+        Utc::now().format("%Y%m%dT%H%M%SZ").to_string(),
+    ));
+
+    event_obj.push(Sequence::new(event.revision.to_string()));
+
+    match status {
+        EventStatus::Created | EventStatus::Updated => {
+            event_obj.push(Status::confirmed());
+            calendar.push(Method::new("REQUEST"));
+        }
+        EventStatus::Cancelled => {
+            event_obj.push(Status::cancelled());
+            calendar.push(Method::new("CANCEL"));
+        }
+    }
+
     let mut organizer_property = Organizer::new(format!("mailto:{}", inviter.email.as_ref()));
     organizer_property
         .append(parameters!("CN" => format!("{} {}", inviter.first_name, inviter.last_name)));
@@ -58,7 +85,15 @@ pub(crate) fn create_ics_v1(
     match invitee {
         Invitee::WithName { email, name } => {
             let mut attendee_property = Attendee::new(format!("mailto:{}", email));
-            attendee_property.append(parameters!("CN" => name));
+
+            attendee_property.append(parameters!(
+                "CUTYPE" => "INDIVIDUAL";
+                "ROLE" => "REQ-PARTICIPANT";
+                "PARTSTAT" => "NEEDS-ACTION";
+                "CN" => name;
+                "RSVP" => "TRUE";
+                "X-NUM-GUESTS" => "0"
+            ));
             event_obj.push(attendee_property);
         }
         Invitee::WithoutName(email) => {
@@ -126,6 +161,8 @@ fn create_time_property<'a>(
 
 #[cfg(test)]
 mod test {
+    use crate::ics::EventStatus;
+
     use super::{create_ics_v1, Invitee};
     use chrono::{TimeZone, Utc};
     use mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
@@ -163,6 +200,7 @@ mod test {
                 id: Uuid::from_u128(3),
                 password: Some("ddd".to_owned()),
             },
+            revision: 0,
         };
 
         let invitee = Invitee::WithName {
@@ -170,15 +208,27 @@ mod test {
             name: "G. G.",
         };
 
-        let ics = create_ics_v1(&user, &event, invitee, &event.description)
-            .expect("Failed to create ics file")
-            .expect("No ics file for this event");
+        let ics = create_ics_v1(
+            &user,
+            &event,
+            invitee,
+            &event.description,
+            EventStatus::Created,
+        )
+        .expect("Failed to create ics file")
+        .expect("No ics file for this event");
 
         let ics_str = String::from_utf8_lossy(&ics);
         let to_test = ics_str.lines().collect::<Vec<_>>();
 
         assert!(to_test.contains(&"BEGIN:VEVENT"));
-        assert!(to_test.contains(&"ATTENDEE;CN=G. G.:mailto:g@example.org"));
+
+        // lines that are longer than 75 octets are split with a CRLF followed by a whitespace (see https://datatracker.ietf.org/doc/html/rfc5545#section-3.1)
+        assert!(to_test.contains(
+            &"ATTENDEE;CN=G. G.;CUTYPE=INDIVIDUAL;PARTSTAT=NEEDS-ACTION;ROLE=REQ-PARTICIP"
+        ));
+        assert!(to_test.contains(&" ANT;RSVP=TRUE;X-NUM-GUESTS=0:mailto:g@example.org"));
+
         assert!(to_test.contains(&"ORGANIZER;CN=Klaus Doktor:mailto:klaus@example.org"));
         assert!(to_test.contains(&"SUMMARY:Test"));
         assert!(to_test.contains(&"DESCRIPTION:Very descriptive"));

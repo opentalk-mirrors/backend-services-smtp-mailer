@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 use super::{generate_mailbox_name, MailTemplate};
-use crate::{i18n, ics::create_ics_v1};
+use crate::{
+    i18n,
+    ics::{create_ics_v1, EventStatus},
+};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
@@ -125,7 +128,13 @@ impl MailTemplate for UnregisteredEventUpdate {
             name: &name,
         };
 
-        let ics = create_ics_v1(&self.inviter, &self.event, invitee, &description)?;
+        let ics = create_ics_v1(
+            &self.inviter,
+            &self.event,
+            invitee,
+            &description,
+            EventStatus::Updated,
+        )?;
 
         let mut attachments = vec![];
 
