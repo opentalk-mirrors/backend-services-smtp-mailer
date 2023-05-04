@@ -42,6 +42,7 @@ fn default_unregistered_invite(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
+            revision: 0
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -89,6 +90,7 @@ fn default_registered_invite(
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
+            revision: 0
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -132,6 +134,7 @@ fn default_external_invite(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
+            revision: 0
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
