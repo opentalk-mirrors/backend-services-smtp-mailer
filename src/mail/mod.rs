@@ -2,11 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use crate::settings;
+use crate::{ics::EventStatus, settings};
 use anyhow::Result;
+use base64::Engine;
 use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
 use lettre::{
-    message::{header, Mailbox, MultiPart, SinglePart},
+    message::{
+        header::{self, ContentDisposition, ContentTransferEncoding, ContentType},
+        Mailbox, MultiPart, SinglePart,
+    },
     Message,
 };
 use mail_worker_protocol as proto;
@@ -133,24 +137,22 @@ impl MailBuilder {
         let txt = message.generate_email_plain(self)?;
         let html = message.generate_email_html(self)?;
 
-        let mut mail_content = MultiPart::alternative()
-            .singlepart(
-                SinglePart::builder()
-                    .header(header::ContentType::TEXT_PLAIN)
-                    .body(txt),
-            )
-            .singlepart(
-                SinglePart::builder()
-                    .header(header::ContentType::TEXT_HTML)
-                    .body(html),
-            );
+        let mut mail_parts = MultiPart::mixed().multipart(
+            MultiPart::alternative()
+                .singlepart(
+                    SinglePart::builder()
+                        .header(header::ContentType::TEXT_PLAIN)
+                        .body(txt),
+                )
+                .singlepart(
+                    SinglePart::builder()
+                        .header(header::ContentType::TEXT_HTML)
+                        .body(html),
+                ),
+        );
 
         for attachment in message.generate_attachments(self)? {
-            let mut builder = MultiPart::mixed().multipart(mail_content);
-
-            builder = builder.singlepart(attachment);
-
-            mail_content = builder;
+            mail_parts = mail_parts.singlepart(attachment);
         }
 
         let email = lettre::Message::builder()
@@ -158,7 +160,7 @@ impl MailBuilder {
             .reply_to(reply_to_mb)
             .to(to_mb)
             .subject(subject)
-            .multipart(mail_content)?;
+            .multipart(mail_parts)?;
 
         Ok(email)
     }
@@ -331,4 +333,33 @@ fn external_invitee_subject_args(
     inviter: &proto::v1::RegisteredUser,
 ) -> HashMap<String, FluentValue<'static>> {
     common_subject_args(event, inviter)
+}
+
+fn create_ics_attachments(ics: Vec<u8>, event_status: EventStatus) -> Vec<SinglePart> {
+    let (file_name, content_type) = match event_status {
+        EventStatus::Created | EventStatus::Updated => (
+            "invite.ics",
+            ContentType::parse("text/calendar; charset=utf-8; method=REQUEST;").unwrap(),
+        ),
+
+        EventStatus::Cancelled => (
+            "cancel.ics",
+            ContentType::parse("text/calendar; charset=utf-8; method=CANCEL;").unwrap(),
+        ),
+    };
+
+    let calendar_attachment = SinglePart::builder()
+        .header(content_type)
+        .header(ContentTransferEncoding::QuotedPrintable)
+        .body(ics.clone());
+
+    let base64_ics: String = base64::engine::general_purpose::STANDARD.encode(ics);
+
+    let ics_attachment = SinglePart::builder()
+        .content_type(ContentType::parse("application/ics").unwrap())
+        .header(ContentDisposition::attachment(file_name))
+        .header(ContentTransferEncoding::Base64)
+        .body(base64_ics);
+
+    vec![calendar_attachment, ics_attachment]
 }
