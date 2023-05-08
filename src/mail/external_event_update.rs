@@ -130,8 +130,10 @@ impl MailTemplate for ExternalEventUpdate {
         let mut attachments = vec![];
 
         if let Some(ics) = ics {
-            let ics = Attachment::new("invite.ics".into())
-                .body(ics, ContentType::parse("text/calendar").unwrap());
+            let ics = Attachment::new("invite.ics".into()).body(
+                ics,
+                ContentType::parse("text/calendar; charset=utf-8; method=REQUEST;").unwrap(),
+            );
 
             attachments.push(ics);
         }

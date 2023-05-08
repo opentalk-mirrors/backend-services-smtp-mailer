@@ -139,8 +139,10 @@ impl MailTemplate for UnregisteredEventCancellation {
         let mut attachments = vec![];
 
         if let Some(ics) = ics {
-            let ics = Attachment::new("cancel.ics".into())
-                .body(ics, ContentType::parse("text/calendar").unwrap());
+            let ics = Attachment::new("cancel.ics".into()).body(
+                ics,
+                ContentType::parse("text/calendar; charset=utf-8; method=CANCEL;").unwrap(),
+            );
 
             attachments.push(ics);
         }
