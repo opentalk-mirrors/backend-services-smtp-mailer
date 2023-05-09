@@ -2,10 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use super::{generate_mailbox_name, MailTemplate};
-use crate::{i18n, ics::create_ics_v1};
+use super::{create_ics_attachments, generate_mailbox_name, MailTemplate};
+use crate::{
+    i18n,
+    ics::{create_ics_v1, EventStatus},
+};
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
-use lettre::message::{header::ContentType, Attachment, Mailbox, SinglePart};
+use lettre::message::{Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
 use protocol::v1::ExternalEventUpdate;
 use std::collections::HashMap;
@@ -116,18 +119,19 @@ impl MailTemplate for ExternalEventUpdate {
 
         let invitee = crate::ics::Invitee::WithoutName(self.invitee.email.as_ref());
 
-        let ics = create_ics_v1(&self.inviter, &self.event, invitee, &description)?;
-
-        let mut attachments = vec![];
+        let ics = create_ics_v1(
+            &self.inviter,
+            &self.event,
+            invitee,
+            &description,
+            EventStatus::Updated,
+        )?;
 
         if let Some(ics) = ics {
-            let ics = Attachment::new("invite.ics".into())
-                .body(ics, ContentType::parse("text/calendar").unwrap());
-
-            attachments.push(ics);
+            return Ok(create_ics_attachments(ics, EventStatus::Updated));
         }
 
-        Ok(attachments)
+        Ok(vec![])
     }
 }
 
