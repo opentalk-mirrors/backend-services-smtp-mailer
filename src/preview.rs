@@ -8,7 +8,21 @@ use mail_worker_protocol as protocol;
 use protocol::v1::{CallIn, Event, Room, Time};
 use smtp_mailer::{send_mail_v1, settings, MailBuilder, MailTemplate};
 use std::time::Duration;
+use types::common::shared_folder::{SharedFolder, SharedFolderAccess};
 use uuid::Uuid;
+
+fn build_shared_folder() -> Option<SharedFolder> {
+    Some(SharedFolder {
+        read: SharedFolderAccess {
+            url: "https://www.example.org/read".to_owned(),
+            password: "ReadSecret".to_owned(),
+        },
+        read_write: Some(SharedFolderAccess {
+            url: "https://www.example.org/write".to_owned(),
+            password: "WriteSecret".to_owned(),
+        }),
+    })
+}
 
 fn default_unregistered_invite(
     lang: &str,
@@ -51,7 +65,8 @@ fn default_unregistered_invite(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 0
+            revision: 0,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -106,7 +121,8 @@ fn default_registered_invite(
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
-            revision: 0
+            revision: 0,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -157,7 +173,8 @@ fn default_external_invite(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 0
+            revision: 0,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -212,7 +229,8 @@ fn default_unregistered_cancellation(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 1
+            revision: 1,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -268,7 +286,8 @@ fn default_registered_cancellation(
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
-            revision: 1
+            revision: 1,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -320,7 +339,8 @@ fn default_external_cancellation(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 1
+            revision: 1,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),

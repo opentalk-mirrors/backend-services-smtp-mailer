@@ -17,8 +17,9 @@
 {% if event.room.password -%}
 {{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}
 {% endif -%}
-{% include "callin_txt.include" %}
-{% if support %}
+{% include "callin_txt.include" -%}
+{% include "shared_folder_txt.include" -%}
+{% if support -%}
 {{ fluent(key="questions", lang = language) }}
 {{ fluent(key="questions.p", lang = language, phone=support.phone | format_telephone_number(mode = "international"), mail=support.mail) }}
 {% endif -%}

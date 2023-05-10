@@ -1,4 +1,4 @@
-{% if event.call_in %}
+{% if event.call_in -%}
 {{ fluent(key="call-in-header", lang = language) }}:
 {{ fluent(key="call-in-hint", lang = language) }}
 

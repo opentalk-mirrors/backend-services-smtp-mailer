@@ -44,6 +44,9 @@ call-in-id = Call-In ID
 call-in-pw = Call-In Passwort
 call-in-quick-dial = Schnelleinwahl
 
+shared-folder = Geteiler Ordner
+shared-folder-password = Ordnerpasswort
+
 questions = Noch Fragen? Wir helfen Ihnen Gerne!
         .p = Um mit einem unserer Mitarbeiter in Kontakt zu treten, rufen Sie uns einfach kostenfrei unter { $phone } an. Alternativ können Sie auch gerne eine E-Mail mit ihrem Anliegen an { $mail } schicken.
 

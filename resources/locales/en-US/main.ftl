@@ -43,6 +43,9 @@ call-in-id = Call-In ID
 call-in-pw = Call-In Password
 call-in-quick-dial = Quick-Dial
 
+shared-folder = Shared Folder
+shared-folder-password = Folder password
+
 questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
 
