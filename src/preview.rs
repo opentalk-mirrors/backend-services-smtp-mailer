@@ -458,10 +458,14 @@ pub async fn preview_send_mail(
     settings: &settings::Settings,
     template: super::TemplateVariant,
     to: String,
+    cancellation_delay: u64,
 ) {
     let smtp_client: AsyncSmtpTransport<Tokio1Executor> =
         settings.smtp.smtp_server.clone().try_into().unwrap();
     let mail_builder = MailBuilder::new(settings).unwrap();
+
+    let duration_between_invite_and_cancellation = Duration::from_secs(cancellation_delay);
+
     let message = match template {
         crate::TemplateVariant::RegisteredInvite => protocol::v1::Message::RegisteredEventInvite(
             default_registered_invite("en-US", Some(to)),
@@ -487,7 +491,7 @@ pub async fn preview_send_mail(
             .await
             .unwrap();
 
-            tokio::time::sleep(Duration::from_secs(15)).await;
+            tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
             protocol::v1::Message::RegisteredEventCancellation(default_registered_cancellation(
                 "en-US",
@@ -507,7 +511,7 @@ pub async fn preview_send_mail(
             .await
             .unwrap();
 
-            tokio::time::sleep(Duration::from_secs(15)).await;
+            tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
             protocol::v1::Message::UnregisteredEventCancellation(default_unregistered_cancellation(
                 "en-US",
@@ -527,7 +531,7 @@ pub async fn preview_send_mail(
             .await
             .unwrap();
 
-            tokio::time::sleep(Duration::from_secs(15)).await;
+            tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
             protocol::v1::Message::ExternalEventCancellation(default_external_cancellation(
                 "en-US",
