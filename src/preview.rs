@@ -8,7 +8,21 @@ use mail_worker_protocol as protocol;
 use protocol::v1::{CallIn, Event, Room, Time};
 use smtp_mailer::{send_mail_v1, settings, MailBuilder, MailTemplate};
 use std::time::Duration;
+use types::common::shared_folder::{SharedFolder, SharedFolderAccess};
 use uuid::Uuid;
+
+fn build_shared_folder() -> Option<SharedFolder> {
+    Some(SharedFolder {
+        read: SharedFolderAccess {
+            url: "https://www.example.org/read".to_owned(),
+            password: "ReadSecret".to_owned(),
+        },
+        read_write: Some(SharedFolderAccess {
+            url: "https://www.example.org/write".to_owned(),
+            password: "WriteSecret".to_owned(),
+        }),
+    })
+}
 
 fn default_unregistered_invite(
     lang: &str,
@@ -51,7 +65,8 @@ fn default_unregistered_invite(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 0
+            revision: 0,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -106,7 +121,8 @@ fn default_registered_invite(
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
-            revision: 0
+            revision: 0,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -157,7 +173,8 @@ fn default_external_invite(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 0
+            revision: 0,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -212,7 +229,8 @@ fn default_unregistered_cancellation(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 1
+            revision: 1,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -268,7 +286,8 @@ fn default_registered_cancellation(
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
-            revision: 1
+            revision: 1,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -320,7 +339,8 @@ fn default_external_cancellation(
                 sip_id: "1234567890".into(),
                 sip_password: "1234567890".into(),
             }),
-            revision: 1
+            revision: 1,
+            shared_folder: build_shared_folder(),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -458,10 +478,14 @@ pub async fn preview_send_mail(
     settings: &settings::Settings,
     template: super::TemplateVariant,
     to: String,
+    cancellation_delay: u64,
 ) {
     let smtp_client: AsyncSmtpTransport<Tokio1Executor> =
         settings.smtp.smtp_server.clone().try_into().unwrap();
     let mail_builder = MailBuilder::new(settings).unwrap();
+
+    let duration_between_invite_and_cancellation = Duration::from_secs(cancellation_delay);
+
     let message = match template {
         crate::TemplateVariant::RegisteredInvite => protocol::v1::Message::RegisteredEventInvite(
             default_registered_invite("en-US", Some(to)),
@@ -487,7 +511,7 @@ pub async fn preview_send_mail(
             .await
             .unwrap();
 
-            tokio::time::sleep(Duration::from_secs(15)).await;
+            tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
             protocol::v1::Message::RegisteredEventCancellation(default_registered_cancellation(
                 "en-US",
@@ -507,7 +531,7 @@ pub async fn preview_send_mail(
             .await
             .unwrap();
 
-            tokio::time::sleep(Duration::from_secs(15)).await;
+            tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
             protocol::v1::Message::UnregisteredEventCancellation(default_unregistered_cancellation(
                 "en-US",
@@ -527,7 +551,7 @@ pub async fn preview_send_mail(
             .await
             .unwrap();
 
-            tokio::time::sleep(Duration::from_secs(15)).await;
+            tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
             protocol::v1::Message::ExternalEventCancellation(default_external_cancellation(
                 "en-US",

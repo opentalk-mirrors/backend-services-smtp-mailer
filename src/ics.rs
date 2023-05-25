@@ -201,6 +201,7 @@ mod test {
                 password: Some("ddd".to_owned()),
             },
             revision: 0,
+            shared_folder: None,
         };
 
         let invitee = Invitee::WithName {

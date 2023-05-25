@@ -51,6 +51,14 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         include_str!("../../resources/templates/callin_html.include"),
     )?;
     tera.add_raw_template(
+        "shared_folder_txt.include",
+        include_str!("../../resources/templates/shared_folder_txt.include"),
+    )?;
+    tera.add_raw_template(
+        "shared_folder_html.include",
+        include_str!("../../resources/templates/shared_folder_html.include"),
+    )?;
+    tera.add_raw_template(
         "ics_description.txt",
         include_str!("../../resources/templates/ics_description.txt"),
     )?;

@@ -44,9 +44,11 @@ enum Commands {
         /// Template to preview
         #[clap(arg_enum)]
         template: TemplateVariant,
-
         /// To Email
         to: String,
+        /// Delay between invite and cancellation in seconds
+        #[clap(default_value_t = 15)]
+        cancellation_delay: u64,
     },
 }
 
@@ -136,8 +138,13 @@ async fn main() -> anyhow::Result<()> {
 
         exit(0);
     }
-    if let Some(Commands::PreviewSend { template, to }) = &args.command {
-        preview_send_mail(&settings, *template, to.clone()).await;
+    if let Some(Commands::PreviewSend {
+        template,
+        to,
+        cancellation_delay,
+    }) = &args.command
+    {
+        preview_send_mail(&settings, *template, to.clone(), *cancellation_delay).await;
 
         exit(0);
     }
