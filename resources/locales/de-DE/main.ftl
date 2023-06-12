@@ -33,7 +33,6 @@ join-directly-link = Öffne den Raum in einem neuen Tab/Fenster
         .alt = Klicken um zu öffnen
 
 meeting-information-password = Meeting-Passwort
-meeting-information-call-in = Telefoneinwahl
 
 call-in-header = Beitritt via Telefon
 call-in-hint = Sie können Ihr Telefon verwenden um diesem Meeting beizutreten.

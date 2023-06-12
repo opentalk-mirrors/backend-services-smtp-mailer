@@ -44,11 +44,10 @@ call-in-pw = Call-In Password
 call-in-quick-dial = Quick-Dial
 
 shared-folder = Shared Folder
-shared-folder-password = Folder password
+shared-folder-password = Folder Password
 
 questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
-
 
 fallback-footer = If the buttons or links dont’t work open your browser and type in the following links:
 join-directly-fallback = Join Meeting: { $link }

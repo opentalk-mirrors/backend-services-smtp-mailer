@@ -268,7 +268,7 @@ pub fn format_telephone_number_filter(
     let number = input.clone();
     let result = std::panic::catch_unwind(move || phonenumber::parse(None, number));
 
-    let formatted_telehpone_number = match result {
+    let formatted_telephone_number = match result {
         Ok(Ok(number)) => number.format().mode(mode).to_string(),
         e if mode == phonenumber::Mode::Rfc3966 => {
             log::warn!(" Failed to parse phone number {:?}", e);
@@ -280,7 +280,7 @@ pub fn format_telephone_number_filter(
         }
     };
 
-    Ok(to_value(formatted_telehpone_number).unwrap())
+    Ok(to_value(formatted_telephone_number).unwrap())
 }
 
 fn common_subject_args(
