@@ -62,6 +62,7 @@ css-inline = { version = "0.8.1" }
 
 ics = { version = "0.5" }
 base64 = "0.21.0"
+textwrap = "0.16.0"
 
 [dev-dependencies]
 pretty_assertions = "1.2.1"

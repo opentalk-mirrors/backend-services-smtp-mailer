@@ -39,6 +39,7 @@ fn build_template_context(
         &builder.create_dashboard_event_link(&obj.event),
     );
     context.insert("support", &builder.support_contact);
+    context.insert("data_protection_url", &builder.frontend.data_protection_url);
     context
 }
 
@@ -121,6 +122,7 @@ impl MailTemplate for UnregisteredEventInvite {
         context.insert("meeting_link", &builder.create_join_link(&self.event));
         context.insert("language", &language);
         context.insert("event", &self.event);
+        context.insert("data_protection_url", &builder.frontend.data_protection_url);
 
         let description = builder.tera.render("ics_description.txt", &context)?;
 

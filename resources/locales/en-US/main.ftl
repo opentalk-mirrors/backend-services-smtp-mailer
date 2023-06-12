@@ -52,3 +52,5 @@ questions = Questions? We are here to help!
 fallback-footer = If the buttons or links dont’t work open your browser and type in the following links:
 join-directly-fallback = Join Meeting: { $link }
 view-in-dashboard-fallback = Meeting Details: { $link }
+
+data-protection-hint = Note for data protection: The protection of your data is important to us. Personal data can also be exchanged when using the video conference solution. For more information on how we handle your personal data, please visit

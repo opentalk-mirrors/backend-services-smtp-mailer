@@ -21,7 +21,8 @@ mail_task_queue = "opentalk_mailer"
 #dashboard_event_link_builder = "{base_url}/dashboard/meetings/{event_id}"
 
 [frontend]
-#base_url = "https://opentalk.mailbox.org"
+#base_url = "https://opentalk.example.org"
+#data_protection_url = "https://opentalk.example.org/dataprotection"
 
 [templates]
 # Path to templates. These are loaded at runtime and are not compiled in.

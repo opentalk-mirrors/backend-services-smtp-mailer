@@ -66,6 +66,9 @@
                     {{ fluent(key="view-in-dashboard-fallback", lang = language, link = event_link)|safe }}
                 </p>
             </div>
+            <div class="data_protection">
+                {% include "data_protection_html.include" %}
+            </div>
         </div>
     </body>
 </html>

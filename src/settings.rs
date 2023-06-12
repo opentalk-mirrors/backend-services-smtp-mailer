@@ -390,18 +390,25 @@ fn template_default_external_event_cancellation() -> MailTemplate {
 pub struct Frontend {
     #[serde(default = "frontend_default_base_url")]
     pub base_url: String,
+    #[serde(default = "frontend_default_data_protection_url")]
+    pub data_protection_url: String,
 }
 
 impl Default for Frontend {
     fn default() -> Self {
         Self {
             base_url: frontend_default_base_url(),
+            data_protection_url: frontend_default_data_protection_url(),
         }
     }
 }
 
 fn frontend_default_base_url() -> String {
     "https://opentalk.example.org".into()
+}
+
+fn frontend_default_data_protection_url() -> String {
+    "https://opentalk.example.org/dataprotection".into()
 }
 
 /// Template Builder Config
