@@ -355,10 +355,10 @@ fn template_default_unregistered_event_update() -> MailTemplate {
     }
 }
 
-fn template_default_unregistered_event_cancellation() -> MailTemplate {
+fn template_default_external_event_update() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/unregistered_event_cancellation.txt".into(),
-        html: "resources/templates/unregistered_event_cancellation.html".into(),
+        txt: "resources/templates/external_event_update.txt".into(),
+        html: "resources/templates/external_event_update.html".into(),
     }
 }
 
@@ -369,10 +369,10 @@ fn template_default_event_cancellation() -> MailTemplate {
     }
 }
 
-fn template_default_external_event_update() -> MailTemplate {
+fn template_default_unregistered_event_cancellation() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/external_event_update.txt".into(),
-        html: "resources/templates/external_event_update.html".into(),
+        txt: "resources/templates/unregistered_event_cancellation.txt".into(),
+        html: "resources/templates/unregistered_event_cancellation.html".into(),
     }
 }
 
