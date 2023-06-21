@@ -58,6 +58,18 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         "shared_folder_html.include",
         include_str!("../../resources/templates/shared_folder_html.include"),
     )?;
+    tera.add_template_file(
+        "resources/templates/data_protection_txt.include",
+        Some("data_protection_txt.include"),
+    )?;
+    tera.add_template_file(
+        "resources/templates/data_protection_html.include",
+        Some("data_protection_html.include"),
+    )?;
+    tera.add_template_file(
+        "resources/templates/data_protection_ics.include",
+        Some("data_protection_ics.include"),
+    )?;
     tera.add_raw_template(
         "ics_description.txt",
         include_str!("../../resources/templates/ics_description.txt"),
@@ -72,6 +84,7 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
 
     tera.register_function("fluent", FluentLoader::new(&*crate::i18n::LOCALES));
 
+    tera.register_filter("wrap_text", wrap_text_filter);
     tera.register_filter("space_groups", space_groups_filter);
     tera.register_filter("format_telephone_number", format_telephone_number_filter);
 
@@ -229,6 +242,18 @@ impl MailTemplate for proto::v1::Message {
     }
 }
 
+pub fn wrap_text_filter(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let s = try_get_value!("wrap_text", "value", String, value);
+
+    let width = match args.get("width") {
+        Some(width) => try_get_value!("wrap_text", "width", usize, width),
+        None => 80,
+    };
+
+    let wrapped_string = textwrap::fill(s.as_str(), width);
+    Ok(to_value(wrapped_string).unwrap())
+}
+
 pub fn space_groups_filter(value: &Value, _: &HashMap<String, Value>) -> tera::Result<Value> {
     let s = try_get_value!("space_groups", "value", String, value);
 
@@ -268,7 +293,7 @@ pub fn format_telephone_number_filter(
     let number = input.clone();
     let result = std::panic::catch_unwind(move || phonenumber::parse(None, number));
 
-    let formatted_telehpone_number = match result {
+    let formatted_telephone_number = match result {
         Ok(Ok(number)) => number.format().mode(mode).to_string(),
         e if mode == phonenumber::Mode::Rfc3966 => {
             log::warn!(" Failed to parse phone number {:?}", e);
@@ -280,7 +305,7 @@ pub fn format_telephone_number_filter(
         }
     };
 
-    Ok(to_value(formatted_telehpone_number).unwrap())
+    Ok(to_value(formatted_telephone_number).unwrap())
 }
 
 fn common_subject_args(

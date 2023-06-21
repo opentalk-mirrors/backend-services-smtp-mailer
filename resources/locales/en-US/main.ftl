@@ -44,12 +44,13 @@ call-in-pw = Call-In Password
 call-in-quick-dial = Quick-Dial
 
 shared-folder = Shared Folder
-shared-folder-password = Folder password
+shared-folder-password = Folder Password
 
 questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
 
-
 fallback-footer = If the buttons or links dont’t work open your browser and type in the following links:
 join-directly-fallback = Join Meeting: { $link }
 view-in-dashboard-fallback = Meeting Details: { $link }
+
+data-protection-hint = Note for data protection: The protection of your data is important to us. Personal data can also be exchanged when using the video conference solution. For more information on how we handle your personal data, please visit

@@ -21,12 +21,20 @@ mail_task_queue = "opentalk_mailer"
 #dashboard_event_link_builder = "{base_url}/dashboard/meetings/{event_id}"
 
 [frontend]
-#base_url = "https://opentalk.mailbox.org"
+#base_url = "https://opentalk.example.org"
+#data_protection_url = "https://opentalk.example.org/dataprotection"
 
 [templates]
 # Path to templates. These are loaded at runtime and are not compiled in.
-#registered_invite = {html = "resources/templates/registered_invite.html", txt = "resources/templates/registered_invite.html"}
-#unregistered_invite = {html = "resources/templates/unregistered_invite.html", txt = "resources/templates/unregistered_invite.html"}
+#registered_invite = {html = "resources/templates/registered_invite.html", txt = "resources/templates/registered_invite.txt"}
+#unregistered_invite = {html = "resources/templates/unregistered_invite.html", txt = "resources/templates/unregistered_invite.txt"}
+#external_invite = {html = "resources/templates/external_invite.html", txt = "resources/templates/external_invite.txt"}
+#registered_event_update = {html = "resources/templates/registered_event_update.html", txt = "resources/templates/registered_event_update.txt"}
+#unregistered_event_update  = {html = "resources/templates/unregistered_event_update.html", txt = "resources/templates/unregistered_event_update.txt"}
+#external_event_update = {html = "resources/templates/external_event_update.html", txt = "resources/templates/external_event_update.txt"}
+#registered_event_cancellation = {html = "resources/templates/registered_event_cancellation.html", txt = "resources/templates/registered_event_cancellation.txt"}
+#unregistered_event_cancellation = {html = "resources/templates/unregistered_event_cancellation.html", txt = "resources/templates/unregistered_event_cancellation.txt"}
+#external_event_cancellation = {html = "resources/templates/external_event_cancellation.html", txt = "resources/templates/external_event_cancellation.txt"}
 
 [languages]
 #default_language = 'de-DE'

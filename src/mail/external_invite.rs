@@ -38,6 +38,7 @@ fn build_template_context(
         &builder.create_room_invite_link(&obj.invite_code),
     );
     context.insert("support", &builder.support_contact);
+    context.insert("data_protection_url", &builder.frontend.data_protection_url);
     context
 }
 
@@ -116,6 +117,7 @@ impl MailTemplate for ExternalEventInvite {
         );
         context.insert("language", &language);
         context.insert("event", &self.event);
+        context.insert("data_protection_url", &builder.frontend.data_protection_url);
 
         let description = builder.tera.render("ics_description.txt", &context)?;
 

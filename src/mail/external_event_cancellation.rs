@@ -34,6 +34,7 @@ fn build_template_context(
     context.insert("inviter", &obj.inviter);
     context.insert("event", &obj.event);
     context.insert("support", &builder.support_contact);
+    context.insert("data_protection_url", &builder.frontend.data_protection_url);
     context
 }
 
@@ -106,6 +107,7 @@ impl MailTemplate for ExternalEventCancellation {
         let mut context = tera::Context::new();
         context.insert("language", &language);
         context.insert("event", &self.event);
+        context.insert("data_protection_url", &builder.frontend.data_protection_url);
 
         let description = builder.tera.render("ics_description.txt", &context)?;
 

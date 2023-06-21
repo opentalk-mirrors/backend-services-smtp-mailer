@@ -1,0 +1,1 @@
+{{ fluent(key="data-protection-hint", lang = language) }} {{ data_protection_url }}.

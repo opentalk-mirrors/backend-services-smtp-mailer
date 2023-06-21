@@ -23,3 +23,4 @@
 {{ fluent(key="questions", lang = language) }}
 {{ fluent(key="questions.p", lang = language, phone=support.phone | format_telephone_number(mode = "international"), mail=support.mail) }}
 {% endif -%}
+{% include "data_protection_txt.include" -%}

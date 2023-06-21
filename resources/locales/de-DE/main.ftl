@@ -33,7 +33,6 @@ join-directly-link = Öffne den Raum in einem neuen Tab/Fenster
         .alt = Klicken um zu öffnen
 
 meeting-information-password = Meeting-Passwort
-meeting-information-call-in = Telefoneinwahl
 
 call-in-header = Beitritt via Telefon
 call-in-hint = Sie können Ihr Telefon verwenden um diesem Meeting beizutreten.
@@ -53,3 +52,5 @@ questions = Noch Fragen? Wir helfen Ihnen Gerne!
 fallback-footer = Sollten die Buttons oder Links nicht funktionieren, können Sie die folgenden URLs in ihrem Browser eingeben:
 join-directly-fallback = Meeting beitreten: { $link }
 view-in-dashboard-fallback = Meeting details: { $link }
+
+data-protection-hint = Hinweis zum Datenschutz: Uns ist der Schutz Ihrer Daten besonders wichtig. Auch bei der Verwendung der Videokonferenzlösung können personenbezogene Daten ausgetauscht werden. Erfahren Sie mehr zum Umgang mit Ihren Daten auf unserer Internetseite unter

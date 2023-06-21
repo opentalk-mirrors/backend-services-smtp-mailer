@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Include shared folder URL and password in emails ([#34](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/34))
+- Data protection hints ([#39](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/39))
+
+### Fixed
+
+- Make shared folder link clickable ([#41](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/41))
 
 ## [0.2.0] - 2023-05-15
 

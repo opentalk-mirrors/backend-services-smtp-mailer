@@ -355,10 +355,10 @@ fn template_default_unregistered_event_update() -> MailTemplate {
     }
 }
 
-fn template_default_unregistered_event_cancellation() -> MailTemplate {
+fn template_default_external_event_update() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/unregistered_event_cancellation.txt".into(),
-        html: "resources/templates/unregistered_event_cancellation.html".into(),
+        txt: "resources/templates/external_event_update.txt".into(),
+        html: "resources/templates/external_event_update.html".into(),
     }
 }
 
@@ -369,10 +369,10 @@ fn template_default_event_cancellation() -> MailTemplate {
     }
 }
 
-fn template_default_external_event_update() -> MailTemplate {
+fn template_default_unregistered_event_cancellation() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/external_event_update.txt".into(),
-        html: "resources/templates/external_event_update.html".into(),
+        txt: "resources/templates/unregistered_event_cancellation.txt".into(),
+        html: "resources/templates/unregistered_event_cancellation.html".into(),
     }
 }
 
@@ -390,18 +390,25 @@ fn template_default_external_event_cancellation() -> MailTemplate {
 pub struct Frontend {
     #[serde(default = "frontend_default_base_url")]
     pub base_url: String,
+    #[serde(default = "frontend_default_data_protection_url")]
+    pub data_protection_url: String,
 }
 
 impl Default for Frontend {
     fn default() -> Self {
         Self {
             base_url: frontend_default_base_url(),
+            data_protection_url: frontend_default_data_protection_url(),
         }
     }
 }
 
 fn frontend_default_base_url() -> String {
     "https://opentalk.example.org".into()
+}
+
+fn frontend_default_data_protection_url() -> String {
+    "https://opentalk.example.org/dataprotection".into()
 }
 
 /// Template Builder Config

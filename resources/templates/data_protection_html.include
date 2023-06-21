@@ -1,0 +1,3 @@
+                    <div class="margin-top-40">
+                        {{ fluent(key="data-protection-hint", lang = language) }} <a href="{{ data_protection_url }}">{{ data_protection_url }}</a>.
+                    </div>

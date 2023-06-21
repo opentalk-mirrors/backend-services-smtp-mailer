@@ -20,3 +20,4 @@
 {{ fluent(key="shared-folder", lang = language) }}: {{ event.shared_folder.read.url }}
 {{ fluent(key="shared-folder-password", lang = language) }}: {{ event.shared_folder.read.password }}
 {% endif %}
+{% include "data_protection_ics.include" -%}
