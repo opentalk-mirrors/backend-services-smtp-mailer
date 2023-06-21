@@ -53,4 +53,4 @@ fallback-footer = Sollten die Buttons oder Links nicht funktionieren, können Si
 join-directly-fallback = Meeting beitreten: { $link }
 view-in-dashboard-fallback = Meeting details: { $link }
 
-data-protection-hint = Hinweis zum Datenschutz: Uns ist der Schutz Ihrer Daten besonders wichtig. Auch bei der Verwendung der Videokonferenzlösung können personenbezogene Daten ausgetauscht werden. Erfahren Sie mehr zum Umgang mit Ihren Daten auf unserer Internetseite unter
+data-protection-hint = Hinweis zum Datenschutz: Uns ist der Schutz Ihrer Daten besonders wichtig. Auch bei der Verwendung der Videokonferenzlösung können personenbezogene Daten ausgetauscht werden. Erfahren Sie mehr zum Umgang mit Ihren Daten auf unserer Internetseite unter { $link }
