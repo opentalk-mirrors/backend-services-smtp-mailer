@@ -85,6 +85,7 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
     tera.register_function("fluent", FluentLoader::new(&*crate::i18n::LOCALES));
 
     tera.register_filter("wrap_text", wrap_text_filter);
+    tera.register_filter("build_link", build_link);
     tera.register_filter("space_groups", space_groups_filter);
     tera.register_filter("format_telephone_number", format_telephone_number_filter);
 
@@ -252,6 +253,18 @@ pub fn wrap_text_filter(value: &Value, args: &HashMap<String, Value>) -> tera::R
 
     let wrapped_string = textwrap::fill(s.as_str(), width);
     Ok(to_value(wrapped_string).unwrap())
+}
+
+pub fn build_link(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let s = try_get_value!("build_link", "value", String, value);
+
+    let caption = match args.get("caption") {
+        Some(caption) => try_get_value!("build_link", "caption", String, caption),
+        None => s.clone(),
+    };
+
+    let link_string = format!("<a href=\"{s}\">{caption}</a>");
+    Ok(to_value(link_string).unwrap())
 }
 
 pub fn space_groups_filter(value: &Value, _: &HashMap<String, Value>) -> tera::Result<Value> {
