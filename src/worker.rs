@@ -51,7 +51,7 @@ where
             match self.handler(data).await {
                 Result::Ok(_) => {
                     if let Err(e) = delivery.ack(Default::default()).await {
-                        log::error!("Ack Error{}", e);
+                        log::error!("Ack Error: {}", e);
                     }
                 }
                 Result::Err(e) => {
@@ -72,7 +72,7 @@ where
                     };
 
                     if let Err(e) = delivery.reject(BasicRejectOptions { requeue }).await {
-                        log::error!("Ack Error{}", e);
+                        log::error!("Ack Error: {}", e);
                     }
 
                     log::debug!("Handler Error: {}", e);
