@@ -36,11 +36,11 @@ meeting-information-password = Meeting Password
 
 call-in-header = Participate via Phone
 call-in-hint = You can use your phone to participate in this meeting.
-call-in-desc = Just dial in the following number and enter the given Call-In-ID and Call-In-Password, or click the Quick-Dial number on your phone.
+call-in-desc = Just dial in the following number and enter the given conference ID and conference PIN, or click the Quick-Dial number on your phone.
 
 call-in-number = Number
-call-in-id = Call-In ID
-call-in-pw = Call-In Password
+call-in-id = Conference ID
+call-in-pw = Conference PIN
 call-in-quick-dial = Quick-Dial
 
 shared-folder = Shared Folder

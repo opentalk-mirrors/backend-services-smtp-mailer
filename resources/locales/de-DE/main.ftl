@@ -36,11 +36,11 @@ meeting-information-password = Meeting-Passwort
 
 call-in-header = Beitritt via Telefon
 call-in-hint = Sie können Ihr Telefon verwenden um diesem Meeting beizutreten.
-call-in-desc = Einfach die unten angegebene Nummer wählen und Call-In ID sowie Call-In Password angeben. Alternativ direkt mit dem Mobiltelefon auf die Schnelleinwahl klicken und direkt loslegen.
+call-in-desc = Einfach die unten angegebene Nummer wählen und Konferenzkennung sowie Konferenz-PIN angeben. Alternativ direkt mit dem Mobiltelefon auf die Schnelleinwahl klicken und direkt loslegen.
 
 call-in-number = Telefonnummer
-call-in-id = Call-In ID
-call-in-pw = Call-In Passwort
+call-in-id = Konferenzkennung
+call-in-pw = Konferenz-PIN
 call-in-quick-dial = Schnelleinwahl
 
 shared-folder = Geteiler Ordner
