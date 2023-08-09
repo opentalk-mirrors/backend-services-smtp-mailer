@@ -2,6 +2,7 @@ registered-event-invite-subject = Einladung zum OpenTalk-Meeting - {$event-name}
 unregistered-event-invite-subject = Einladung zum OpenTalk-Meeting - {$event-name}
 event-update-subject = OpenTalk-Meeting wurde geändert - {$event-name}
 event-cancellation-subject = OpenTalk-Meeting wurde abgesagt - {$event-name}
+event-uninvite-subject = Sie wurden von einem OpenTalk-Meeting entfernt - {$event-name}
 
 # Arguments name
 invite = Einladung zum OpenTalk-Meeting - { $name }
@@ -24,6 +25,9 @@ event_update = OpenTalk-Meeting wurde geändert - { $name }
 
 event_cancellation = OpenTalk-Meeting wurde abgesagt - { $name }
         .p = {$firstname} {$lastname} hat ein OpenTalk-Meeting abgesagt.
+
+event_uninvite = Einladung zum OpenTalk-Meeting wurde zurückgezogen - { $name }
+        .p = {$firstname} {$lastname} hat sie von einem OpenTalk-Meeting entfernt.
 
 meeting-information = Meeting-Information
 meeting-information-title = Titel

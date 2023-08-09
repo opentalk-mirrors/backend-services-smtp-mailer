@@ -35,6 +35,9 @@ mail_task_queue = "opentalk_mailer"
 #registered_event_cancellation = {html = "resources/templates/registered_event_cancellation.html", txt = "resources/templates/registered_event_cancellation.txt"}
 #unregistered_event_cancellation = {html = "resources/templates/unregistered_event_cancellation.html", txt = "resources/templates/unregistered_event_cancellation.txt"}
 #external_event_cancellation = {html = "resources/templates/external_event_cancellation.html", txt = "resources/templates/external_event_cancellation.txt"}
+#registered_uninvite = {html = "resources/templates/registered_uninvite.html", txt = "resources/templates/registered_uninvite.txt"}
+#unregistered_uninvite = {html = "resources/templates/unregistered_uninvite.html", txt = "resources/templates/unregistered_uninvite.txt"}
+#external_uninvite = {html = "resources/templates/external_uninvite.html", txt = "resources/templates/external_uninvite.txt"}
 
 [languages]
 #default_language = 'de-DE'
