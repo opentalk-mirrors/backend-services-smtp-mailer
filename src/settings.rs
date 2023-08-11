@@ -227,6 +227,13 @@ pub struct Templates {
     unregistered_event_cancellation: MailTemplate,
     #[serde(default = "template_default_external_event_cancellation")]
     external_event_cancellation: MailTemplate,
+    //
+    #[serde(default = "template_default_uninvite")]
+    registered_uninvite: MailTemplate,
+    #[serde(default = "template_default_unregistered_uninvite")]
+    unregistered_uninvite: MailTemplate,
+    #[serde(default = "template_default_external_uninvite")]
+    external_uninvite: MailTemplate,
 }
 
 impl Templates {
@@ -297,6 +304,28 @@ impl Templates {
                 self.external_event_cancellation.html.as_ref(),
                 "external_event_cancellation.html",
             ),
+            //
+            (
+                self.registered_uninvite.txt.as_ref(),
+                "registered_uninvite.txt",
+            ),
+            (
+                self.registered_uninvite.html.as_ref(),
+                "registered_uninvite.html",
+            ),
+            (
+                self.unregistered_uninvite.txt.as_ref(),
+                "unregistered_uninvite.txt",
+            ),
+            (
+                self.unregistered_uninvite.html.as_ref(),
+                "unregistered_uninvite.html",
+            ),
+            (self.external_uninvite.txt.as_ref(), "external_uninvite.txt"),
+            (
+                self.external_uninvite.html.as_ref(),
+                "external_uninvite.html",
+            ),
         ]
         .into_iter()
     }
@@ -316,6 +345,10 @@ impl Default for Templates {
             registered_event_cancellation: template_default_event_cancellation(),
             unregistered_event_cancellation: template_default_unregistered_event_cancellation(),
             external_event_cancellation: template_default_external_event_cancellation(),
+            //
+            registered_uninvite: template_default_uninvite(),
+            unregistered_uninvite: template_default_unregistered_uninvite(),
+            external_uninvite: template_default_external_uninvite(),
         }
     }
 }
@@ -380,6 +413,27 @@ fn template_default_external_event_cancellation() -> MailTemplate {
     MailTemplate {
         txt: "resources/templates/external_event_cancellation.txt".into(),
         html: "resources/templates/external_event_cancellation.html".into(),
+    }
+}
+
+fn template_default_uninvite() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/registered_uninvite.txt".into(),
+        html: "resources/templates/registered_uninvite.html".into(),
+    }
+}
+
+fn template_default_unregistered_uninvite() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/unregistered_uninvite.txt".into(),
+        html: "resources/templates/unregistered_uninvite.html".into(),
+    }
+}
+
+fn template_default_external_uninvite() -> MailTemplate {
+    MailTemplate {
+        txt: "resources/templates/external_uninvite.txt".into(),
+        html: "resources/templates/external_uninvite.html".into(),
     }
 }
 

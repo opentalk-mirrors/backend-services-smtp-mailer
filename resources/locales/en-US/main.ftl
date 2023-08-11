@@ -2,6 +2,7 @@ registered-event-invite-subject = OpenTalk Meeting Invitation - {$event-name}
 unregistered-event-invite-subject = OpenTalk Meeting Invitation - {$event-name}
 event-update-subject = OpenTalk Meeting was updated - {$event-name}
 event-cancellation-subject = OpenTalk Meeting was cancelled - {$event-name}
+event-uninvite-subject = You have been removed from an OpenTalk-Meeting - {$event-name}
 
 # Arguments name
 invite = OpenTalk Meeting Invitation - { $name }
@@ -24,6 +25,9 @@ event_update = OpenTalk Meeting was updated - { $name }
 
 event_cancellation = OpenTalk Meeting was cancelled - { $name }
         .p = {$firstname} {$lastname} cancelled an OpenTalk Meeting.
+
+event_uninvite = OpenTalk Meeting Invitation was revoked - { $name }
+        .p = {$firstname} {$lastname} removed you from an OpenTalk Meeting.
 
 meeting-information = Meeting Information
 meeting-information-title = Title

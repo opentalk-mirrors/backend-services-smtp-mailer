@@ -21,12 +21,15 @@ use tera::{try_get_value, Tera};
 mod external_event_cancellation;
 mod external_event_update;
 mod external_invite;
+mod external_uninvite;
 mod registered_event_cancellation;
 mod registered_event_update;
 mod registered_invite;
+mod registered_uninvite;
 mod unregistered_event_cancellation;
 mod unregistered_event_update;
 mod unregistered_invite;
+mod unregistered_uninvite;
 
 pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Tera> {
     let mut tera = Tera::default();
@@ -209,6 +212,10 @@ macro_rules! forward {
             ::mail_worker_protocol::v1::Message::RegisteredEventCancellation(x) => x.$fn($($arg)*),
             ::mail_worker_protocol::v1::Message::UnregisteredEventCancellation(x) => x.$fn($($arg)*),
             ::mail_worker_protocol::v1::Message::ExternalEventCancellation(x) => x.$fn($($arg)*),
+            // Uninvites
+            ::mail_worker_protocol::v1::Message::RegisteredEventUninvite(x) => x.$fn($($arg)*),
+            ::mail_worker_protocol::v1::Message::UnregisteredEventUninvite(x) => x.$fn($($arg)*),
+            ::mail_worker_protocol::v1::Message::ExternalEventUninvite(x) => x.$fn($($arg)*),
         }
     };
 }
