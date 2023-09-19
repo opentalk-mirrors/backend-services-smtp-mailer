@@ -4,7 +4,6 @@
 
 use crate::{ics::EventStatus, settings};
 use anyhow::Result;
-use base64::Engine;
 use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
 use lettre::{
     message::{
@@ -406,13 +405,11 @@ fn create_ics_attachments(ics: Vec<u8>, event_status: EventStatus) -> Vec<Single
         .header(ContentTransferEncoding::QuotedPrintable)
         .body(ics.clone());
 
-    let base64_ics: String = base64::engine::general_purpose::STANDARD.encode(ics);
-
     let ics_attachment = SinglePart::builder()
         .content_type(ContentType::parse("application/ics").unwrap())
         .header(ContentDisposition::attachment(file_name))
         .header(ContentTransferEncoding::Base64)
-        .body(base64_ics);
+        .body(ics);
 
     vec![calendar_attachment, ics_attachment]
 }
