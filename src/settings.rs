@@ -496,7 +496,7 @@ fn email_default_dashboard_event_link_builder() -> String {
 }
 
 fn email_default_join_link_builder() -> String {
-    "{base_url}/lobby/{room_id}".into()
+    "{base_url}/room/{room_id}".into()
 }
 
 fn email_default_guest_link_builder() -> String {
