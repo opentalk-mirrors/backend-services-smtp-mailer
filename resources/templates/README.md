@@ -46,7 +46,7 @@ Variables:
 | event.call_in.sip_tel      | string         | Telephone number to call                          |
 | event.call_in.sip_id       | string         | Id of the room to enter                           |
 | event.call_in.sip_password | string         | Password of the room to enter                     |
-| join_link                  | string         | Link href to the lobby page of the room           |
+| join_link                  | string         | Link href to the meeting room                     |
 | event_link                 | string         | Link href to the dashboard event/meeting page     |
 | support                    | object \| null | Support contact information                       |
 | support.phone              | string         | The support phone number                          |
@@ -88,7 +88,7 @@ Variables:
 | event.call_in.sip_tel      | string         | Telephone number to call                               |
 | event.call_in.sip_id       | string         | Id of the room to enter                                |
 | event.call_in.sip_password | string         | Password of the room to enter                          |
-| join_link                  | string         | Link href to the lobby page of the room                |
+| join_link                  | string         | Link href to the meeting room                          |
 | event_link                 | string         | Link href to the dashboard event/meeting page          |
 | support                    | object \| null | Support contact information                            |
 | support.phone              | string         | The support phone number                               |

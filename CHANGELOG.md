@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Make shared folder link clickable ([#41](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/41))
+- Replace deprecated lobby URLs with room counterparts ([#61](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/61))
 
 ## [0.2.0] - 2023-05-15
 
