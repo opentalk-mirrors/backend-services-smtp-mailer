@@ -82,6 +82,13 @@ html, body{
     line-height: 1.5;
 }
 .data_protection{
+    margin-top: 1rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    line-height: 1.5;
+}
+.quick_guide{
+    margin-top: 1rem;
     padding-left: 2.5rem;
     padding-right: 2.5rem;
     line-height: 1.5;
