@@ -61,6 +61,14 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         include_str!("../../resources/templates/shared_folder_html.include"),
     )?;
     tera.add_template_file(
+        "resources/templates/quick_guide_txt.include",
+        Some("quick_guide_txt.include"),
+    )?;
+    tera.add_template_file(
+        "resources/templates/quick_guide_html.include",
+        Some("quick_guide_html.include"),
+    )?;
+    tera.add_template_file(
         "resources/templates/data_protection_txt.include",
         Some("data_protection_txt.include"),
     )?;

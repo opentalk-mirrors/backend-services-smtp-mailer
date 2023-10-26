@@ -57,4 +57,7 @@ fallback-footer = If the buttons or links dont’t work open your browser and ty
 join-directly-fallback = Join Meeting: { $link }
 view-in-dashboard-fallback = Meeting Details: { $link }
 
+quick-guide-hint-txt = New to OpenTalk? Read our quick guide here: https://opentalk.eu/en/quick-manual
+quick-guide-hint-html = New to OpenTalk? Read our quick guide here: <a href="https://opentalk.eu/en/quick-manual">https://opentalk.eu/en/quick-manual</a>
+
 data-protection-hint = Note for data protection: The protection of your data is important to us. Personal data can also be exchanged when using the video conference solution. For more information on how we handle your personal data, please visit { $link }
