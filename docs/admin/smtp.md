@@ -1,0 +1,46 @@
+# SMTP
+
+OpenTalk SMTP Mailer sends emails via a SMTP server. These protocols are supported:
+
+- SMTP cleartext
+- SMTP with StartTLS
+- SMTP with implicit TLS
+
+## Configuration
+
+The section in the [configuration file](configuration.md) is called `smtp`.
+
+| Field         | Type     | Required | Default value          | Description                                                          |
+| ------------- | -------- | -------- | ---------------------- | -------------------------------------------------------------------- |
+| `smtp_server` | `string` | no       | "smtp://localhost:25"  | The URL of the SMTP server used for sending emails                   |
+| `from_name`   | `string` | no       | "OpenTalk"             | The sender's name written to the `From` field of the emails          |
+| `from_email`  | `string` | no       | "no-reply@example.org" | The sender's email address written to the `From` field of the emails |
+
+### Examples
+
+#### SMTP cleartext to local server, explicit port, anonymous (i.e. without credentials)
+
+```toml
+[smtp]
+smtp_server = "smtp://localhost:1025?disable_starttls=true"
+from_name = "OpenTalk"
+from_email = "no-reply@example.org"
+```
+
+#### SMTP with StartTLS to remote server, explicit port, using credentials
+
+```toml
+[smtp]
+smtp_server = "smtp://user:pass@mailserver.example.org:1234"
+from_name = "OpenTalk"
+from_email = "no-reply@example.org"
+```
+
+#### SMTP with implicit TLS to remote server, default port, using credentials
+
+```toml
+[smtp]
+smtp_server = "smtps://user:pass@mailserver.example.org"
+from_name = "OpenTalk"
+from_email = "no-reply@example.org"
+```
