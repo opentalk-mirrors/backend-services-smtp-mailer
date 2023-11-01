@@ -61,3 +61,36 @@ quick-guide-hint-txt = Neu bei OpenTalk? Eine Kurzanleitung finden Sie hier: htt
 quick-guide-hint-html = Neu bei OpenTalk? Eine Kurzanleitung finden Sie hier: <a href="https://opentalk.eu/de/kurzanleitung">https://opentalk.eu/de/kurzanleitung</a>
 
 data-protection-hint = Hinweis zum Datenschutz: Uns ist der Schutz Ihrer Daten besonders wichtig. Auch bei der Verwendung der Videokonferenzlösung können personenbezogene Daten ausgetauscht werden. Erfahren Sie mehr zum Umgang mit Ihren Daten auf unserer Internetseite unter { $link }
+
+adhoc-meeting-info-hours =
+        Dies ist ein Adhoc meeting, diese werden nach { $retentiontime ->
+                [1] einer Stunde
+                [2] zwei Stunden
+                [3] drei Stunden
+                [4] vier Stunden
+                [5] fünf Stunden
+                [6] sechs Stunden
+                [7] sieben Stunden
+                [8] acht Stunden
+                [9] neun Stunden
+                [10] zehn Stunden
+                [11] elf Stunden
+                [12] zwölf Stunden
+               *[other] { $retentiontime } Stunden
+        } automatisch gelöscht.
+adhoc-meeting-info-minutes =
+        Dies ist ein Adhoc meeting, diese werden nach { $retentiontime ->
+                [1] einer Minute
+                [2] zwei Minuten
+                [3] drei Minuten
+                [4] vier Minuten
+                [5] fünf Minuten
+                [6] sechs Minuten
+                [7] sieben Minuten
+                [8] acht Minuten
+                [9] neun Minuten
+                [10] zehn Minuten
+                [11] elf Minuten
+                [12] zwölf Minuten
+               *[other] { $retentiontime } Minuten
+        } automatisch gelöscht.

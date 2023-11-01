@@ -67,6 +67,7 @@ fn default_unregistered_invite(
             }),
             revision: 0,
             shared_folder: build_shared_folder(),
+            adhoc_retention_seconds: None,
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -123,6 +124,7 @@ fn default_registered_invite(
             }),
             revision: 0,
             shared_folder: build_shared_folder(),
+            adhoc_retention_seconds: Some(1345),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -175,6 +177,7 @@ fn default_external_invite(
             }),
             revision: 0,
             shared_folder: build_shared_folder(),
+            adhoc_retention_seconds: Some(86400),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -231,6 +234,7 @@ fn default_unregistered_cancellation(
             }),
             revision: 1,
             shared_folder: build_shared_folder(),
+            adhoc_retention_seconds: Some(86400),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -288,6 +292,7 @@ fn default_registered_cancellation(
             }),
             revision: 1,
             shared_folder: build_shared_folder(),
+            adhoc_retention_seconds: Some(86400),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
@@ -341,6 +346,7 @@ fn default_external_cancellation(
             }),
             revision: 1,
             shared_folder: build_shared_folder(),
+            adhoc_retention_seconds: Some(86400),
         },
         inviter: protocol::v1::RegisteredUser {
             email: "sender@example.org".into(),
