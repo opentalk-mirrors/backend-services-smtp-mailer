@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-image: git.opentalk.dev:5050/opentalk/backend/containers/rust:1.66.1
+image: git.opentalk.dev:5050/opentalk/backend/containers/rust:1.73.0-bullseye
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
