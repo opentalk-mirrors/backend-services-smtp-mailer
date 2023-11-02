@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Pin build base container to Debian Bullseye to fix GLIBC errors ([#70](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/70))
+- Pin dockerfile build container to Debian Bullseye to fix GLIBC errors ([#72](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/72))
 
 ## [0.3.0] - 2023-06-27
 

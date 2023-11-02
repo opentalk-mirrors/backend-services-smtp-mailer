@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-FROM rust:slim AS builder
+FROM rust:1.73.0-slim-bullseye AS builder
 
 ARG GIT_SHA
 ARG GIT_REF
