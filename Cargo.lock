@@ -737,6 +737,9 @@ name = "email_address"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2153bd83ebc09db15bcbdc3e2194d901804952e3dc96967e1cd3b0c5c32d112"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "enum-iterator"
@@ -1669,9 +1672,12 @@ dependencies = [
 name = "opentalk-types"
 version = "0.0.0-dev"
 dependencies = [
+ "base64 0.21.0",
+ "bincode",
  "chrono",
  "chrono-tz 0.8.3",
  "derive_more",
+ "email_address",
  "serde",
  "serde_json",
  "strum",

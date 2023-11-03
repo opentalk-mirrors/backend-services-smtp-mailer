@@ -45,6 +45,9 @@
                     <br/>
                     <b>{{ fluent(key="meeting-information-password", lang = language) }}:</b> {{ event.room.password}}
                     {% endif %}
+                    {% if event.adhoc_retention_seconds -%}
+                        {% include "adhoc_html.include" %}
+                    {% endif %}
                 </p>
                 {% include "callin_html.include" %}
                 {% include "shared_folder_html.include" %}

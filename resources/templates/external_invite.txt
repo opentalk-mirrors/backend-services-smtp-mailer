@@ -17,6 +17,9 @@
 {% if event.room.password -%}
 {{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}
 {% endif -%}
+{% if event.adhoc_retention_seconds -%}
+{% include "adhoc_txt.include" -%}
+{% endif -%}
 {% include "callin_txt.include" -%}
 {% include "shared_folder_txt.include" -%}
 {% if support -%}

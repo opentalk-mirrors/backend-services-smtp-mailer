@@ -84,6 +84,15 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         "ics_description.txt",
         include_str!("../../resources/templates/ics_description.txt"),
     )?;
+    tera.add_template_file(
+        "resources/templates/adhoc_txt.include",
+        Some("adhoc_txt.include"),
+    )?;
+    tera.add_template_file(
+        "resources/templates/adhoc_html.include",
+        Some("adhoc_html.include"),
+    )?;
+
     tera.add_template_files(
         settings
             .templates

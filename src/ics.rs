@@ -202,6 +202,7 @@ mod test {
             },
             revision: 0,
             shared_folder: None,
+            adhoc_retention_seconds: Some(86400),
         };
 
         let invitee = Invitee::WithName {
