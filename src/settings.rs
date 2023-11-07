@@ -81,9 +81,9 @@ fn rabbitmq_default_queue_name() -> String {
 /// A SMTP URI type
 ///
 /// # Examples
-/// SMTP Cleartext: smtp://foo:bar@my-mailserver:1234/?disable_starttls=true
-/// SMTP with StartTLS: smtp://foo:bar@my-mailserver:1234/
-/// SMTP with implicit TLS: smtps://foo:bar@my-mailserver:1234/
+/// SMTP Cleartext: smtp://user:pass@mailserver.example.org:1234?disable_starttls=true
+/// SMTP with StartTLS: smtp://user:pass@mailserver.example.org:1234
+/// SMTP with implicit TLS: smtps://user:pass@mailserver.example.org:1234
 #[derive(Debug, Clone)]
 pub struct SmtpUri(url::Url);
 impl FromStr for SmtpUri {
@@ -538,7 +538,7 @@ mod test {
     #[test]
     fn settings_env_vars_overwite_config() -> Result<(), ConfigError> {
         // Sanity check
-        let settings = Settings::load("./config.toml.example")?;
+        let settings = Settings::load("./extra/example.toml")?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, "+49123321123".to_string());
@@ -550,7 +550,7 @@ mod test {
         env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
         env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
 
-        let settings = Settings::load("./config.toml.example")?;
+        let settings = Settings::load("./extra/example.toml")?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, env_support_phone);

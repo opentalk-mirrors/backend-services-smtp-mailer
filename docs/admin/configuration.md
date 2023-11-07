@@ -1,14 +1,70 @@
+# Configuring OpenTalk SMTP Mailer
+
+When the SMTP mailer gets started, it loads the configuration from the
+environment. It reads the settings in this order:
+
+- Read environment variables which have a specific name, see section
+  [Environment variables](#environment-variables).
+- Load from a configuration file which defaults to `config.toml` in the current
+  working directory.
+
+## Sections in the configuration file
+
+Functionality that can be configured through the configuration file:
+
+- [RabbitMQ](rabbitmq.md)
+- [Frontend](frontend.md)
+- [Languages](languages.md)
+- [SMTP server](smtp.md)
+- [Support contact](support_contact.md)
+- [Template builder](template_builder.md)
+- [Templates](templates.md)
+
+## Environment variables
+
+Settings in the configuration file can be overwritten by environment variables,
+nested fields are separated by two underscores `__`. The pattern looks like
+this:
+
+```sh
+MAILER_<field>__<nested-field>…
+```
+
+### Limitations
+
+Some settings can not be overwritten by environment variables. This is for
+example the case for entries in lists, because there is no environment variable
+naming pattern that could identify the index of the entry inside the list.
+
+### Examples
+
+In order to set the `rabbit_mq.mail_task_queue` field, this environment variable could be used:
+
+```sh
+MAILER_RABBIT_MQ__MAIL_TASK_QUEUE=opentalk_mailer
+```
+
+## Example configuration file
+
+This file can be found in the source code distribution under `extra/example.toml`
+
+<!-- begin:fromfile:toml:config/example.toml -->
+
+```toml
+# SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
+#
+# SPDX-License-Identifier: EUPL-1.2
 
 [rabbit_mq]
 # The URL to use to connect to the rabbit mq broker
-url = "amqp://guest:guest@localhost/%2F"
+url = "amqp://username:password@localhost/%2F"
 # The queue to subscribe to
 mail_task_queue = "opentalk_mailer"
 
 [smtp]
-# SMTP Cleartext: smtp://foo:bar@my-mailserver:1234/?disable_starttls=true
-# SMTP with StartTLS: smtp://foo:bar@my-mailserver:1234/
-# SMTP with implicit TLS: smtps://foo:bar@my-mailserver:1234/
+# SMTP Cleartext: smtp://user:pass@mailserver.example.org:1234?disable_starttls=true
+# SMTP with StartTLS: smtp://user:pass@mailserver.example.org:1234
+# SMTP with implicit TLS: smtps://user:pass@mailserver.example.org:1234
 #smtp_server = "smtp://localhost:1025?disable_starttls=true"
 # Set the From email address according to the requirements of your SMTP server.
 #from_name = "OpenTalk"
@@ -40,7 +96,7 @@ mail_task_queue = "opentalk_mailer"
 #external_uninvite = {html = "resources/templates/external_uninvite.html", txt = "resources/templates/external_uninvite.txt"}
 
 [languages]
-#default_language = 'de-DE'
+#default_language = "de-DE"
 
 # Optional support contact information
 # Adds a support contact section to the template
@@ -49,3 +105,6 @@ mail_task_queue = "opentalk_mailer"
 phone = "+49123321123"
 # Support mail contact
 mail = "support@example.com"
+```
+
+<!-- end:fromfile:toml:config/example.toml -->
