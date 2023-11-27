@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Languages
 
 The language of the emails can localized individually. If no culture is specified a fallback is used.

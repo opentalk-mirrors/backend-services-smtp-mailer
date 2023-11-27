@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Configuring OpenTalk SMTP Mailer
 
 When the SMTP mailer gets started, it loads the configuration from the

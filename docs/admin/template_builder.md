@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Template builder
 
 The emails contain some individual links whose destination URLs are generated using the templates listed below.

@@ -1,3 +1,7 @@
+---
+title: SMTP Mailer
+---
+
 # Administration guide for the OpenTalk SMTP Mailer
 
 ## General information about the service
