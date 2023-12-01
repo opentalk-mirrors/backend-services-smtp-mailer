@@ -12,6 +12,7 @@ stages:
   - test
   - build
   - package
+  - trigger
 
 lint:fmt:
   rules:
@@ -91,6 +92,16 @@ package:mailer-container-dev:
       --dockerfile $CI_PROJECT_DIR/container/Dockerfile
       --destination $CI_REGISTRY_IMAGE:dev
       --force
+
+trigger-docs:
+  needs: []
+  stage: trigger
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_NAME !~ /^.*canary$/ || $CI_COMMIT_TAG =~ /^v.*$/
+  trigger:
+    project: opentalk/backend/docs
 
 package:mailer-container-tag:
   rules:

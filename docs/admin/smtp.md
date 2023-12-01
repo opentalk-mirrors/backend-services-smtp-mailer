@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # SMTP
 
 OpenTalk SMTP Mailer sends emails via a SMTP server. These protocols are supported:

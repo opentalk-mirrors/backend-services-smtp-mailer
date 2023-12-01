@@ -1,3 +1,7 @@
+---
+sidebar_position: 8
+---
+
 # Templates
 
 The emails are generated from templates. For each kind of email, there exists one html template and one plaintext template. These templates can be replaced during runtime, before starting the SMTP mailer.

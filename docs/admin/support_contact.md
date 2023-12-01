@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # Support contact
 
 The emails optionally can contain information about a support contact.

@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Frontend
 
 The emails contain some links referring to specific parts of the frontend.
