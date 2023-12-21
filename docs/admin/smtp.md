@@ -20,6 +20,11 @@ The section in the [configuration file](configuration.md) is called `smtp`.
 | `from_name`   | `string` | no       | "OpenTalk"             | The sender's name written to the `From` field of the emails          |
 | `from_email`  | `string` | no       | "no-reply@example.org" | The sender's email address written to the `From` field of the emails |
 
+Note: Encode the `smtp_server` URL properly:
+
+- Significant characters (e.g. the '@' separating the user credentials from the domain) must be written literally.
+- Special characters within the URL parts must be paraphrased (e.g. '@' replaced with '%40')
+
 ### Examples
 
 #### SMTP cleartext to local server, explicit port, anonymous (i.e. without credentials)
@@ -40,11 +45,11 @@ from_name = "OpenTalk"
 from_email = "no-reply@example.org"
 ```
 
-#### SMTP with implicit TLS to remote server, default port, using credentials
+#### SMTP with implicit TLS to remote server, default port, using credentials (with a username containing '@')
 
 ```toml
 [smtp]
-smtp_server = "smtps://user:pass@mailserver.example.org"
+smtp_server = "smtps://user%40maildomain.example.org:pass@mailserver.example.org"
 from_name = "OpenTalk"
 from_email = "no-reply@example.org"
 ```
