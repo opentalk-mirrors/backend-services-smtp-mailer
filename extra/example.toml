@@ -12,6 +12,10 @@ mail_task_queue = "opentalk_mailer"
 # SMTP Cleartext: smtp://user:pass@mailserver.example.org:1234?disable_starttls=true
 # SMTP with StartTLS: smtp://user:pass@mailserver.example.org:1234
 # SMTP with implicit TLS: smtps://user:pass@mailserver.example.org:1234
+# Note: Encode the URL properly:
+#       - Significant characters (e.g. the '@' separating the user credentials from the domain) must be written literally.
+#       - Special characters within the URL parts must be paraphrased (e.g. '@' replaced with '%40')
+#       Example: smtps://user%40maildomain.example.org:pass@mailserver.example.org
 #smtp_server = "smtp://localhost:1025?disable_starttls=true"
 # Set the From email address according to the requirements of your SMTP server.
 #from_name = "OpenTalk"
