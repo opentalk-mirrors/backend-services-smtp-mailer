@@ -7,22 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2024-01-10
+
 ### Added
 
-- Send emails to users when they are removed from a meeting ([#48](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/48))
 - Add deletion notice for adhoc meetings to emails ([#57](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/57))
+
+### Fixed
+
+- Update `self_cell` dependency to fix [`RUSTSEC-2023-0070`](https://rustsec.org/advisories/RUSTSEC-2023-0070) ([#76](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/76))
+
+## [0.4.2] - 2023-11-02
+
+### Fixed
+
+- Pin dockerfile build container to Debian Bullseye to fix GLIBC errors ([#72](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/72))
+
+## [0.4.1] - 2023-11-02
+
+### Fixed
+
+- Pin build base container to Debian Bullseye to fix GLIBC errors ([#70](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/70))
+
+## [0.4.0] - 2023-10-30
+
+### Added
+
+- Add quick guide hint (including link) to the generated emails ([#65](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/65))
+- Send emails to users when they are removed from a meeting ([#48](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/48))
 
 ### Changed
 
 - Change wording in emails to match the voice announcements ([#46](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/46))
 - Add quick guide hint (including link) to the generated emails ([#65](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/65))
 - Update CI rust tooling to 1.73.0  ([#62](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/62))
-
-### Fixed
-
-- Pin build base container to Debian Bullseye to fix GLIBC errors ([#70](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/70))
-- Pin dockerfile build container to Debian Bullseye to fix GLIBC errors ([#72](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/72))
-- Update `self_cell` dependency to fix [`RUSTSEC-2023-0070`](https://rustsec.org/advisories/RUSTSEC-2023-0070) ([#76](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/76))
 
 ## [0.3.0] - 2023-06-27
 
@@ -92,7 +110,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 initial release candidate
 
-[Unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.3.0...main
+[Unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.4.3...main
+
+[0.4.3]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.2...v0.4.3
+[0.4.2]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.1...v0.4.2
+[0.4.1]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.0...v0.4.1
+[0.4.0]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/f51209ff8fc6d709c3df81198bf709b88a64f44d...v0.4.0
+
 
 [0.3.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/25b0d812a39f1cfb6b5dd11598a7be9e20964eda...v0.3.0
 
