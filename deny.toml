@@ -97,7 +97,9 @@ default = "deny"
 confidence-threshold = 0.8
 # Allow 1 or more licenses on a per-crate basis, so that particular licenses
 # aren't accepted for every possible crate as with the normal allow list
-exceptions = []
+exceptions = [
+    { allow = ["EUPL-1.2"], name = "opentalk-types" }
+]
 
 [[licenses.clarify]]
 name = "ring"

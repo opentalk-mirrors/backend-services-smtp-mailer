@@ -124,6 +124,7 @@ impl MailTemplate for ExternalEventUpdate {
         let ics = create_ics_v1(
             &self.inviter,
             &self.event,
+            self.event_exception.as_ref(),
             invitee,
             &description,
             EventStatus::Updated,

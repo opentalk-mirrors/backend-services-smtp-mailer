@@ -131,6 +131,7 @@ impl MailTemplate for RegisteredEventUninvite {
         let ics = create_ics_v1(
             &self.inviter,
             &self.event,
+            None,
             invitee,
             &description,
             EventStatus::Cancelled,

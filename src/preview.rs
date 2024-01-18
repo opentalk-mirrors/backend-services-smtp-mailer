@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use chrono::Timelike;
+use chrono::{Timelike, Utc};
 use lettre::{AsyncSmtpTransport, Tokio1Executor};
 use mail_worker_protocol as protocol;
 use protocol::v1::{CallIn, Event, Room, Time};
@@ -50,6 +50,10 @@ fn default_unregistered_invite(
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),
+            },
+            created_at: Time {
+                time: Utc::now(),
+                timezone: "Europe/Berlin".into(),
             },
             start_time: Some(Time {
                 time: next_hour,
@@ -107,6 +111,9 @@ fn default_registered_invite(
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".to_owned()),
+            },            created_at: Time {
+                time: Utc::now(),
+                timezone: "Europe/Berlin".into(),
             },
             start_time: Some(Time {
                 time: next_hour,
@@ -160,6 +167,10 @@ fn default_external_invite(
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),
+            },
+            created_at: Time {
+                time: Utc::now(),
+                timezone: "Europe/Berlin".into(),
             },
             start_time: Some(Time {
                 time: next_hour,
@@ -217,6 +228,9 @@ fn default_unregistered_cancellation(
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),
+            },            created_at: Time {
+                time: Utc::now(),
+                timezone: "Europe/Berlin".into(),
             },
             start_time: Some(Time {
                 time: next_hour,
@@ -275,6 +289,9 @@ fn default_registered_cancellation(
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".to_owned()),
+            },            created_at: Time {
+                time: Utc::now(),
+                timezone: "Europe/Berlin".into(),
             },
             start_time: Some(Time {
                 time: next_hour,
@@ -329,6 +346,9 @@ fn default_external_cancellation(
             room: Room {
                 id: Uuid::nil(),
                 password: Some("password123".into()),
+            },            created_at: Time {
+                time: Utc::now(),
+                timezone: "Europe/Berlin".into(),
             },
             start_time: Some(Time {
                 time: next_hour,
