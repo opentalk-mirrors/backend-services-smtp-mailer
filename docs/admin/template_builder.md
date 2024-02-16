@@ -13,9 +13,9 @@ The section in the [configuration file](configuration.md) is called `template_bu
 
 | Field                          | Type     | Required | Default value                              | Description                                                    |
 | ------------------------------ | -------- | -------- | ------------------------------------------ | -------------------------------------------------------------- |
-| `join_link_builder`            | `string` | no       | "{base_url}/room/{room_id}"                | The template used to generate room links                       |
-| `guest_link_builder`           | `string` | no       | "{base_url}/invite/{invite_id}"            | The template used to generate invite links                     |
-| `dashboard_event_link_builder` | `string` | no       | "{base_url}/dashboard/meetings/{event_id}" | The template used to generate links to events in the dashboard |
+| `join_link_builder`            | `string` | no       | `{base_url}/room/{room_id}`                | The template used to generate room links                       |
+| `guest_link_builder`           | `string` | no       | `{base_url}/invite/{invite_id}`            | The template used to generate invite links                     |
+| `dashboard_event_link_builder` | `string` | no       | `{base_url}/dashboard/meetings/{event_id}` | The template used to generate links to events in the dashboard |
 
 ### Example
 

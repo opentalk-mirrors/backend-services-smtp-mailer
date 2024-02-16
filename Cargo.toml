@@ -14,7 +14,7 @@ build = "build.rs"
 # mail-worker-proto = { git = "https://git.heinlein-video.de/heinlein-video/k3k-controller", package = "mail-worker-proto"  }
 # mail-worker-proto = { git = "ssh://git@git.heinlein-video.de:222/r.floren/k3k-controller.git", version = "0.1.0", branch = "mails", package = "mail-worker-proto" }
 mail-worker-protocol = { path = "vendored/k3k-controller/crates/mail-worker-protocol", package = "opentalk-mail-worker-protocol" }
-types = { path = "vendored/k3k-controller/crates/types", package = "opentalk-types", features = ["serde"]}
+types = { path = "vendored/k3k-controller/crates/types", package = "opentalk-types", features = ["serde"] }
 
 # ics-chrono-tz = { git = "ssh://git@git.heinlein-video.de:222/k.baltruschat/ics-timezones.git", branch = "main" }
 ics-chrono-tz = { path = "vendored/ics-chrono-tz" }
@@ -68,5 +68,11 @@ pretty_assertions = "1.2.1"
 
 
 [build-dependencies]
-vergen = "7.2.1"
+vergen = { version = "8", features = [
+  "build",
+  "cargo",
+  "rustc",
+  "git",
+  "git2",
+] }
 anyhow = "1.0"
