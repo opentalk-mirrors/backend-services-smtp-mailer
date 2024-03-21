@@ -16,8 +16,7 @@ build = "build.rs"
 mail-worker-protocol = { path = "vendored/k3k-controller/crates/mail-worker-protocol", package = "opentalk-mail-worker-protocol" }
 types = { path = "vendored/k3k-controller/crates/types", package = "opentalk-types", features = ["serde"] }
 
-# ics-chrono-tz = { git = "ssh://git@git.heinlein-video.de:222/k.baltruschat/ics-timezones.git", branch = "main" }
-ics-chrono-tz = { path = "vendored/ics-chrono-tz" }
+ics-chrono-tz = "0.2"
 
 lapin = { version = "2.1.1", default-features = false }
 tokio-reactor-trait = "1"
@@ -36,7 +35,7 @@ env_logger = "0.9.0"
 anyhow = "1.0.57"
 thiserror = "1.0.31"
 chrono = { version = "0.4", features = ["serde"] }
-chrono-tz = { version = "0.6" }
+chrono-tz = { version = "0.8" }
 serde = { version = "1.0.137", features = ["derive"] }
 serde_json = "1.0.81"
 serde_path_to_error = "0.1.4"
