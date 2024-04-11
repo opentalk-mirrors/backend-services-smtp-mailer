@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-FROM rust:1.73.0-slim-bullseye AS builder
+FROM rust:1.77.0-slim-bookworm AS builder
 
 ARG GIT_SHA
 ARG GIT_REF
@@ -27,7 +27,7 @@ ADD ./src ./src
 RUN cargo build --release --locked
 
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 WORKDIR /opt/smtp-mailer
 COPY ./resources ./resources
 COPY --from=builder /opt/smtp-mailer/target/release/smtp-mailer .

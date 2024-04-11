@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Create a proper ICS file for event instance updates ([#60](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/60))
+- Upgrade debian image in ci & container creation to bookworm ([#92](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/92))
 
 ## [0.4.3] - 2024-01-10
 
