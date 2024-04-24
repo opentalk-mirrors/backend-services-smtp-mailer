@@ -42,12 +42,11 @@ lint:doc:
   script: cargo doc --workspace --no-deps
 
 lint:dependency_check:
-  image: git.opentalk.dev:5050/opentalk/backend/containers/cargo-deny:latest
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_PIPELINE_SOURCE == 'schedule'
   stage: lint
-  script: cargo-deny check
+  script: cargo deny check
 
 lint:licensing:
   rules:
