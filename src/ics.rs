@@ -2,19 +2,22 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use anyhow::anyhow;
-use anyhow::{Context, Result};
+use std::borrow::Cow;
+
+use anyhow::{anyhow, Context, Result};
 use chrono::{DateTime, Duration, Utc};
 use chrono_tz::Tz;
-use ics::components::Property;
-use ics::properties::{
-    Attendee, Created, Description, ExDate, LastModified, Method, Organizer, RDate, RRule,
-    Sequence, Status, Summary,
+use ics::{
+    components::Property,
+    escape_text, parameters,
+    properties::{
+        Attendee, Created, Description, ExDate, LastModified, Method, Organizer, RDate, RRule,
+        Sequence, Status, Summary,
+    },
+    Event, ICalendar,
 };
-use ics::{escape_text, parameters, Event, ICalendar};
 use ics_chrono_tz::ToIcsTimeZone;
 use mail_worker_protocol::v1::{self, EventException, Time};
-use std::borrow::Cow;
 use types::common::shared_folder::SharedFolder;
 use uuid::Uuid;
 
@@ -413,12 +416,12 @@ fn calculate_meeting_duration(start: &Time, end: &Time) -> Duration {
 }
 #[cfg(test)]
 mod test {
-    use crate::ics::EventStatus;
-
-    use super::{create_ics_v1, Invitee};
     use chrono::{TimeZone, Utc};
     use mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
     use uuid::Uuid;
+
+    use super::{create_ics_v1, Invitee};
+    use crate::ics::EventStatus;
 
     #[test]
     fn test_ics() {

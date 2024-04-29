@@ -2,14 +2,15 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use crate::{
-    mail::{MailBuilder, MailTemplate},
-    settings,
-};
 use anyhow::Result;
 use futures::stream::StreamExt;
 use lapin::options::BasicRejectOptions;
 use mail_worker_protocol as proto;
+
+use crate::{
+    mail::{MailBuilder, MailTemplate},
+    settings,
+};
 
 /// A Mail Worker
 pub struct Worker<T> {

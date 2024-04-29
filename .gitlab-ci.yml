@@ -23,7 +23,7 @@ lint:fmt:
     - if: $CI_PIPELINE_SOURCE == 'schedule'
   stage: lint
   script:
-    - cargo fmt -- --check
+    - cargo +nightly fmt -- --check
 
 lint:clippy:
   rules:

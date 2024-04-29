@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use fluent_templates::fluent_bundle::FluentValue;
-use fluent_templates::static_loader;
+use fluent_templates::{fluent_bundle::FluentValue, static_loader};
 
 static_loader! {
     pub static LOCALES = {

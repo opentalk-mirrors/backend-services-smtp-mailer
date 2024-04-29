@@ -2,11 +2,12 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use crate::settings;
 use anyhow::{Context, Result};
 use thiserror::Error;
 use tokio_executor_trait::Tokio as TokioExecutor;
 use tokio_reactor_trait::Tokio as TokioReactor;
+
+use crate::settings;
 
 pub(crate) struct RabbitMqService {
     _conn: lapin::Connection,

@@ -2,16 +2,18 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+use std::collections::HashMap;
+
+use fluent_templates::{fluent_bundle::FluentValue, Loader};
+use lettre::message::{Mailbox, SinglePart};
+use mail_worker_protocol as protocol;
+use protocol::v1::RegisteredEventInvite;
+
 use super::{create_ics_attachments, generate_mailbox_name, MailTemplate};
 use crate::{
     i18n,
     ics::{create_ics_v1, EventStatus},
 };
-use fluent_templates::{fluent_bundle::FluentValue, Loader};
-use lettre::message::{Mailbox, SinglePart};
-use mail_worker_protocol as protocol;
-use protocol::v1::RegisteredEventInvite;
-use std::collections::HashMap;
 
 fn language(obj: &RegisteredEventInvite) -> &String {
     &obj.invitee.language

@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+use std::time::Duration;
+
 use chrono::{Timelike, Utc};
 use lettre::{AsyncSmtpTransport, Tokio1Executor};
 use mail_worker_protocol as protocol;
 use protocol::v1::{CallIn, Event, Room, Time};
 use smtp_mailer::{send_mail_v1, settings, MailBuilder, MailTemplate};
-use std::time::Duration;
 use types::common::shared_folder::{SharedFolder, SharedFolderAccess};
 use uuid::Uuid;
 
