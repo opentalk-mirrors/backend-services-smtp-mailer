@@ -14,7 +14,7 @@ RUN USER=root cargo new --bin smtp-mailer --vcs none
 RUN apt-get update && apt-get install -y git
 
 WORKDIR /opt/smtp-mailer
-COPY ./.cargo/config ./.cargo/config
+COPY ./.cargo/config.toml ./.cargo/config.toml
 COPY ./vendored ./vendored
 COPY ./resources ./resources
 COPY ./Cargo.lock ./Cargo.lock
