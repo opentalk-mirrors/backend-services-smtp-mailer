@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+use std::process::exit;
+
 use clap::{ArgEnum, Parser, Subcommand};
 use preview::preview_send_mail;
 use smtp_mailer::{run, settings};
-use std::process::exit;
 
 pub mod preview;
 

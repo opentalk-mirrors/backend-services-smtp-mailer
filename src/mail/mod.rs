@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use crate::{ics::EventStatus, settings};
+use std::collections::HashMap;
+
 use anyhow::Result;
 use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
 use lettre::{
@@ -14,8 +15,9 @@ use lettre::{
 };
 use mail_worker_protocol as proto;
 use serde_json::{to_value, Value};
-use std::collections::HashMap;
 use tera::{try_get_value, Tera};
+
+use crate::{ics::EventStatus, settings};
 
 mod external_event_cancellation;
 mod external_event_update;

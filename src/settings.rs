@@ -2,13 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use config::{Config, ConfigError, Environment, File, FileFormat};
-use percent_encoding::percent_decode_str;
-use serde::{de, Deserialize, Deserializer, Serialize};
 use std::{
     path::{Path, PathBuf},
     str::FromStr,
 };
+
+use config::{Config, ConfigError, Environment, File, FileFormat};
+use percent_encoding::percent_decode_str;
+use serde::{de, Deserialize, Deserializer, Serialize};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Settings {
@@ -532,8 +533,9 @@ pub struct SupportContact {
 
 #[cfg(test)]
 mod test {
-    use super::*;
     use std::env;
+
+    use super::*;
 
     #[test]
     fn settings_env_vars_overwite_config() -> Result<(), ConfigError> {
