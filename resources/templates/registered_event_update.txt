@@ -14,9 +14,6 @@
 {% if join_link -%}
 {{ fluent(key="meeting-information-link", lang = language) }}: {{ join_link }}
 {% endif -%}
-{% if event.room.password -%}
-{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}
-{% endif -%}
 {% include "callin_txt.include" -%}
 {% include "shared_folder_txt.include" -%}
 {% if support -%}

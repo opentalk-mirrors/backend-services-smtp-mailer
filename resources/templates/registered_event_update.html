@@ -44,10 +44,6 @@
                     {% endif %}
                     <b>{{ fluent(key="meeting-information-link", lang = language) }}:</b> {{ macros::link(fluent_key = "join-directly-link", lang = language, href = join_link) }}
 
-                    {% if event.room.password -%}
-                    <br/>
-                    <b>{{ fluent(key="meeting-information-password", lang = language) }}:</b> {{ event.room.password}}
-                    {% endif %}
                 </p>
                 {% include "callin_html.include" %}
                 {% include "shared_folder_html.include" %}
