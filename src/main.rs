@@ -72,10 +72,12 @@ impl From<&OutputVariant> for bool {
 #[allow(clippy::enum_variant_names)]
 pub enum TemplateVariant {
     RegisteredInvite,
-    UnregisteredInvite,
-    ExternalInvite,
+    RegisteredEventUpdate,
     RegisteredCancellation,
+    RegisteredUninvite,
+    UnregisteredInvite,
     UnregisteredCancellation,
+    ExternalInvite,
     ExternalCancellation,
 }
 
@@ -105,16 +107,10 @@ async fn main() -> anyhow::Result<()> {
                     preview::preview_registered_invite(&settings, type_.into(), language)
                 );
             }
-            TemplateVariant::UnregisteredInvite => {
+            TemplateVariant::RegisteredEventUpdate => {
                 println!(
                     "{}",
-                    preview::preview_unregistered_invite(&settings, type_.into(), language)
-                );
-            }
-            TemplateVariant::ExternalInvite => {
-                println!(
-                    "{}",
-                    preview::preview_external_invite(&settings, type_.into(), language)
+                    preview::preview_registered_event_update(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::RegisteredCancellation => {
@@ -123,10 +119,28 @@ async fn main() -> anyhow::Result<()> {
                     preview::preview_registered_cancellation(&settings, type_.into(), language)
                 );
             }
+            TemplateVariant::RegisteredUninvite => {
+                println!(
+                    "{}",
+                    preview::preview_registered_uninvite(&settings, type_.into(), language)
+                );
+            }
+            TemplateVariant::UnregisteredInvite => {
+                println!(
+                    "{}",
+                    preview::preview_unregistered_invite(&settings, type_.into(), language)
+                );
+            }
             TemplateVariant::UnregisteredCancellation => {
                 println!(
                     "{}",
                     preview::preview_registered_cancellation(&settings, type_.into(), language)
+                );
+            }
+            TemplateVariant::ExternalInvite => {
+                println!(
+                    "{}",
+                    preview::preview_external_invite(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::ExternalCancellation => {
