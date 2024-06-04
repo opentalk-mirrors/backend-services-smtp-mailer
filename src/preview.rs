@@ -6,11 +6,22 @@ use std::time::Duration;
 
 use chrono::{Timelike, Utc};
 use lettre::{AsyncSmtpTransport, Tokio1Executor};
-use mail_worker_protocol as protocol;
+use mail_worker_protocol::{
+    self as protocol,
+    v1::{
+        ExternalEventCancellation, ExternalEventInvite, RegisteredEventCancellation,
+        RegisteredEventInvite, RegisteredEventUninvite, RegisteredEventUpdate,
+        UnregisteredEventCancellation, UnregisteredEventInvite,
+    },
+};
 use protocol::v1::{CallIn, Event, Room, Time};
 use smtp_mailer::{send_mail_v1, settings, MailBuilder, MailTemplate};
 use types::common::shared_folder::{SharedFolder, SharedFolderAccess};
 use uuid::Uuid;
+
+const EVENT_DESCRIPTION_REGISTERED: &str = "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description";
+const EVENT_DESCRIPTION_EXTERNAL: &str = "This event is a dummy event, and you should have got this invite as a external user. You can safely ignore this description";
+const EVENT_DESCRIPTION_UNREGISTERED: &str = "This event is a dummy event, and you should have got this invite as a keycloak user. You can safely ignore this description";
 
 fn build_shared_folder() -> Option<SharedFolder> {
     Some(SharedFolder {
@@ -25,653 +36,204 @@ fn build_shared_folder() -> Option<SharedFolder> {
     })
 }
 
-fn default_unregistered_invite(
-    lang: &str,
-    to_overwrite: Option<String>,
-) -> protocol::v1::UnregisteredEventInvite {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::UnregisteredEventInvite {
-        invitee: protocol::v1::UnregisteredUser{
-            email: to_overwrite
-            .unwrap_or_else(|| "receiver@example.org".into())
+fn unregistered_invitee(email_address: &Option<String>) -> protocol::v1::UnregisteredUser {
+    protocol::v1::UnregisteredUser {
+        email: email_address
+            .as_deref()
+            .unwrap_or("invitee@example.org")
             .into(),
-            first_name: "".to_string(),
-            last_name: "".to_string(),
-        },
-        event: Event {
-            id: Uuid::new_v4(),
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a keycloak user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".into()),
-            },
-            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour + chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: None,
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".into(),
-                sip_id: "1234567890".into(),
-                sip_password: "1234567890".into(),
-            }),
-            revision: 0,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: None,
-        },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
+        first_name: "Ingrid".to_string(),
+        last_name: "Invitee".to_string(),
     }
 }
 
-fn default_registered_invite(
-    lang: &str,
-    to_overwrite: Option<String>,
-) -> protocol::v1::RegisteredEventInvite {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::RegisteredEventInvite {
-        invitee: protocol::v1::RegisteredUser {
-            email: to_overwrite
-                .unwrap_or_else(|| "receiver@example.org".into())
-                .into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-        event: Event {
-            id: Uuid::new_v4(),
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".to_owned()),
-            },            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour + chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: Some("RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1".to_owned()),
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".to_owned(),
-                sip_id: "0123456789".to_owned(),
-                sip_password: "555NASE".to_owned(),
-            }),
-            revision: 0,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: Some(1345),
-        },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-    }
-}
-
-fn default_registered_uninvite(
-    lang: &str,
-    to_overwrite: Option<String>,
-) -> protocol::v1::RegisteredEventUninvite {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::RegisteredEventUninvite {
-        invitee: protocol::v1::RegisteredUser {
-            email: to_overwrite
-                .unwrap_or_else(|| "receiver@example.org".into())
-                .into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-        event: Event {
-            id: Uuid::new_v4(),
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".to_owned()),
-            },            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour + chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: Some("RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1".to_owned()),
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".to_owned(),
-                sip_id: "0123456789".to_owned(),
-                sip_password: "555NASE".to_owned(),
-            }),
-            revision: 0,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: Some(1345),
-        },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-    }
-}
-
-fn default_registered_event_update(
-    lang: &str,
-    to_overwrite: Option<String>,
-) -> protocol::v1::RegisteredEventUpdate {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::RegisteredEventUpdate {
-        invitee: protocol::v1::RegisteredUser {
-            email: to_overwrite
-                .unwrap_or_else(|| "receiver@example.org".into())
-                .into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-        event: Event {
-            id: Uuid::new_v4(),
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".to_owned()),
-            },            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour + chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: Some("RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1".to_owned()),
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".to_owned(),
-                sip_id: "0123456789".to_owned(),
-                sip_password: "555NASE".to_owned(),
-            }),
-            revision: 0,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: Some(1345),
-        },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-        event_exception: None,
-    }
-}
-
-fn default_external_invite(
-    lang: &str,
-    to_overwrite: Option<String>,
-) -> protocol::v1::ExternalEventInvite {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::ExternalEventInvite {
-        invitee: protocol::v1::ExternalUser{
-            email: to_overwrite
-            .unwrap_or_else(|| "receiver@example.org".into())
+fn external_invitee(email_address: &Option<String>) -> protocol::v1::ExternalUser {
+    protocol::v1::ExternalUser {
+        email: email_address
+            .as_deref()
+            .unwrap_or("external.invitee@example.org")
             .into(),
-        },
-        event: Event {
-            id: Uuid::from_u128(1),
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a external user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".into()),
-            },
-            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour + chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: None,
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".into(),
-                sip_id: "1234567890".into(),
-                sip_password: "1234567890".into(),
-            }),
-            revision: 0,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: Some(86400),
-        },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-        invite_code: Uuid::nil().to_string(),
     }
 }
 
-fn default_unregistered_cancellation(
-    lang: &str,
-    to_overwrite: Option<String>,
-    event_id: Uuid,
-) -> protocol::v1::UnregisteredEventCancellation {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::UnregisteredEventCancellation {
-        invitee: protocol::v1::UnregisteredUser{
-            email: to_overwrite
-            .unwrap_or_else(|| "receiver@example.org".into())
+fn registered_invitee(
+    language: &str,
+    email_address: &Option<String>,
+) -> protocol::v1::RegisteredUser {
+    protocol::v1::RegisteredUser {
+        email: email_address
+            .as_deref()
+            .unwrap_or("invitee@example.org")
             .into(),
-            first_name: "".to_string(),
-            last_name: "".to_string(),
-        },
-        event: Event {
-            id: event_id,
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a keycloak user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".into()),
-            },            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour+ chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: None,
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".into(),
-                sip_id: "1234567890".into(),
-                sip_password: "1234567890".into(),
-            }),
-            revision: 1,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: Some(86400),
-        },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
+        first_name: "Ingrid".to_string(),
+        last_name: "Invitee".to_string(),
+        title: "Prof.".to_string(),
+        language: language.to_string(),
     }
 }
 
-fn default_registered_cancellation(
-    lang: &str,
-    to_overwrite: Option<String>,
-    event_id: Uuid,
-) -> protocol::v1::RegisteredEventCancellation {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::RegisteredEventCancellation {
-        invitee: protocol::v1::RegisteredUser {
-            email: to_overwrite
-                .unwrap_or_else(|| "receiver@example.org".into())
-                .into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-        event: Event {
-            id: event_id,
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".to_owned()),
-            },            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour + chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: Some("RRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1".to_owned()),
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".to_owned(),
-                sip_id: "0123456789".to_owned(),
-                sip_password: "555NASE".to_owned(),
-            }),
-            revision: 1,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: Some(86400),
-        },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
-    }
-}
-
-fn default_external_cancellation(
-    lang: &str,
-    to_overwrite: Option<String>,
-    event_id: Uuid,
-) -> protocol::v1::ExternalEventCancellation {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .unwrap()
-    .with_second(0)
-    .unwrap();
-
-    protocol::v1::ExternalEventCancellation {
-        invitee: protocol::v1::ExternalUser{
-            email: to_overwrite
-            .unwrap_or_else(|| "receiver@example.org".into())
+fn registered_inviter(
+    language: &str,
+    email_address: &Option<String>,
+) -> protocol::v1::RegisteredUser {
+    protocol::v1::RegisteredUser {
+        email: email_address
+            .as_deref()
+            .unwrap_or("ernest.inviter@example.org")
             .into(),
+        first_name: "Ernest".to_string(),
+        last_name: "Inviter".to_string(),
+        title: "Dr.".to_string(),
+        language: language.to_string(),
+    }
+}
+
+pub trait ExampleData: Sized + MailTemplate {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self;
+
+    fn preview(settings: &settings::Settings, html: bool, lang: &str) -> String {
+        let mail_builder = MailBuilder::new(settings).unwrap();
+
+        let demo_message = Self::generate_example(lang, &None);
+
+        if html {
+            return demo_message
+                .generate_email_html(&mail_builder)
+                .unwrap_or_else(|e| {
+                    log::error!("Error while generating html: {e:?}");
+                    "".into()
+                });
+        }
+
+        demo_message
+            .generate_email_plain(&mail_builder)
+            .unwrap_or_else(|e| {
+                log::error!("Error while generating plain text: {e:?}");
+                "".into()
+            })
+    }
+}
+
+fn generate_example_event(description: String) -> Event {
+    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
+        + chrono::Duration::hours(1))
+    .with_minute(0)
+    .unwrap()
+    .with_second(0)
+    .unwrap();
+
+    Event {
+        id: Uuid::new_v4(),
+        name: "This is a Preview Event".into(),
+        description,
+        room: Room {
+            id: Uuid::nil(),
+            password: Some("password123".into()),
         },
-        event: Event {
-            id: event_id,
-            name: "This is a Preview Event".into(),
-            description: "This event is a dummy event, and you should have got this invite as a external user. You can safely ignore this description".into(),
-            room: Room {
-                id: Uuid::nil(),
-                password: Some("password123".into()),
-            },            created_at: Time {
-                time: Utc::now(),
-                timezone: "Europe/Berlin".into(),
-            },
-            start_time: Some(Time {
-                time: next_hour,
-                timezone: "Europe/Berlin".into(),
-            }),
-            end_time: Some(Time {
-                time: next_hour + chrono::Duration::minutes(40),
-                timezone: "Europe/Berlin".into(),
-            }),
-            rrule: None,
-            call_in: Some(CallIn {
-                sip_tel: "+4930405051330".into(),
-                sip_id: "1234567890".into(),
-                sip_password: "1234567890".into(),
-            }),
-            revision: 1,
-            shared_folder: build_shared_folder(),
-            adhoc_retention_seconds: Some(86400),
+        created_at: Time {
+            time: Utc::now(),
+            timezone: "Europe/Berlin".into(),
         },
-        inviter: protocol::v1::RegisteredUser {
-            email: "sender@example.org".into(),
-            title: "10x developer".into(),
-            first_name: "Alice".into(),
-            last_name: "Wonderland".into(),
-            language: lang.into(),
-        },
+        start_time: Some(Time {
+            time: next_hour,
+            timezone: "Europe/Berlin".into(),
+        }),
+        end_time: Some(Time {
+            time: next_hour + chrono::Duration::minutes(40),
+            timezone: "Europe/Berlin".into(),
+        }),
+        rrule: None,
+        call_in: Some(CallIn {
+            sip_tel: "+4930405051330".into(),
+            sip_id: "1234567890".into(),
+            sip_password: "1234567890".into(),
+        }),
+        revision: 0,
+        shared_folder: build_shared_folder(),
+        adhoc_retention_seconds: None,
     }
 }
 
-pub fn preview_unregistered_invite(
-    settings: &settings::Settings,
-    html: bool,
-    lang: &str,
-) -> String {
-    let mail_builder = MailBuilder::new(settings).unwrap();
-
-    let demo_message = default_unregistered_invite(lang, None);
-
-    if html {
-        return demo_message
-            .generate_email_html(&mail_builder)
-            .unwrap_or_else(|e| {
-                log::error!("Error while generating html: {e:?}");
-                "".into()
-            });
+impl ExampleData for protocol::v1::UnregisteredEventInvite {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: unregistered_invitee(email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_UNREGISTERED.to_string()),
+            inviter: registered_inviter(language, &None),
+        }
     }
-
-    demo_message
-        .generate_email_plain(&mail_builder)
-        .unwrap_or_else(|e| {
-            log::error!("Error while generating plain text: {e:?}");
-            "".into()
-        })
 }
 
-pub fn preview_registered_invite(settings: &settings::Settings, html: bool, lang: &str) -> String {
-    let mail_builder = MailBuilder::new(settings).unwrap();
-
-    let demo_message = default_registered_invite(lang, None);
-
-    if html {
-        return demo_message
-            .generate_email_html(&mail_builder)
-            .unwrap_or_else(|e| {
-                log::error!("Error while generating html: {e:?}");
-                "".into()
-            });
+impl ExampleData for protocol::v1::UnregisteredEventCancellation {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: unregistered_invitee(email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_UNREGISTERED.to_string()),
+            inviter: registered_inviter(language, &None),
+        }
     }
-
-    demo_message
-        .generate_email_plain(&mail_builder)
-        .unwrap_or_else(|e| {
-            log::error!("Error while generating plain text: {e:?}");
-            "".into()
-        })
 }
 
-pub fn preview_registered_event_update(
-    settings: &settings::Settings,
-    html: bool,
-    lang: &str,
-) -> String {
-    let mail_builder = MailBuilder::new(settings).unwrap();
-
-    let demo_message = default_registered_event_update(lang, None);
-
-    if html {
-        return demo_message
-            .generate_email_html(&mail_builder)
-            .unwrap_or_else(|e| {
-                log::error!("Error while generating html: {e:?}");
-                "".into()
-            });
+impl ExampleData for protocol::v1::RegisteredEventInvite {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: registered_invitee(language, email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string()),
+            inviter: registered_inviter(language, email_address),
+        }
     }
-
-    demo_message
-        .generate_email_plain(&mail_builder)
-        .unwrap_or_else(|e| {
-            log::error!("Error while generating plain text: {e:?}");
-            "".into()
-        })
 }
 
-pub fn preview_registered_uninvite(
-    settings: &settings::Settings,
-    html: bool,
-    lang: &str,
-) -> String {
-    let mail_builder = MailBuilder::new(settings).unwrap();
-
-    let demo_message = default_registered_uninvite(lang, None);
-
-    if html {
-        return demo_message
-            .generate_email_html(&mail_builder)
-            .unwrap_or_else(|e| {
-                log::error!("Error while generating html: {e:?}");
-                "".into()
-            });
+impl ExampleData for protocol::v1::RegisteredEventUninvite {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: registered_invitee(language, email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string()),
+            inviter: registered_inviter(language, email_address),
+        }
     }
-
-    demo_message
-        .generate_email_plain(&mail_builder)
-        .unwrap_or_else(|e| {
-            log::error!("Error while generating plain text: {e:?}");
-            "".into()
-        })
 }
 
-pub fn preview_external_invite(settings: &settings::Settings, html: bool, lang: &str) -> String {
-    let mail_builder = MailBuilder::new(settings).unwrap();
-
-    let demo_message = default_external_invite(lang, None);
-
-    if html {
-        return demo_message
-            .generate_email_html(&mail_builder)
-            .unwrap_or_else(|e| {
-                log::error!("Error while generating html: {e:?}");
-                "".into()
-            });
+impl ExampleData for protocol::v1::RegisteredEventUpdate {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: registered_invitee(language, email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string()),
+            inviter: registered_inviter(language, email_address),
+            event_exception: None,
+        }
     }
-
-    demo_message
-        .generate_email_plain(&mail_builder)
-        .unwrap_or_else(|e| {
-            log::error!("Error while generating plain text: {e:?}");
-            "".into()
-        })
 }
 
-pub fn preview_registered_cancellation(
-    settings: &settings::Settings,
-    html: bool,
-    lang: &str,
-) -> String {
-    let mail_builder = MailBuilder::new(settings).unwrap();
-
-    let demo_message = default_registered_cancellation(lang, None, Uuid::new_v4());
-
-    if html {
-        return demo_message
-            .generate_email_html(&mail_builder)
-            .unwrap_or_else(|e| {
-                log::error!("Error while generating html: {e:?}");
-                "".into()
-            });
+impl ExampleData for protocol::v1::RegisteredEventCancellation {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: registered_invitee(language, email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string()),
+            inviter: registered_inviter(language, &None),
+        }
     }
-
-    demo_message
-        .generate_email_plain(&mail_builder)
-        .unwrap_or_else(|e| {
-            log::error!("Error while generating plain text: {e:?}");
-            "".into()
-        })
 }
 
-pub fn preview_unregistered_cancellation(
-    settings: &settings::Settings,
-    html: bool,
-    lang: &str,
-) -> String {
-    let mail_builder = MailBuilder::new(settings).unwrap();
-
-    let demo_message = default_registered_cancellation(lang, None, Uuid::new_v4());
-
-    if html {
-        return demo_message
-            .generate_email_html(&mail_builder)
-            .unwrap_or_else(|e| {
-                log::error!("Error while generating html: {e:?}");
-                "".into()
-            });
+impl ExampleData for protocol::v1::ExternalEventInvite {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: external_invitee(email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_EXTERNAL.to_string()),
+            inviter: registered_inviter(language, email_address),
+            invite_code: Uuid::new_v4().to_string(),
+        }
     }
+}
 
-    demo_message
-        .generate_email_plain(&mail_builder)
-        .unwrap_or_else(|e| {
-            log::error!("Error while generating plain text: {e:?}");
-            "".into()
-        })
+impl ExampleData for protocol::v1::ExternalEventCancellation {
+    fn generate_example(language: &str, email_address: &Option<String>) -> Self {
+        Self {
+            invitee: external_invitee(email_address),
+            event: generate_example_event(EVENT_DESCRIPTION_EXTERNAL.to_string()),
+            inviter: registered_inviter(language, &None),
+        }
+    }
 }
 
 pub async fn preview_send_mail(
@@ -685,22 +247,22 @@ pub async fn preview_send_mail(
     let mail_builder = MailBuilder::new(settings).unwrap();
 
     let duration_between_invite_and_cancellation = Duration::from_secs(cancellation_delay);
+    let receiver = Some(to);
 
     let message = match template {
         crate::TemplateVariant::RegisteredInvite => protocol::v1::Message::RegisteredEventInvite(
-            default_registered_invite("en-US", Some(to)),
+            RegisteredEventInvite::generate_example("en-US", &receiver),
         ),
         crate::TemplateVariant::UnregisteredInvite => {
-            protocol::v1::Message::UnregisteredEventInvite(default_unregistered_invite(
-                "en-US",
-                Some(to),
-            ))
+            protocol::v1::Message::UnregisteredEventInvite(
+                UnregisteredEventInvite::generate_example("en-US", &receiver),
+            )
         }
-        crate::TemplateVariant::ExternalInvite => {
-            protocol::v1::Message::ExternalEventInvite(default_external_invite("en-US", Some(to)))
-        }
+        crate::TemplateVariant::ExternalInvite => protocol::v1::Message::ExternalEventInvite(
+            ExternalEventInvite::generate_example("en-US", &receiver),
+        ),
         crate::TemplateVariant::RegisteredCancellation => {
-            let invite = default_registered_invite("en-US", Some(to.clone()));
+            let invite = RegisteredEventInvite::generate_example("en-US", &receiver);
             let event_id = invite.event.id;
 
             send_mail_v1(
@@ -713,14 +275,13 @@ pub async fn preview_send_mail(
 
             tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
-            protocol::v1::Message::RegisteredEventCancellation(default_registered_cancellation(
-                "en-US",
-                Some(to),
-                event_id,
-            ))
+            let mut cancellation =
+                RegisteredEventCancellation::generate_example("en-US", &receiver);
+            cancellation.event.id = event_id;
+            protocol::v1::Message::RegisteredEventCancellation(cancellation)
         }
         crate::TemplateVariant::UnregisteredCancellation => {
-            let invite = default_unregistered_invite("en-US", Some(to.clone()));
+            let invite = UnregisteredEventInvite::generate_example("en-US", &receiver);
             let event_id = invite.event.id;
 
             send_mail_v1(
@@ -733,14 +294,13 @@ pub async fn preview_send_mail(
 
             tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
-            protocol::v1::Message::UnregisteredEventCancellation(default_unregistered_cancellation(
-                "en-US",
-                Some(to),
-                event_id,
-            ))
+            let mut cancellation =
+                UnregisteredEventCancellation::generate_example("en-US", &receiver);
+            cancellation.event.id = event_id;
+            protocol::v1::Message::UnregisteredEventCancellation(cancellation)
         }
         crate::TemplateVariant::ExternalCancellation => {
-            let invite = default_external_invite("en-US", Some(to.clone()));
+            let invite = ExternalEventInvite::generate_example("en-US", &receiver);
             let event_id = invite.event.id;
 
             send_mail_v1(
@@ -753,23 +313,19 @@ pub async fn preview_send_mail(
 
             tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
-            protocol::v1::Message::ExternalEventCancellation(default_external_cancellation(
-                "en-US",
-                Some(to),
-                event_id,
-            ))
+            let mut cancellation = ExternalEventCancellation::generate_example("en-US", &receiver);
+            cancellation.event.id = event_id;
+            protocol::v1::Message::ExternalEventCancellation(cancellation)
         }
         crate::TemplateVariant::RegisteredEventUpdate => {
-            protocol::v1::Message::RegisteredEventUpdate(default_registered_event_update(
-                "en-US",
-                Some(to),
+            protocol::v1::Message::RegisteredEventUpdate(RegisteredEventUpdate::generate_example(
+                "en-US", &receiver,
             ))
         }
         crate::TemplateVariant::RegisteredUninvite => {
-            protocol::v1::Message::RegisteredEventUninvite(default_registered_uninvite(
-                "en-US",
-                Some(to),
-            ))
+            protocol::v1::Message::RegisteredEventUninvite(
+                RegisteredEventUninvite::generate_example("en-US", &receiver),
+            )
         }
     };
 

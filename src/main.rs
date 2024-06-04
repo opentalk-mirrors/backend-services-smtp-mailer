@@ -5,7 +5,12 @@
 use std::process::exit;
 
 use clap::{ArgEnum, Parser, Subcommand};
-use preview::preview_send_mail;
+use mail_worker_protocol::v1::{
+    ExternalEventCancellation, ExternalEventInvite, RegisteredEventCancellation,
+    RegisteredEventInvite, RegisteredEventUninvite, RegisteredEventUpdate,
+    UnregisteredEventCancellation, UnregisteredEventInvite,
+};
+use preview::{preview_send_mail, ExampleData as _};
 use smtp_mailer::{run, settings};
 
 pub mod preview;
@@ -104,49 +109,49 @@ async fn main() -> anyhow::Result<()> {
             TemplateVariant::RegisteredInvite => {
                 println!(
                     "{}",
-                    preview::preview_registered_invite(&settings, type_.into(), language)
+                    RegisteredEventInvite::preview(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::RegisteredEventUpdate => {
                 println!(
                     "{}",
-                    preview::preview_registered_event_update(&settings, type_.into(), language)
+                    RegisteredEventUpdate::preview(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::RegisteredCancellation => {
                 println!(
                     "{}",
-                    preview::preview_registered_cancellation(&settings, type_.into(), language)
+                    RegisteredEventCancellation::preview(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::RegisteredUninvite => {
                 println!(
                     "{}",
-                    preview::preview_registered_uninvite(&settings, type_.into(), language)
+                    RegisteredEventUninvite::preview(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::UnregisteredInvite => {
                 println!(
                     "{}",
-                    preview::preview_unregistered_invite(&settings, type_.into(), language)
+                    UnregisteredEventInvite::preview(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::UnregisteredCancellation => {
                 println!(
                     "{}",
-                    preview::preview_registered_cancellation(&settings, type_.into(), language)
+                    UnregisteredEventCancellation::preview(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::ExternalInvite => {
                 println!(
                     "{}",
-                    preview::preview_external_invite(&settings, type_.into(), language)
+                    ExternalEventInvite::preview(&settings, type_.into(), language)
                 );
             }
             TemplateVariant::ExternalCancellation => {
                 println!(
                     "{}",
-                    preview::preview_registered_cancellation(&settings, type_.into(), language)
+                    ExternalEventCancellation::preview(&settings, type_.into(), language)
                 );
             }
         }
