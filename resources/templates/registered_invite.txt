@@ -14,9 +14,6 @@
 {% if join_link -%}
 {{ fluent(key="meeting-information-link", lang = language) }}: {{ join_link }}
 {% endif -%}
-{% if event.room.password -%}
-{{ fluent(key="meeting-information-password", lang = language) }}: {{ event.room.password}}
-{% endif -%}
 {% if event.adhoc_retention_seconds -%}
 {% include "adhoc_txt.include" -%}
 {% endif -%}
