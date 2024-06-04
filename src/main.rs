@@ -4,6 +4,7 @@
 
 use std::process::exit;
 
+use anyhow::Context;
 use clap::{ArgEnum, Parser, Subcommand};
 use mail_worker_protocol::v1::{
     ExternalEventCancellation, ExternalEventInvite, RegisteredEventCancellation,
@@ -105,56 +106,34 @@ async fn main() -> anyhow::Result<()> {
         template,
     }) = &args.command
     {
-        match template {
+        let example_mail = match template {
             TemplateVariant::RegisteredInvite => {
-                println!(
-                    "{}",
-                    RegisteredEventInvite::preview(&settings, type_.into(), language)
-                );
+                RegisteredEventInvite::preview(&settings, type_.into(), language)
             }
             TemplateVariant::RegisteredEventUpdate => {
-                println!(
-                    "{}",
-                    RegisteredEventUpdate::preview(&settings, type_.into(), language)
-                );
+                RegisteredEventUpdate::preview(&settings, type_.into(), language)
             }
             TemplateVariant::RegisteredCancellation => {
-                println!(
-                    "{}",
-                    RegisteredEventCancellation::preview(&settings, type_.into(), language)
-                );
+                RegisteredEventCancellation::preview(&settings, type_.into(), language)
             }
             TemplateVariant::RegisteredUninvite => {
-                println!(
-                    "{}",
-                    RegisteredEventUninvite::preview(&settings, type_.into(), language)
-                );
+                RegisteredEventUninvite::preview(&settings, type_.into(), language)
             }
             TemplateVariant::UnregisteredInvite => {
-                println!(
-                    "{}",
-                    UnregisteredEventInvite::preview(&settings, type_.into(), language)
-                );
+                UnregisteredEventInvite::preview(&settings, type_.into(), language)
             }
             TemplateVariant::UnregisteredCancellation => {
-                println!(
-                    "{}",
-                    UnregisteredEventCancellation::preview(&settings, type_.into(), language)
-                );
+                UnregisteredEventCancellation::preview(&settings, type_.into(), language)
             }
             TemplateVariant::ExternalInvite => {
-                println!(
-                    "{}",
-                    ExternalEventInvite::preview(&settings, type_.into(), language)
-                );
+                ExternalEventInvite::preview(&settings, type_.into(), language)
             }
             TemplateVariant::ExternalCancellation => {
-                println!(
-                    "{}",
-                    ExternalEventCancellation::preview(&settings, type_.into(), language)
-                );
+                ExternalEventCancellation::preview(&settings, type_.into(), language)
             }
         }
+        .context("Failed to create preview")?;
+        print!("{}", example_mail);
 
         exit(0);
     }
@@ -164,7 +143,7 @@ async fn main() -> anyhow::Result<()> {
         cancellation_delay,
     }) = &args.command
     {
-        preview_send_mail(&settings, *template, to.clone(), *cancellation_delay).await;
+        preview_send_mail(&settings, *template, to.clone(), *cancellation_delay).await?;
 
         exit(0);
     }
