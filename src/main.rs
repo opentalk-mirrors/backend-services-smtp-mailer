@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use std::process::exit;
+use std::{fmt::Write, process::exit};
 
 use anyhow::Context;
-use clap::{ArgEnum, Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueEnum};
 use mail_worker_protocol::v1::{
     ExternalEventCancellation, ExternalEventInvite, RegisteredEventCancellation,
     RegisteredEventInvite, RegisteredEventUninvite, RegisteredEventUpdate,
@@ -18,7 +18,6 @@ pub mod preview;
 
 #[derive(Parser, Debug)]
 #[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
-#[clap(global_setting(clap::AppSettings::NoAutoVersion))]
 pub(crate) struct Args {
     /// Name of the person to greet
     #[clap(short, long, default_value = "config.toml")]
@@ -27,29 +26,27 @@ pub(crate) struct Args {
     #[clap(subcommand)]
     command: Option<Commands>,
 
-    #[clap(long)]
+    #[clap(long, short('V'))]
     version: bool,
 }
 
 #[derive(Debug, Subcommand)]
 enum Commands {
     /// Return a preview of an email
-    #[clap()]
     Preview {
         /// Output type
-        #[clap(arg_enum)]
+        #[clap(value_enum)]
         type_: OutputVariant,
         /// Template to preview
-        #[clap(arg_enum)]
+        #[clap(value_enum)]
         template: TemplateVariant,
         /// Language Code
         #[clap()]
         language: String,
     },
-    #[clap()]
     PreviewSend {
         /// Template to preview
-        #[clap(arg_enum)]
+        #[clap(value_enum)]
         template: TemplateVariant,
         /// To Email
         to: String,
@@ -59,7 +56,7 @@ enum Commands {
     },
 }
 
-#[derive(Debug, Clone, Copy, ArgEnum)]
+#[derive(Debug, Clone, Copy, ValueEnum)]
 enum OutputVariant {
     Html,
     Plain,
@@ -74,7 +71,7 @@ impl From<&OutputVariant> for bool {
     }
 }
 
-#[derive(Debug, Clone, Copy, ArgEnum)]
+#[derive(Debug, Clone, Copy, ValueEnum)]
 #[allow(clippy::enum_variant_names)]
 pub enum TemplateVariant {
     RegisteredInvite,
