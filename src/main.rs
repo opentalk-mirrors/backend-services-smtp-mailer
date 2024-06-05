@@ -89,8 +89,9 @@ async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     if args.version {
-        print_version_info();
-        exit(0);
+        println!("{}", version_info());
+
+        return Ok(());
     }
 
     env_logger::init();
@@ -151,7 +152,7 @@ async fn main() -> anyhow::Result<()> {
 
 const BUILD_INFO: [(&str, Option<&str>); 10] = [
     ("Build Timestamp", option_env!("VERGEN_BUILD_TIMESTAMP")),
-    ("Build Version", option_env!("VERGEN_BUILD_SEMVER")),
+    ("Build Version", option_env!("CARGO_PKG_VERSION")),
     ("Commit SHA", option_env!("VERGEN_GIT_SHA")),
     ("Commit Date", option_env!("VERGEN_GIT_COMMIT_TIMESTAMP")),
     ("Commit Branch", option_env!("VERGEN_GIT_BRANCH")),
@@ -162,11 +163,21 @@ const BUILD_INFO: [(&str, Option<&str>); 10] = [
         "cargo Target Triple",
         option_env!("VERGEN_CARGO_TARGET_TRIPLE"),
     ),
-    ("cargo Profile", option_env!("VERGEN_CARGO_PROFILE")),
+    ("cargo Profile", option_env!("VERGEN_CARGO_OPT_LEVEL")),
 ];
 
-fn print_version_info() {
-    for (label, value) in BUILD_INFO {
-        println!("{label}: {value}", value = value.unwrap_or("N/A"));
+fn version_info() -> String {
+    let mut version_message = String::new();
+    if let Some(bin_name) = option_env!("CARGO_BIN_NAME") {
+        writeln!(version_message, "{}:", bin_name).expect("Writing to string buffer must succeed");
     }
+    for (label, value) in BUILD_INFO {
+        writeln!(
+            version_message,
+            "{label}: {value}",
+            value = value.unwrap_or("N/A")
+        )
+        .expect("Writing to string buffer must succeed");
+    }
+    version_message
 }

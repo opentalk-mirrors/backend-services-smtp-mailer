@@ -15,11 +15,11 @@ fn add_custom_environment_variable<F: FnMut(&mut EmitBuilder) -> &mut EmitBuilde
     mut enable_fn: F,
 ) {
     if let Ok(s) = std::env::var(name) {
-        println!("cargo:rustc-env={name}={s}");
+        println!("cargo::rustc-env={name}={s}");
     } else {
         enable_fn(builder);
     }
-    println!("cargo:rerun-if-env-changed={name}");
+    println!("cargo::rerun-if-env-changed={name}");
 }
 
 fn main() -> Result<()> {
@@ -42,7 +42,7 @@ fn main() -> Result<()> {
         EmitBuilder::build_timestamp,
     );
 
-    if git_at_cd_or_above()? {
+    if is_contained_in_git()? {
         add_custom_environment_variable("VERGEN_GIT_SHA", builder, |builder| {
             const USE_SHORT: bool = false;
             builder.git_sha(USE_SHORT)
@@ -65,10 +65,12 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn git_at_cd_or_above() -> Result<bool> {
+/// Checks wether the current or one of the parent directories contains a `.git` entry.
+fn is_contained_in_git() -> Result<bool> {
     let current_dir = std::env::current_dir()?;
     let mut parents = vec![];
     let mut path = &*current_dir.canonicalize()?;
+    parents.push(path);
     while let Some(parent) = path.parent() {
         parents.push(parent);
         path = parent;
@@ -78,5 +80,6 @@ fn git_at_cd_or_above() -> Result<bool> {
             return Ok(true);
         }
     }
+    println!("cargo::warning=No .git directory found");
     Ok(false)
 }
