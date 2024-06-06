@@ -94,6 +94,14 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         "resources/templates/adhoc_html.include",
         Some("adhoc_html.include"),
     )?;
+    tera.add_template_file(
+        "resources/templates/streaming_links_txt.include",
+        Some("streaming_links_txt.include"),
+    )?;
+    tera.add_template_file(
+        "resources/templates/streaming_links_html.include",
+        Some("streaming_links_html.include"),
+    )?;
 
     tera.add_template_files(
         settings

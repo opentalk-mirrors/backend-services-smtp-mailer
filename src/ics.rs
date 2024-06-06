@@ -418,6 +418,10 @@ fn calculate_meeting_duration(start: &Time, end: &Time) -> Duration {
 mod test {
     use chrono::{TimeZone, Utc};
     use mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
+    use types::{
+        common::streaming::{RoomStreamingTarget, StreamingTarget},
+        core::StreamingKey,
+    };
     use uuid::Uuid;
 
     use super::{create_ics_v1, Invitee};
@@ -462,6 +466,38 @@ mod test {
             revision: 0,
             shared_folder: None,
             adhoc_retention_seconds: Some(86400),
+            streaming_targets: vec![
+                RoomStreamingTarget {
+                    id: Uuid::new_v4().into(),
+                    streaming_target: StreamingTarget {
+                        name: "streaming service 1".to_string(),
+                        kind: types::common::streaming::StreamingTargetKind::Custom {
+                            streaming_endpoint: "https://stream-a.example.com"
+                                .parse()
+                                .expect("This is a valid URL!"),
+                            streaming_key: StreamingKey::from("value".to_string()),
+                            public_url: "https://example.com/4385f873-6077-4d2c-8b46-dbec62029ac6"
+                                .parse()
+                                .expect("This is a valid URL!"),
+                        },
+                    },
+                },
+                RoomStreamingTarget {
+                    id: Uuid::new_v4().into(),
+                    streaming_target: StreamingTarget {
+                        name: "streaming service 2".to_string(),
+                        kind: types::common::streaming::StreamingTargetKind::Custom {
+                            streaming_endpoint: "https://stream-b.example.com"
+                                .parse()
+                                .expect("This is a valid URL!"),
+                            streaming_key: StreamingKey::from("value".to_string()),
+                            public_url: "https://example.com/f544bef8-aa33-475b-8664-fa17c5ca7f83"
+                                .parse()
+                                .expect("This is a valid URL!"),
+                        },
+                    },
+                },
+            ],
         };
 
         let invitee = Invitee::WithName {

@@ -94,3 +94,9 @@ adhoc-meeting-info-minutes =
                 [12] zwölf Minuten
                *[other] { $retentiontime } Minuten
         } automatisch gelöscht.
+
+streaming-header =
+        Dies ist eine öffentliche Sitzung, { $numberstreams ->
+                [one] der Link zum Livestream:
+               *[other] die Links zu den Livestreams:
+        }

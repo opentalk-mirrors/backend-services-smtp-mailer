@@ -17,7 +17,13 @@ use mail_worker_protocol::{
 };
 use protocol::v1::{CallIn, Event, Room, Time};
 use smtp_mailer::{send_mail_v1, settings, MailBuilder, MailTemplate};
-use types::common::shared_folder::{SharedFolder, SharedFolderAccess};
+use types::{
+    common::{
+        shared_folder::{SharedFolder, SharedFolderAccess},
+        streaming::{RoomStreamingTarget, StreamingTarget},
+    },
+    core::StreamingKey,
+};
 use uuid::Uuid;
 
 const EVENT_DESCRIPTION_REGISTERED: &str = "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description";
@@ -106,7 +112,7 @@ pub trait ExampleData: Sized + MailTemplate {
 
         demo_message
             .generate_email_plain(&mail_builder)
-            .context("Failed to generate email html")
+            .context("Failed to generate email plain")
     }
 }
 
@@ -149,6 +155,38 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
         revision: 0,
         shared_folder: build_shared_folder(),
         adhoc_retention_seconds: None,
+        streaming_targets: vec![
+            RoomStreamingTarget {
+                id: Uuid::new_v4().into(),
+                streaming_target: StreamingTarget {
+                    name: "streaming service 1".to_string(),
+                    kind: types::common::streaming::StreamingTargetKind::Custom {
+                        streaming_endpoint: "https://stream-a.example.com"
+                            .parse()
+                            .expect("This is a valid URL!"),
+                        streaming_key: StreamingKey::from("value".to_string()),
+                        public_url: "https://example.com/4385f873-6077-4d2c-8b46-dbec62029ac6"
+                            .parse()
+                            .expect("This is a valid URL!"),
+                    },
+                },
+            },
+            RoomStreamingTarget {
+                id: Uuid::new_v4().into(),
+                streaming_target: StreamingTarget {
+                    name: "streaming service 2".to_string(),
+                    kind: types::common::streaming::StreamingTargetKind::Custom {
+                        streaming_endpoint: "https://stream-b.example.com"
+                            .parse()
+                            .expect("This is a valid URL!"),
+                        streaming_key: StreamingKey::from("value".to_string()),
+                        public_url: "https://example.com/f544bef8-aa33-475b-8664-fa17c5ca7f83"
+                            .parse()
+                            .expect("This is a valid URL!"),
+                    },
+                },
+            },
+        ],
     })
 }
 
