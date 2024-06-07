@@ -16,8 +16,7 @@
 {% set quick_dial = e164 ~ ",," ~ event.call_in.sip_id ~ ",," ~ event.call_in.sip_password %}
 {{ fluent(key="call-in-quick-dial", lang = language) }}: {{ quick_dial }}
 {% endif %}
-{% if event.shared_folder -%}
-{{ fluent(key="shared-folder", lang = language) }}: {{ event.shared_folder.read.url }}
-{{ fluent(key="shared-folder-password", lang = language) }}: {{ event.shared_folder.read.password }}
-{% endif %}
+{% include "shared_folder_txt.include" -%}
+{% include "streaming_links_txt.include" %}
+
 {% include "data_protection_ics.include" -%}
