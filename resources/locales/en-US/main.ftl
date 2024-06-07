@@ -72,3 +72,9 @@ adhoc-meeting-info-minutes =
                 [one] one minute
                *[other] { $retentiontime } minutes
         }.
+
+streaming-header =
+        This is a public meeting, { $numberstreams ->
+                [one] the link to the livestream:
+               *[other] the links to the livestreams:
+        }
