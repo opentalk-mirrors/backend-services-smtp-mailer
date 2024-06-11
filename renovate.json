@@ -3,5 +3,15 @@
   "extends": [
     "config:recommended"
   ],
-  "cloneSubmodules": true
+  "cloneSubmodules": true,
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "chrono-tz",
+        "ics-chrono-tz"
+      ],
+      "groupName": "chrono-tz",
+      "groupSlug": "chrono-tz"
+    }
+  ]
 }

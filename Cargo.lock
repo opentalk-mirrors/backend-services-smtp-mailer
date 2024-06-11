@@ -1435,12 +1435,12 @@ checksum = "3ebec52f461ade2d19e7b594ecbcd0723ba0ab0eefa8aae2281b78ff461a91fa"
 
 [[package]]
 name = "ics-chrono-tz"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8c36285d45b612908c24b7823aa4f8b09293303c540ff0973ee509f977823b4c"
+checksum = "e655f7e512a76ec5d934f925acbd388a91d76777858a80e356ecb576a9518d54"
 dependencies = [
  "chrono",
- "chrono-tz 0.8.6",
+ "chrono-tz 0.9.0",
  "ics",
  "parse-zoneinfo",
 ]
@@ -1926,9 +1926,9 @@ dependencies = [
 
 [[package]]
 name = "parse-zoneinfo"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c705f256449c60da65e11ff6626e0c16a0a0b96aaa348de61376b249bc340f41"
+checksum = "1f2a05b18d44e2957b88f96ba460715e295bc1d7510468a2f3d3b44535d26c24"
 dependencies = [
  "regex",
 ]
@@ -2830,7 +2830,7 @@ dependencies = [
  "async-trait",
  "bytes",
  "chrono",
- "chrono-tz 0.8.6",
+ "chrono-tz 0.9.0",
  "clap",
  "config",
  "css-inline",
