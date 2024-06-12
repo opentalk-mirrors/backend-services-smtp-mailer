@@ -31,6 +31,7 @@ event_uninvite = OpenTalk Meeting Invitation was revoked - { $name }
 
 meeting-information = Meeting Information
 meeting-information-title = Title
+meeting-information-details = Details
 meeting-information-when = Time
 meeting-information-link = Link to Meeting
 join-directly-link = Open the conference room in new tab/window
@@ -53,7 +54,7 @@ shared-folder-password = Folder Password
 questions = Questions? We are here to help!
         .p = To talk to our help desk, give us a call via { $phone }. Alternatively, you can send us an email to { $mail }.
 
-fallback-footer = If the buttons or links dont’t work open your browser and type in the following links:
+fallback-footer = If the buttons or links don’t work open your browser and type in the following links:
 join-directly-fallback = Join Meeting: { $link }
 view-in-dashboard-fallback = Meeting Details: { $link }
 
