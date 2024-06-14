@@ -57,7 +57,7 @@ lettre = { version = "0.11.0", default-features = false, features = [
   "tokio1-rustls-tls",
   "tokio1",
 ] }
-css-inline = { version = "0.10.5" }
+css-inline = { version = "0.14.0" }
 
 ics = { version = "0.5" }
 textwrap = "0.16.0"
