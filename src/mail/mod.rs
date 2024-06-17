@@ -102,6 +102,20 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         "resources/templates/streaming_links_html.include",
         Some("streaming_links_html.include"),
     )?;
+    tera.add_template_files(vec![
+        (
+            "resources/templates/external_details_html.include",
+            Some("external_details_html.include"),
+        ),
+        (
+            "resources/templates/unregistered_details_html.include",
+            Some("unregistered_details_html.include"),
+        ),
+        (
+            "resources/templates/registered_details_html.include",
+            Some("registered_details_html.include"),
+        ),
+    ])?;
 
     tera.add_template_files(
         settings

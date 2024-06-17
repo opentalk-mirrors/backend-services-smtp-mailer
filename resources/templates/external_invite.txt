@@ -4,6 +4,9 @@
 
 {{ fluent(key="meeting-information", lang = language) }}
 {{ fluent(key="meeting-information-title", lang = language) }}: {{ event.name }}
+{% if event.description -%}
+{{ fluent(key="meeting-information-details", lang = language) }}: {{ event.description }}
+{% endif -%}
 {% if event.start_time -%}
 {% if event.end_time -%}
 {{ fluent(key="meeting-information-when", lang = language) }}: {{ event.start_time.time | date(timezone = event.start_time.timezone, format="%d.%m.%Y %H:%M")}}-{{ event.end_time.time | date(timezone = event.end_time.timezone, format="%H:%M")}}

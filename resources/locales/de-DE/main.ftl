@@ -31,6 +31,7 @@ event_uninvite = Einladung zum OpenTalk-Meeting wurde zurückgezogen - { $name }
 
 meeting-information = Meeting-Information
 meeting-information-title = Titel
+meeting-information-details = Details
 meeting-information-when = Uhrzeit
 meeting-information-link = Link zum Meeting
 join-directly-link = Öffne den Raum in einem neuen Tab/Fenster
@@ -47,7 +48,7 @@ call-in-id = Konferenzkennung
 call-in-pw = Konferenz-PIN
 call-in-quick-dial = Schnelleinwahl
 
-shared-folder = Geteiler Ordner
+shared-folder = Geteilter Ordner
 shared-folder-password = Ordnerpasswort
 
 questions = Noch Fragen? Wir helfen Ihnen Gerne!
