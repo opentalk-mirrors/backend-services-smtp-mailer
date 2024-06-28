@@ -4,6 +4,7 @@ Upstream-Name: OpenTalk SMTP Mailer
 Upstream-Contact: OpenTalk GmbH <mail@opentalk.eu>
 
 Files:
+ .commitlintrc.json
  CHANGELOG.md
  Cargo.lock
  config.toml.example

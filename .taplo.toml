@@ -2,4 +2,8 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-net.git-fetch-with-cli = true
+include = ["**/*.toml"]
+
+[formatting]
+reorder_arrays = true
+reorder_keys = true

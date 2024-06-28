@@ -27,7 +27,7 @@ The section in the [configuration file](configuration.md) is called `templates`.
 
  To specify the templates, their set of paths must be provided in a certain format. The default template path settings accord with this pattern:
  - `{html = "resources/templates/{field}.html", txt = "resources/templates/{field}.txt"}`
- 
+
 ### Example
 
 ```toml
