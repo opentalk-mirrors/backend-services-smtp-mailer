@@ -131,6 +131,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 initial release candidate
 
+[unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.2...main
+
 [0.5.2]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.1...v0.5.2
 [0.5.1]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.0...v0.5.1
 [0.5.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/fb7bb1046c6850b5bf8f42f7ab58a4eab68d7ad3...v0.5.0
@@ -139,7 +141,6 @@ initial release candidate
 [0.4.2]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.1...v0.4.2
 [0.4.1]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.0...v0.4.1
 [0.4.0]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/f51209ff8fc6d709c3df81198bf709b88a64f44d...v0.4.0
-
 
 [0.3.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/25b0d812a39f1cfb6b5dd11598a7be9e20964eda...v0.3.0
 

@@ -11,6 +11,7 @@ This is the [OpenTalk](https://opentalk.eu/) SMTP Mailer service. Its main purpo
 ## Development
 
 There are two git submodules you need to checkout as a first step, to do so simply run:
+
 ```bash
 git submodule init
 git submodule update
@@ -30,7 +31,8 @@ The SMTP mailer includes a CLI utility to test its functionalities. It can eithe
 The commands are `preview` and `preview-send` with the following options:
 
 `preview`:
-```
+
+```txt
 USAGE:
     smtp-mailer preview <TYPE> <TEMPLATE> <LANGUAGE>
 
@@ -46,7 +48,8 @@ OPTIONS:
 ```
 
 `preview-send`:
-```
+
+```txt
 USAGE:
     smtp-mailer preview-send <TEMPLATE> <TO>
 
