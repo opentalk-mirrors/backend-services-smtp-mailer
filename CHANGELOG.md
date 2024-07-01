@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0]
+
+### :rocket: New features
+
+- Added previews for: registered-event-update and registered-uninvite
+- Add streaming information to all templates ([#66](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/66))
+
+### :bug: Bug fixes
+
+- Don't show passwords for registered users ([#93](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/93))
+- print Version output ([!92](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/91))
+
+### Ci
+
 - Upgrade debian image in ci & container creation to bookworm ([#92](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/92))
+
+### :gear: Miscellaneous Tasks
+
+- Update controller submodule to v0.15.0
 
 ## [0.5.2]
 
@@ -131,7 +149,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 initial release candidate
 
-[unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.2...main
+[unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.6.0...main
+
+[0.6.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.2...v0.6.0
 
 [0.5.2]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.1...v0.5.2
 [0.5.1]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.0...v0.5.1
