@@ -4,12 +4,21 @@ title: SMTP Mailer
 
 # Administration guide for the OpenTalk SMTP Mailer
 
-## General information about the service
+## General information
+
+The purpose of the OpenTalk SMTP Mailer service is to inform users by mail when
+a change in an OpenTalk instance affects them. Typical notifications are:
+
+- A user has been invited to an event
+- A user has been uninvited from an event
+- An event has been updated
+- An event has been deleted
 
 - [Configuration](configuration.md)
 
-## Interaction between OpenTalk SMTP Mailer and other services
+## Interaction with other services
 
-### Services required by OpenTalk SMTP Mailer
+### Required services
 
-- [RabbitMQ](rabbitmq.md)
+- [RabbitMQ](rabbitmq.md): OpenTalk SMTP Mailer consumes messages from a
+  RabbitMQ queue.
