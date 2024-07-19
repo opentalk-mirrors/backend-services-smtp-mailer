@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0]
+
+### <!-- 0 -->:rocket: New features
+
+- Add event details to email templates ([#85](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/85))
+
+### <!-- 3 -->:gear: Dependencies
+
+- Update controller submodule to version 0.16.0-rc.1
+- Update git.opentalk.dev:5050/opentalk/backend/containers/rust docker tag to v1.79.0
+- Update rust crate anyhow to v1.0.86
+- Update rust crate chrono-tz to 0.9
+- Update rust crate clap to v4.5.8
+- Update rust crate css-inline to 0.14.0
+- Update rust crate fluent-templates to 0.9.0
+- Update rust crate ics-chrono-tz to 0.3
+- Update rust crate lapin to v2.3.4
+- Update rust crate lettre to 0.11.0
+- Update rust crate log to v0.4.22
+- Update rust crate phonenumber to v0.3.5
+- Update rust crate serde to v1.0.203
+- Update rust crate serde_json to v1.0.119
+- Update rust crate tera to v1.20.0
+- Update rust crate thiserror to v1.0.61
+- Update rust crate tokio to v1.38.0
+- Update rust crate url to v2.5.2
+- Update rust crate uuid to v1.9.1
+
+### Ci
+
+- Lint commits, md, yaml and format tomls
+
 ## [0.6.0]
 
 ### :rocket: New features
@@ -149,7 +181,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 initial release candidate
 
-[unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.6.0...main
+[Unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.7.0...main
+
+[0.7.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.6.0...v0.7.0
 
 [0.6.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.2...v0.6.0
 
