@@ -150,28 +150,46 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-const BUILD_INFO: [(&str, Option<&str>); 10] = [
-    ("Build Timestamp", option_env!("VERGEN_BUILD_TIMESTAMP")),
-    ("Build Version", option_env!("CARGO_PKG_VERSION")),
-    ("Commit SHA", option_env!("VERGEN_GIT_SHA")),
-    ("Commit Date", option_env!("VERGEN_GIT_COMMIT_TIMESTAMP")),
-    ("Commit Branch", option_env!("VERGEN_GIT_BRANCH")),
-    ("rustc Version", option_env!("VERGEN_RUSTC_SEMVER")),
-    ("rustc Channel", option_env!("VERGEN_RUSTC_CHANNEL")),
-    ("rustc Host Triple", option_env!("VERGEN_RUSTC_HOST_TRIPLE")),
-    (
-        "cargo Target Triple",
-        option_env!("VERGEN_CARGO_TARGET_TRIPLE"),
-    ),
-    ("cargo Profile", option_env!("VERGEN_CARGO_OPT_LEVEL")),
-];
+fn profile_to_human(profile: &str) -> &str {
+    // Copied from https://doc.rust-lang.org/cargo/reference/profiles.html#opt-level
+    match profile {
+        "0" => "0, no optimizations",
+        "1" => "1, basic optimizations",
+        "2" => "2, some optimizations",
+        "3" => "3, all optimizations",
+        "s" => "'s', optimize for binary size",
+        "z" => "'z', optimize for binary size, but also turn off loop vectorization.",
+        profile => profile,
+    }
+}
+
+fn build_info() -> [(&'static str, Option<&'static str>); 10] {
+    [
+        ("Build Timestamp", Some(env!("VERGEN_BUILD_TIMESTAMP"))),
+        ("Build Version", Some(env!("CARGO_PKG_VERSION"))),
+        ("Commit SHA", option_env!("VERGEN_GIT_SHA")),
+        ("Commit Date", option_env!("VERGEN_GIT_COMMIT_TIMESTAMP")),
+        ("Commit Branch", option_env!("VERGEN_GIT_BRANCH")),
+        ("rustc Version", Some(env!("VERGEN_RUSTC_SEMVER"))),
+        ("rustc Channel", Some(env!("VERGEN_RUSTC_CHANNEL"))),
+        ("rustc Host Triple", Some(env!("VERGEN_RUSTC_HOST_TRIPLE"))),
+        (
+            "cargo Target Triple",
+            Some(env!("VERGEN_CARGO_TARGET_TRIPLE")),
+        ),
+        (
+            "cargo Profile",
+            Some(env!("VERGEN_CARGO_OPT_LEVEL")).map(profile_to_human),
+        ),
+    ]
+}
 
 fn version_info() -> String {
     let mut version_message = String::new();
     if let Some(bin_name) = option_env!("CARGO_BIN_NAME") {
         writeln!(version_message, "{}:", bin_name).expect("Writing to string buffer must succeed");
     }
-    for (label, value) in BUILD_INFO {
+    for (label, value) in build_info() {
         writeln!(
             version_message,
             "{label}: {value}",
