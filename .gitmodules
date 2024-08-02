@@ -1,8 +1,0 @@
-# SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
-#
-# SPDX-License-Identifier: EUPL-1.2
-
-[submodule "vendored/k3k-controller"]
-	path = vendored/k3k-controller
-	url = ../controller
-	branch = main
