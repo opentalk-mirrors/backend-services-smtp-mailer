@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-FROM rust:1.79.0-slim-bookworm AS builder
+FROM rust:1.80.0-slim-bookworm AS builder
 
 ARG GIT_SHA
 ARG GIT_REF
