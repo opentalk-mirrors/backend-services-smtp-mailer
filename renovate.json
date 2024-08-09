@@ -12,6 +12,14 @@
       ],
       "groupName": "chrono-tz",
       "groupSlug": "chrono-tz"
+    },
+    {
+      "matchPackagePatterns": [
+        "opentalk-mail-worker-protocol",
+        "opentalk-types"
+      ],
+      "groupName": "opentalk-controller",
+      "groupSlug": "opentalk-controller"
     }
   ]
 }
