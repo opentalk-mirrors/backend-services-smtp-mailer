@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-FROM rust:1.80.0-slim-bookworm AS builder
+FROM git.opentalk.dev:5050/opentalk/backend/containers/rust:1.79.0-bookworm AS builder
 
 ARG GIT_SHA
 ARG GIT_REF
@@ -19,11 +19,11 @@ COPY ./resources ./resources
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
 ADD ./build.rs ./build.rs
-RUN cargo build --release --locked
+RUN cargo auditable build --release --locked
 RUN rm ./src/*.rs
 RUN rm ./target/release/deps/smtp_mailer*
 ADD ./src ./src
-RUN cargo build --release --locked
+RUN cargo auditable build --release --locked
 
 
 FROM debian:bookworm-slim
