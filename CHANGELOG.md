@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0]
+
+### <!-- 0 -->:bug: Bug Fixes
+
+- *(deps)* Update rust crate async-trait to v0.1.81
+- *(deps)* Update rust crate serde to v1.0.204
+- *(deps)* Update rust crate clap to v4.5.9
+- *(deps)* Update rust crate uuid to v1.10.0
+- *(deps)* Update rust crate phonenumber to v0.3.6
+- *(deps)* Update rust crate thiserror to v1.0.62
+- *(deps)* Update rust crate bytes to v1.6.1
+- *(deps)* Update rust crate tokio to v1.38.1
+- *(deps)* Update rust crate lapin to v2.4.0
+- *(deps)* Update rust crate thiserror to v1.0.63
+
+### <!-- 1 -->:books: Documentation
+
+- Add a general description and link the protocol docs
+
 ## [0.7.0]
 
 ### <!-- 0 -->:rocket: New features
@@ -181,7 +200,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 initial release candidate
 
-[Unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.7.0...main
+[Unreleased]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.8.0...main
+
+[0.8.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.7.0...v0.8.0
 
 [0.7.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.6.0...v0.7.0
 
