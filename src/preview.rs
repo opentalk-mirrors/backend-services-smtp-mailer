@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use std::time::Duration;
+use std::{str::FromStr as _, time::Duration};
 
 use anyhow::Context;
 use chrono::{Timelike, Utc};
@@ -22,7 +22,7 @@ use types::{
         shared_folder::{SharedFolder, SharedFolderAccess},
         streaming::{RoomStreamingTarget, StreamingTarget},
     },
-    core::StreamingKey,
+    core::{RoomPassword, StreamingKey},
 };
 use uuid::Uuid;
 
@@ -132,7 +132,10 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
         description,
         room: Room {
             id: Uuid::nil(),
-            password: Some("password123".into()),
+            password: Some(
+                RoomPassword::from_str("password123")
+                    .context("Example room password was invalid")?,
+            ),
         },
         created_at: Time {
             time: Utc::now(),
