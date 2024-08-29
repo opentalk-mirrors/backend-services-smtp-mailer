@@ -416,11 +416,13 @@ fn calculate_meeting_duration(start: &Time, end: &Time) -> Duration {
 }
 #[cfg(test)]
 mod test {
+    use std::str::FromStr as _;
+
     use chrono::{TimeZone, Utc};
     use mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
     use types::{
         common::streaming::{RoomStreamingTarget, StreamingTarget},
-        core::StreamingKey,
+        core::{RoomPassword, StreamingKey},
     };
     use uuid::Uuid;
 
@@ -461,7 +463,7 @@ mod test {
             description: "Very descriptive".to_owned(),
             room: Room {
                 id: Uuid::from_u128(3),
-                password: Some("ddd".to_owned()),
+                password: Some(RoomPassword::from_str("ddd").expect("Invalid room password")),
             },
             revision: 0,
             shared_folder: None,
