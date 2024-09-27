@@ -17,12 +17,10 @@ use mail_worker_protocol::{
 };
 use protocol::v1::{CallIn, Event, Room, Time};
 use smtp_mailer::{send_mail_v1, settings, MailBuilder, MailTemplate};
-use types::{
-    common::{
-        shared_folder::{SharedFolder, SharedFolderAccess},
-        streaming::{RoomStreamingTarget, StreamingTarget},
-    },
-    core::{RoomPassword, StreamingKey},
+use types_common::{
+    rooms::RoomPassword,
+    shared_folders::{SharedFolder, SharedFolderAccess},
+    streaming::{RoomStreamingTarget, StreamingKey, StreamingTarget, StreamingTargetKind},
 };
 use uuid::Uuid;
 
@@ -163,7 +161,7 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
                 id: Uuid::new_v4().into(),
                 streaming_target: StreamingTarget {
                     name: "streaming service 1".to_string(),
-                    kind: types::common::streaming::StreamingTargetKind::Custom {
+                    kind: StreamingTargetKind::Custom {
                         streaming_endpoint: "https://stream-a.example.com"
                             .parse()
                             .expect("This is a valid URL!"),
@@ -178,7 +176,7 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
                 id: Uuid::new_v4().into(),
                 streaming_target: StreamingTarget {
                     name: "streaming service 2".to_string(),
-                    kind: types::common::streaming::StreamingTargetKind::Custom {
+                    kind: StreamingTargetKind::Custom {
                         streaming_endpoint: "https://stream-b.example.com"
                             .parse()
                             .expect("This is a valid URL!"),
