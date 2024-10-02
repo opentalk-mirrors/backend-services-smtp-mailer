@@ -18,7 +18,7 @@ use ics::{
 };
 use ics_chrono_tz::ToIcsTimeZone;
 use mail_worker_protocol::v1::{self, EventException, Time};
-use types::common::shared_folder::SharedFolder;
+use types_common::shared_folders::SharedFolder;
 use uuid::Uuid;
 
 #[derive(Clone, Copy)]
@@ -420,9 +420,9 @@ mod test {
 
     use chrono::{TimeZone, Utc};
     use mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
-    use types::{
-        common::streaming::{RoomStreamingTarget, StreamingTarget},
-        core::{RoomPassword, StreamingKey},
+    use types_common::{
+        rooms::RoomPassword,
+        streaming::{RoomStreamingTarget, StreamingKey, StreamingTarget, StreamingTargetKind},
     };
     use uuid::Uuid;
 
@@ -473,7 +473,7 @@ mod test {
                     id: Uuid::new_v4().into(),
                     streaming_target: StreamingTarget {
                         name: "streaming service 1".to_string(),
-                        kind: types::common::streaming::StreamingTargetKind::Custom {
+                        kind: StreamingTargetKind::Custom {
                             streaming_endpoint: "https://stream-a.example.com"
                                 .parse()
                                 .expect("This is a valid URL!"),
@@ -488,7 +488,7 @@ mod test {
                     id: Uuid::new_v4().into(),
                     streaming_target: StreamingTarget {
                         name: "streaming service 2".to_string(),
-                        kind: types::common::streaming::StreamingTargetKind::Custom {
+                        kind: StreamingTargetKind::Custom {
                             streaming_endpoint: "https://stream-b.example.com"
                                 .parse()
                                 .expect("This is a valid URL!"),
