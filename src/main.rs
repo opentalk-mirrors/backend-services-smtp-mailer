@@ -4,17 +4,11 @@
 
 use std::{fmt::Write, process::exit};
 
-use anyhow::Context;
-use clap::{Parser, Subcommand, ValueEnum};
-use mail_worker_protocol::v1::{
-    ExternalEventCancellation, ExternalEventInvite, RegisteredEventCancellation,
-    RegisteredEventInvite, RegisteredEventUninvite, RegisteredEventUpdate,
-    UnregisteredEventCancellation, UnregisteredEventInvite,
+use clap::{Parser, Subcommand};
+use smtp_mailer::{
+    preview::{preview_send_mail, OutputVariant, TemplateVariant},
+    run, settings,
 };
-use preview::{preview_send_mail, ExampleData as _};
-use smtp_mailer::{run, settings};
-
-pub mod preview;
 
 #[derive(Parser, Debug)]
 #[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
@@ -56,34 +50,6 @@ enum Commands {
     },
 }
 
-#[derive(Debug, Clone, Copy, ValueEnum)]
-enum OutputVariant {
-    Html,
-    Plain,
-}
-
-impl From<&OutputVariant> for bool {
-    fn from(val: &OutputVariant) -> Self {
-        match val {
-            OutputVariant::Html => true,
-            OutputVariant::Plain => false,
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, ValueEnum)]
-#[allow(clippy::enum_variant_names)]
-pub enum TemplateVariant {
-    RegisteredInvite,
-    RegisteredEventUpdate,
-    RegisteredCancellation,
-    RegisteredUninvite,
-    UnregisteredInvite,
-    UnregisteredCancellation,
-    ExternalInvite,
-    ExternalCancellation,
-}
-
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
@@ -104,38 +70,11 @@ async fn main() -> anyhow::Result<()> {
         template,
     }) = &args.command
     {
-        let example_mail = match template {
-            TemplateVariant::RegisteredInvite => {
-                RegisteredEventInvite::preview(&settings, type_.into(), language)
-            }
-            TemplateVariant::RegisteredEventUpdate => {
-                RegisteredEventUpdate::preview(&settings, type_.into(), language)
-            }
-            TemplateVariant::RegisteredCancellation => {
-                RegisteredEventCancellation::preview(&settings, type_.into(), language)
-            }
-            TemplateVariant::RegisteredUninvite => {
-                RegisteredEventUninvite::preview(&settings, type_.into(), language)
-            }
-            TemplateVariant::UnregisteredInvite => {
-                UnregisteredEventInvite::preview(&settings, type_.into(), language)
-            }
-            TemplateVariant::UnregisteredCancellation => {
-                UnregisteredEventCancellation::preview(&settings, type_.into(), language)
-            }
-            TemplateVariant::ExternalInvite => {
-                ExternalEventInvite::preview(&settings, type_.into(), language)
-            }
-            TemplateVariant::ExternalCancellation => {
-                ExternalEventCancellation::preview(&settings, type_.into(), language)
-            }
-        }
-        .context("Failed to create preview")?;
+        let example_mail = template.render_template(&settings, *type_, language)?;
         print!("{}", example_mail);
 
         exit(0);
-    }
-    if let Some(Commands::PreviewSend {
+    } else if let Some(Commands::PreviewSend {
         template,
         to,
         cancellation_delay,
