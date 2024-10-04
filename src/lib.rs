@@ -11,10 +11,10 @@ pub mod i18n;
 pub(crate) mod mail;
 
 mod ics;
+pub mod preview;
 mod rabbitmq;
 pub mod settings;
 mod worker;
-pub mod preview;
 
 pub use mail::{MailBuilder, MailTemplate};
 pub use worker::send_mail_v1;

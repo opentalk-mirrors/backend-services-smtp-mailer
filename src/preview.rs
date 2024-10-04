@@ -5,7 +5,6 @@
 use std::{str::FromStr as _, time::Duration};
 
 use anyhow::Context;
-use chrono::{Timelike, Utc};
 use clap::ValueEnum;
 use lettre::{AsyncSmtpTransport, Tokio1Executor};
 use mail_worker_protocol::{
@@ -193,36 +192,35 @@ pub trait ExampleData: Sized + MailTemplate {
 }
 
 fn generate_example_event(description: String) -> anyhow::Result<Event> {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .context("The minute value must be inside the valid range and the resulting time must exists.")?
-    .with_second(0)
-    .context(
-        "The seconds value must be inside the valid range and the resulting time must exists.",
-    )?;
+    let start_date = chrono::DateTime::parse_from_rfc3339("2024-10-10 15:30:00+02:00")
+        .expect("Must be valid date")
+        .to_utc();
+
+    let created_at = chrono::DateTime::parse_from_rfc3339("2024-10-04 13:30:25+02:00")
+        .expect("Must be valid date")
+        .to_utc();
 
     Ok(Event {
-        id: Uuid::new_v4(),
+        id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390000),
         name: "This is a Preview Event".into(),
         description,
         room: Room {
-            id: Uuid::nil(),
+            id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390001),
             password: Some(
                 RoomPassword::from_str("password123")
                     .context("Example room password was invalid")?,
             ),
         },
         created_at: Time {
-            time: Utc::now(),
+            time: created_at,
             timezone: "Europe/Berlin".into(),
         },
         start_time: Some(Time {
-            time: next_hour,
+            time: start_date,
             timezone: "Europe/Berlin".into(),
         }),
         end_time: Some(Time {
-            time: next_hour + chrono::Duration::minutes(40),
+            time: start_date + chrono::Duration::minutes(40),
             timezone: "Europe/Berlin".into(),
         }),
         rrule: None,
@@ -236,7 +234,7 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
         adhoc_retention_seconds: None,
         streaming_targets: vec![
             RoomStreamingTarget {
-                id: Uuid::new_v4().into(),
+                id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390002).into(),
                 streaming_target: StreamingTarget {
                     name: "streaming service 1".to_string(),
                     kind: StreamingTargetKind::Custom {
@@ -251,7 +249,7 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
                 },
             },
             RoomStreamingTarget {
-                id: Uuid::new_v4().into(),
+                id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390003).into(),
                 streaming_target: StreamingTarget {
                     name: "streaming service 2".to_string(),
                     kind: StreamingTargetKind::Custom {
@@ -336,7 +334,7 @@ impl ExampleData for protocol::v1::ExternalEventInvite {
             invitee: external_invitee(email_address),
             event: generate_example_event(EVENT_DESCRIPTION_EXTERNAL.to_string())?,
             inviter: registered_inviter(language, email_address),
-            invite_code: Uuid::new_v4().to_string(),
+            invite_code: Uuid::from_u128(0xa3e92829_b599_4985_9d0d_8e070a8b0000).into(),
         })
     }
 }
