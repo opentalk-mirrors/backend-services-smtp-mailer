@@ -5,7 +5,7 @@
 use std::{str::FromStr as _, time::Duration};
 
 use anyhow::Context;
-use chrono::{Timelike, Utc};
+use clap::ValueEnum;
 use lettre::{AsyncSmtpTransport, Tokio1Executor};
 use mail_worker_protocol::{
     self as protocol,
@@ -16,13 +16,90 @@ use mail_worker_protocol::{
     },
 };
 use protocol::v1::{CallIn, Event, Room, Time};
-use smtp_mailer::{send_mail_v1, settings, MailBuilder, MailTemplate};
 use types_common::{
     rooms::RoomPassword,
     shared_folders::{SharedFolder, SharedFolderAccess},
     streaming::{RoomStreamingTarget, StreamingKey, StreamingTarget, StreamingTargetKind},
 };
 use uuid::Uuid;
+
+use crate::{send_mail_v1, settings::Settings, MailBuilder, MailTemplate};
+
+#[derive(Debug, Clone, Copy, ValueEnum)]
+pub enum OutputVariant {
+    Html,
+    Plain,
+}
+
+impl OutputVariant {
+    /// Returns `true` if the output variant is [`Html`].
+    ///
+    /// [`Html`]: OutputVariant::Html
+    #[must_use]
+    fn is_html(&self) -> bool {
+        matches!(self, Self::Html)
+    }
+}
+
+impl From<&OutputVariant> for bool {
+    fn from(val: &OutputVariant) -> Self {
+        match val {
+            OutputVariant::Html => true,
+            OutputVariant::Plain => false,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, ValueEnum)]
+#[allow(clippy::enum_variant_names)]
+pub enum TemplateVariant {
+    RegisteredInvite,
+    RegisteredEventUpdate,
+    RegisteredCancellation,
+    RegisteredUninvite,
+    UnregisteredInvite,
+    UnregisteredCancellation,
+    ExternalInvite,
+    ExternalCancellation,
+}
+
+impl TemplateVariant {
+    pub fn render_template(
+        &self,
+        settings: &Settings,
+        output: OutputVariant,
+        language: &str,
+    ) -> anyhow::Result<String> {
+        let example_mail = match self {
+            TemplateVariant::RegisteredInvite => {
+                RegisteredEventInvite::preview(settings, output.is_html(), language)
+            }
+            TemplateVariant::RegisteredEventUpdate => {
+                RegisteredEventUpdate::preview(settings, output.is_html(), language)
+            }
+            TemplateVariant::RegisteredCancellation => {
+                RegisteredEventCancellation::preview(settings, output.is_html(), language)
+            }
+            TemplateVariant::RegisteredUninvite => {
+                RegisteredEventUninvite::preview(settings, output.is_html(), language)
+            }
+            TemplateVariant::UnregisteredInvite => {
+                UnregisteredEventInvite::preview(settings, output.is_html(), language)
+            }
+            TemplateVariant::UnregisteredCancellation => {
+                UnregisteredEventCancellation::preview(settings, output.is_html(), language)
+            }
+            TemplateVariant::ExternalInvite => {
+                ExternalEventInvite::preview(settings, output.is_html(), language)
+            }
+            TemplateVariant::ExternalCancellation => {
+                ExternalEventCancellation::preview(settings, output.is_html(), language)
+            }
+        }
+        .context("Failed to create preview")?;
+        Ok(example_mail)
+    }
+}
 
 const EVENT_DESCRIPTION_REGISTERED: &str = "This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description";
 const EVENT_DESCRIPTION_EXTERNAL: &str = "This event is a dummy event, and you should have got this invite as a external user. You can safely ignore this description";
@@ -96,7 +173,7 @@ fn registered_inviter(
 pub trait ExampleData: Sized + MailTemplate {
     fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self>;
 
-    fn preview(settings: &settings::Settings, html: bool, lang: &str) -> anyhow::Result<String> {
+    fn preview(settings: &Settings, html: bool, lang: &str) -> anyhow::Result<String> {
         let mail_builder =
             MailBuilder::new(settings).context("Failed to initialize MailBuilder")?;
 
@@ -115,36 +192,35 @@ pub trait ExampleData: Sized + MailTemplate {
 }
 
 fn generate_example_event(description: String) -> anyhow::Result<Event> {
-    let next_hour: chrono::DateTime<chrono::Utc> = (chrono::Utc::now()
-        + chrono::Duration::hours(1))
-    .with_minute(0)
-    .context("The minute value must be inside the valid range and the resulting time must exists.")?
-    .with_second(0)
-    .context(
-        "The seconds value must be inside the valid range and the resulting time must exists.",
-    )?;
+    let start_date = chrono::DateTime::parse_from_rfc3339("2024-10-10 15:30:00+02:00")
+        .expect("Must be valid date")
+        .to_utc();
+
+    let created_at = chrono::DateTime::parse_from_rfc3339("2024-10-04 13:30:25+02:00")
+        .expect("Must be valid date")
+        .to_utc();
 
     Ok(Event {
-        id: Uuid::new_v4(),
+        id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390000),
         name: "This is a Preview Event".into(),
         description,
         room: Room {
-            id: Uuid::nil(),
+            id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390001),
             password: Some(
                 RoomPassword::from_str("password123")
                     .context("Example room password was invalid")?,
             ),
         },
         created_at: Time {
-            time: Utc::now(),
+            time: created_at,
             timezone: "Europe/Berlin".into(),
         },
         start_time: Some(Time {
-            time: next_hour,
+            time: start_date,
             timezone: "Europe/Berlin".into(),
         }),
         end_time: Some(Time {
-            time: next_hour + chrono::Duration::minutes(40),
+            time: start_date + chrono::Duration::minutes(40),
             timezone: "Europe/Berlin".into(),
         }),
         rrule: None,
@@ -158,7 +234,7 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
         adhoc_retention_seconds: None,
         streaming_targets: vec![
             RoomStreamingTarget {
-                id: Uuid::new_v4().into(),
+                id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390002).into(),
                 streaming_target: StreamingTarget {
                     name: "streaming service 1".to_string(),
                     kind: StreamingTargetKind::Custom {
@@ -173,7 +249,7 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
                 },
             },
             RoomStreamingTarget {
-                id: Uuid::new_v4().into(),
+                id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390003).into(),
                 streaming_target: StreamingTarget {
                     name: "streaming service 2".to_string(),
                     kind: StreamingTargetKind::Custom {
@@ -258,7 +334,7 @@ impl ExampleData for protocol::v1::ExternalEventInvite {
             invitee: external_invitee(email_address),
             event: generate_example_event(EVENT_DESCRIPTION_EXTERNAL.to_string())?,
             inviter: registered_inviter(language, email_address),
-            invite_code: Uuid::new_v4().to_string(),
+            invite_code: Uuid::from_u128(0xa3e92829_b599_4985_9d0d_8e070a8b0000).into(),
         })
     }
 }
@@ -274,8 +350,8 @@ impl ExampleData for protocol::v1::ExternalEventCancellation {
 }
 
 pub async fn preview_send_mail(
-    settings: &settings::Settings,
-    template: super::TemplateVariant,
+    settings: &Settings,
+    template: TemplateVariant,
     to: String,
     cancellation_delay: u64,
 ) -> anyhow::Result<()> {
@@ -287,21 +363,19 @@ pub async fn preview_send_mail(
     let receiver = Some(to);
 
     let message = match template {
-        crate::TemplateVariant::RegisteredInvite => protocol::v1::Message::RegisteredEventInvite(
+        TemplateVariant::RegisteredInvite => protocol::v1::Message::RegisteredEventInvite(
             RegisteredEventInvite::generate_example("en-US", &receiver)
                 .context("Failed to generate example RegisteredEventInvite")?,
         ),
-        crate::TemplateVariant::UnregisteredInvite => {
-            protocol::v1::Message::UnregisteredEventInvite(
-                UnregisteredEventInvite::generate_example("en-US", &receiver)
-                    .context("Failed to generate example UnregisteredEventInvite")?,
-            )
-        }
-        crate::TemplateVariant::ExternalInvite => protocol::v1::Message::ExternalEventInvite(
+        TemplateVariant::UnregisteredInvite => protocol::v1::Message::UnregisteredEventInvite(
+            UnregisteredEventInvite::generate_example("en-US", &receiver)
+                .context("Failed to generate example UnregisteredEventInvite")?,
+        ),
+        TemplateVariant::ExternalInvite => protocol::v1::Message::ExternalEventInvite(
             ExternalEventInvite::generate_example("en-US", &receiver)
                 .context("Failed to generate example ExternalEventInvite")?,
         ),
-        crate::TemplateVariant::RegisteredCancellation => {
+        TemplateVariant::RegisteredCancellation => {
             let invite = RegisteredEventInvite::generate_example("en-US", &receiver)
                 .context("Failed to generate example RegisteredEventInvite")?;
             let event_id = invite.event.id;
@@ -322,7 +396,7 @@ pub async fn preview_send_mail(
             cancellation.event.id = event_id;
             protocol::v1::Message::RegisteredEventCancellation(cancellation)
         }
-        crate::TemplateVariant::UnregisteredCancellation => {
+        TemplateVariant::UnregisteredCancellation => {
             let invite = UnregisteredEventInvite::generate_example("en-US", &receiver)
                 .context("Failed to generate example UnregisteredEventInvite")?;
             let event_id = invite.event.id;
@@ -343,7 +417,7 @@ pub async fn preview_send_mail(
             cancellation.event.id = event_id;
             protocol::v1::Message::UnregisteredEventCancellation(cancellation)
         }
-        crate::TemplateVariant::ExternalCancellation => {
+        TemplateVariant::ExternalCancellation => {
             let invite = ExternalEventInvite::generate_example("en-US", &receiver)
                 .context("Failed to generate example ExternalEventInvite")?;
             let event_id = invite.event.id;
@@ -363,18 +437,14 @@ pub async fn preview_send_mail(
             cancellation.event.id = event_id;
             protocol::v1::Message::ExternalEventCancellation(cancellation)
         }
-        crate::TemplateVariant::RegisteredEventUpdate => {
-            protocol::v1::Message::RegisteredEventUpdate(
-                RegisteredEventUpdate::generate_example("en-US", &receiver)
-                    .context("Failed to generate example RegisteredEventUpdate")?,
-            )
-        }
-        crate::TemplateVariant::RegisteredUninvite => {
-            protocol::v1::Message::RegisteredEventUninvite(
-                RegisteredEventUninvite::generate_example("en-US", &receiver)
-                    .context("Failed to generate example RegisteredEventUninvite")?,
-            )
-        }
+        TemplateVariant::RegisteredEventUpdate => protocol::v1::Message::RegisteredEventUpdate(
+            RegisteredEventUpdate::generate_example("en-US", &receiver)
+                .context("Failed to generate example RegisteredEventUpdate")?,
+        ),
+        TemplateVariant::RegisteredUninvite => protocol::v1::Message::RegisteredEventUninvite(
+            RegisteredEventUninvite::generate_example("en-US", &receiver)
+                .context("Failed to generate example RegisteredEventUninvite")?,
+        ),
     };
 
     send_mail_v1(&smtp_client, &mail_builder, &message)

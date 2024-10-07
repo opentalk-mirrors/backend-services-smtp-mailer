@@ -11,7 +11,7 @@ use config::{Config, ConfigError, Environment, File, FileFormat};
 use percent_encoding::percent_decode_str;
 use serde::{de, Deserialize, Deserializer, Serialize};
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Default)]
 pub struct Settings {
     #[serde(default)]
     pub rabbit_mq: RabbitMqConfig,
