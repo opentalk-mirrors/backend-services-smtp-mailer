@@ -481,9 +481,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "93698b29de5e97ad0ae26447b344c482a7284c737d9ddc5f9e52b74a336671bb"
 dependencies = [
  "chrono",
- "chrono-tz-build",
+ "chrono-tz-build 0.3.0",
  "phf 0.11.2",
  "serde",
+]
+
+[[package]]
+name = "chrono-tz"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cd6dd8046d00723a59a2f8c5f295c515b9bb9a331ee4f8f3d4dd49e428acd3b6"
+dependencies = [
+ "chrono",
+ "chrono-tz-build 0.4.0",
+ "phf 0.11.2",
 ]
 
 [[package]]
@@ -494,6 +505,16 @@ checksum = "0c088aee841df9c3041febbb73934cfc39708749bf96dc827e3359cd39ef11b1"
 dependencies = [
  "parse-zoneinfo",
  "phf 0.11.2",
+ "phf_codegen 0.11.2",
+]
+
+[[package]]
+name = "chrono-tz-build"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e94fea34d77a245229e7746bd2beb786cd2a896f306ff491fb8cecb3074b10a7"
+dependencies = [
+ "parse-zoneinfo",
  "phf_codegen 0.11.2",
 ]
 
@@ -2035,12 +2056,12 @@ checksum = "3ebec52f461ade2d19e7b594ecbcd0723ba0ab0eefa8aae2281b78ff461a91fa"
 
 [[package]]
 name = "ics-chrono-tz"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e655f7e512a76ec5d934f925acbd388a91d76777858a80e356ecb576a9518d54"
+checksum = "6a5b4e07e618068f121090a600db5d48142c529135d21039c2d16de8257ce5b4"
 dependencies = [
  "chrono",
- "chrono-tz",
+ "chrono-tz 0.10.0",
  "ics",
  "parse-zoneinfo",
 ]
@@ -2641,7 +2662,7 @@ dependencies = [
  "base64",
  "bincode",
  "chrono",
- "chrono-tz",
+ "chrono-tz 0.9.0",
  "derive_more 1.0.0",
  "itertools 0.13.0",
  "log",
@@ -2663,7 +2684,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ffe5bf22e14e28cbd1e4c057a064b2803692a0565cbb16d39f3655385ad110f3"
 dependencies = [
  "chrono",
- "chrono-tz",
+ "chrono-tz 0.9.0",
  "derive_more 1.0.0",
  "email_address",
  "itertools 0.13.0",
@@ -3703,7 +3724,7 @@ dependencies = [
  "async-trait",
  "bytes",
  "chrono",
- "chrono-tz",
+ "chrono-tz 0.10.0",
  "clap",
  "config",
  "css-inline",
@@ -3949,7 +3970,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab9d851b45e865f178319da0abdbfe6acbc4328759ff18dafc3a41c16b4cd2ee"
 dependencies = [
  "chrono",
- "chrono-tz",
+ "chrono-tz 0.9.0",
  "globwalk",
  "humansize",
  "lazy_static",
