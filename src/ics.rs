@@ -57,14 +57,14 @@ impl TryFrom<v1::Event> for IcsCompatibleEvent {
     fn try_from(event: v1::Event) -> std::result::Result<Self, Self::Error> {
         Ok(IcsCompatibleEvent {
             id: event.id,
-            name: event.name,
+            name: event.name.to_string(),
             created_at: event.created_at,
             start_time: event
                 .start_time
                 .ok_or_else(|| anyhow!("missing start time"))?,
             end_time: event.end_time.ok_or_else(|| anyhow!("missing end time"))?,
             rrule: event.rrule,
-            description: event.description,
+            description: event.description.to_string(),
             room: event.room,
             call_in: event.call_in,
             revision: event.revision,
@@ -291,13 +291,18 @@ fn create_exception_event_object<'a>(
     }
 
     // use the new instance title or fallback to the original
-    let title = exception.title.as_ref().unwrap_or(&event.name);
+    let title = exception
+        .title
+        .as_ref()
+        .map(|e| e.to_string())
+        .unwrap_or_else(|| event.name.to_string());
     event_obj.push(Summary::new(escape_text(title)));
 
     // use the new instance description or fallback to the original
     let description: Cow<'a, str> = exception
         .description
         .as_ref()
+        .map(|d| d.to_string())
         .map(Into::into)
         .unwrap_or_else(|| description.into());
 
@@ -441,7 +446,7 @@ mod test {
 
         let event = Event {
             id: Uuid::from_u128(2),
-            name: "Test".to_owned(),
+            name: "Test".parse().expect("Example must be valid"),
             created_at: Time {
                 time: Utc.with_ymd_and_hms(2022, 6, 20, 0, 0, 0).unwrap(),
                 timezone: "UTC".to_owned(),
@@ -460,7 +465,7 @@ mod test {
                 sip_id: "0123456789".to_owned(),
                 sip_password: "555NASE".to_owned(),
             }),
-            description: "Very descriptive".to_owned(),
+            description: "Very descriptive".parse().expect("Example must be valid"),
             room: Room {
                 id: Uuid::from_u128(3),
                 password: Some(RoomPassword::from_str("ddd").expect("Invalid room password")),
@@ -512,7 +517,7 @@ mod test {
             &event,
             None,
             invitee,
-            &event.description,
+            &event.description.to_string(),
             EventStatus::Created,
         )
         .expect("Failed to create ics file")
