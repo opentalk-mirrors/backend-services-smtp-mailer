@@ -382,7 +382,7 @@ fn common_subject_args(
         inviter.last_name.clone().into(),
     );
     args.insert("inviter-title".to_owned(), inviter.title.clone().into());
-    args.insert("event-name".to_owned(), event.name.clone().into());
+    args.insert("event-name".to_owned(), event.name.to_string().into());
     args
 }
 

@@ -202,8 +202,10 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
 
     Ok(Event {
         id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390000),
-        name: "This is a Preview Event".into(),
-        description,
+        name: "This is a Preview Event"
+            .parse()
+            .expect("Example must be valid"),
+        description: description.parse()?,
         room: Room {
             id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390001),
             password: Some(
