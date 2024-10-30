@@ -2652,12 +2652,12 @@ checksum = "44d11de466f4a3006fe8a5e7ec84e93b79c70cb992ae0aa0eb631ad2df8abfe2"
 
 [[package]]
 name = "opentalk-mail-worker-protocol"
-version = "0.21.0"
+version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "346c361a7683844430f53beed8e1a4b0c31892c1e3c95132428e87e9522a450b"
+checksum = "d0f4638261eb2761e8a7e566e5aacda5b74e53c137e09307428a6f272f9c4222"
 dependencies = [
  "chrono",
- "opentalk-types-common",
+ "opentalk-types-common 0.25.0",
  "serde",
  "serde_json",
  "uuid",
@@ -2676,7 +2676,7 @@ dependencies = [
  "derive_more 1.0.0",
  "itertools 0.13.0",
  "log",
- "opentalk-types-common",
+ "opentalk-types-common 0.21.0",
  "opentalk-types-signaling",
  "serde",
  "serde_json",
@@ -2707,13 +2707,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "opentalk-types-common"
+version = "0.25.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "59198a437c165c2ab50f8bdbfca21f31e3175732ace7706f20587461f76a538b"
+dependencies = [
+ "chrono",
+ "chrono-tz 0.9.0",
+ "derive_more 1.0.0",
+ "email_address",
+ "itertools 0.13.0",
+ "serde",
+ "serde_with",
+ "snafu",
+ "strum",
+ "url",
+ "uuid",
+]
+
+[[package]]
 name = "opentalk-types-signaling"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d8d9d67d832113c0046d5db7e8906932e343107839bd846a4a76126529859e1b"
 dependencies = [
  "derive_more 1.0.0",
- "opentalk-types-common",
+ "opentalk-types-common 0.21.0",
  "serde",
  "serde_json",
  "strum",
@@ -3750,7 +3769,7 @@ dependencies = [
  "log",
  "opentalk-mail-worker-protocol",
  "opentalk-types",
- "opentalk-types-common",
+ "opentalk-types-common 0.25.0",
  "percent-encoding",
  "phonenumber",
  "pretty_assertions",
