@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0]
+
+### 📦 Dependencies
+
+- Update git.opentalk.dev:5050/opentalk/backend/containers/rust docker tag to v1.82.0 ([!228](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/228))
+- Update opentalk-controller to 0.25.0 ([!244](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/244))
+- Update rust crate anyhow to v1.0.91 ([!237](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/237))
+- Update rust crate bytes to v1.8.0 ([!233](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/233))
+- Update rust crate config to v0.14.1 ([!240](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/240))
+- Update rust crate lettre to v0.11.10 ([!239](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/239))
+- Update rust crate serde to v1.0.214 ([!234](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/234), [!236](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/236), [!243](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/243))
+- Update rust crate serde_json to v1.0.129 ([!227](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/227))
+- Update rust crate thiserror to v1.0.65 ([!238](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/238))
+- Update rust crate tokio to v1.41.0 ([!235](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/235))
+- Update rust crate uuid to v1.11.0 ([!226](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/226))
+- Lock file maintenance ([!231](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/231), [!225](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/225), [!242](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/242))
+
+### ⚙ Miscellaneous
+
+- Sync changelog with version 0.9.0 ([!223](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/223))
+
+### Ci
+
+- Introduce changelog bot ([!232](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/232))
+
 ## [0.9.0]
 
 ### 🚀 New features
@@ -246,6 +271,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.0-internal-release.1] - 2022-06-23
 
 initial release candidate
+
+[0.10.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.9.0...v0.10.0
 
 [0.9.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.8.0...v0.9.0
 
