@@ -2657,7 +2657,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0f4638261eb2761e8a7e566e5aacda5b74e53c137e09307428a6f272f9c4222"
 dependencies = [
  "chrono",
- "opentalk-types-common 0.25.0",
+ "opentalk-types-common",
  "serde",
  "serde_json",
  "uuid",
@@ -2665,9 +2665,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types"
-version = "0.21.0"
+version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83fc9c70ca0756791961e0cd677b26f8c7b29d4ab71279ed8849bed95083117f"
+checksum = "3bce56f5c7bee7984343b0daedff2de6fd2a42e30eed619fd2cf410f233ffe98"
 dependencies = [
  "base64",
  "bincode",
@@ -2676,7 +2676,7 @@ dependencies = [
  "derive_more 1.0.0",
  "itertools 0.13.0",
  "log",
- "opentalk-types-common 0.21.0",
+ "opentalk-types-common",
  "opentalk-types-signaling",
  "serde",
  "serde_json",
@@ -2685,25 +2685,6 @@ dependencies = [
  "url",
  "uuid",
  "validator",
-]
-
-[[package]]
-name = "opentalk-types-common"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1992692bb2290fd7de154948bf9c8c4a668bc10784541c997b9cf127940562f5"
-dependencies = [
- "chrono",
- "chrono-tz 0.9.0",
- "derive_more 1.0.0",
- "email_address",
- "itertools 0.13.0",
- "serde",
- "serde_with",
- "snafu",
- "strum",
- "url",
- "uuid",
 ]
 
 [[package]]
@@ -2727,12 +2708,12 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-signaling"
-version = "0.21.0"
+version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8d9d67d832113c0046d5db7e8906932e343107839bd846a4a76126529859e1b"
+checksum = "2524dcb9d4ddac0e0339b4e1a1171358a8abceaaa251dcc8add7b0d79da017db"
 dependencies = [
  "derive_more 1.0.0",
- "opentalk-types-common 0.21.0",
+ "opentalk-types-common",
  "serde",
  "serde_json",
  "strum",
@@ -3769,7 +3750,7 @@ dependencies = [
  "log",
  "opentalk-mail-worker-protocol",
  "opentalk-types",
- "opentalk-types-common 0.25.0",
+ "opentalk-types-common",
  "percent-encoding",
  "phonenumber",
  "pretty_assertions",
