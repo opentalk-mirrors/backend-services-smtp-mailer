@@ -40,6 +40,11 @@ yanked = "warn"
 # A list of advisory IDs to ignore. Note that ignored advisories will still
 # output a note when they are encountered.
 ignore = [
+  # instant is unmaintained
+  #
+  # This is a transitive dependency of this project.
+  # We need to wait for our dependencies to fix this by switching themselves.
+  "RUSTSEC-2024-0384",
   # proc-macro-error is unmaintained
   #
   # This is a transitive dependency of this project.
