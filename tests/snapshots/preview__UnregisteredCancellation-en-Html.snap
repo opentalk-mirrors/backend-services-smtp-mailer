@@ -1,8 +1,9 @@
 ---
 source: tests/preview.rs
 expression: example_mail
+snapshot_kind: text
 ---
-<!DOCTYPE html><html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" style="margin: 0;padding: 0;font-family: "OpenTalk", Arial;font-weight: 400;color-scheme: light dark;supported-color-schemes: light dark"><head>
+<!DOCTYPE html><html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" style="margin: 0;padding: 0;font-family: 'OpenTalk', Arial;font-weight: 400;color-scheme: light dark;supported-color-schemes: light dark"><head>
         <!--[if !mso]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta charset="UTF-8">

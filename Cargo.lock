@@ -686,9 +686,9 @@ dependencies = [
 
 [[package]]
 name = "css-inline"
-version = "0.14.1"
+version = "0.14.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "51e78fc779a73a539d6d824009440bed880b62061c9b39a78e02a75b58bf10b1"
+checksum = "88d76dc0b39768e177b6f61d73a995d867bd4267801fdb43494e1ee7902a8848"
 dependencies = [
  "cssparser",
  "html5ever",
@@ -697,7 +697,7 @@ dependencies = [
  "pico-args",
  "rayon",
  "reqwest",
- "rustc-hash 1.1.0",
+ "rustc-hash 2.0.0",
  "selectors",
  "smallvec",
  "url",
@@ -4680,7 +4680,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
