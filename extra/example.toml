@@ -49,6 +49,10 @@ mail_task_queue = "opentalk_mailer"
 [languages]
 #default_language = "de-DE"
 
+[monitoring]
+addr = "0.0.0.0"
+port = 11411
+
 # Optional support contact information
 # Adds a support contact section to the template
 [support_contact]

@@ -63,6 +63,7 @@ lettre = { version = "0.11.0", default-features = false, features = [
 ] }
 
 ics = { version = "0.5" }
+service-probe = "0.2.0"
 textwrap = "0.16.0"
 
 [dev-dependencies]
