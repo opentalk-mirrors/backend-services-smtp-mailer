@@ -2369,7 +2369,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b9d9d414fc817d3e3d62b2598616733f76c4cc74fbac96069674739b881295c8"
 dependencies = [
  "jiff-tzdb-platform",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -2667,9 +2667,9 @@ checksum = "44d11de466f4a3006fe8a5e7ec84e93b79c70cb992ae0aa0eb631ad2df8abfe2"
 
 [[package]]
 name = "opentalk-mail-worker-protocol"
-version = "0.25.0"
+version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0f4638261eb2761e8a7e566e5aacda5b74e53c137e09307428a6f272f9c4222"
+checksum = "14d8d57c5af6fb3874ecebfffba14042e9813e55f8b4e59afae90d54084ee4b2"
 dependencies = [
  "chrono",
  "opentalk-types-common",
@@ -2680,9 +2680,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types"
-version = "0.25.0"
+version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3bce56f5c7bee7984343b0daedff2de6fd2a42e30eed619fd2cf410f233ffe98"
+checksum = "0348516a7f31e36f9b842cbdabb69c4ffacccd2d2b614d1151eb689bc3c4eb8c"
 dependencies = [
  "base64",
  "bincode",
@@ -2704,9 +2704,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-common"
-version = "0.25.0"
+version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59198a437c165c2ab50f8bdbfca21f31e3175732ace7706f20587461f76a538b"
+checksum = "88d5b2f66733ebeadae067ebc0cada61f592380d54f50a3e5978e7c0f311aae4"
 dependencies = [
  "chrono",
  "chrono-tz 0.9.0",
@@ -2723,9 +2723,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-signaling"
-version = "0.25.0"
+version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2524dcb9d4ddac0e0339b4e1a1171358a8abceaaa251dcc8add7b0d79da017db"
+checksum = "82efdeb465dc5b282d265b2e4026e6a1586660d4c3798d648ed19cd23101a57b"
 dependencies = [
  "derive_more 1.0.0",
  "opentalk-types-common",
@@ -3162,7 +3162,7 @@ dependencies = [
  "once_cell",
  "socket2 0.5.7",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3853,7 +3853,7 @@ dependencies = [
  "cfg-if",
  "libc",
  "psm",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3976,7 +3976,7 @@ dependencies = [
  "fastrand 2.2.0",
  "once_cell",
  "rustix 0.38.40",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -4689,7 +4689,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.48.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
