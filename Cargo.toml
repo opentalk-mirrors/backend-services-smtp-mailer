@@ -13,9 +13,9 @@ version = "0.0.0-dev"
 [dependencies]
 # mail-worker-proto = { git = "https://git.heinlein-video.de/heinlein-video/k3k-controller", package = "mail-worker-proto"  }
 # mail-worker-proto = { git = "ssh://git@git.heinlein-video.de:222/r.floren/k3k-controller.git", version = "0.1.0", branch = "mails", package = "mail-worker-proto" }
-mail-worker-protocol = { version = "0.26.0", package = "opentalk-mail-worker-protocol" }
-types = { version = "0.26.0", package = "opentalk-types", features = ["serde"] }
-types-common = { version = "0.26.0", package = "opentalk-types-common", features = [
+mail-worker-protocol = { version = "0.27.0", package = "opentalk-mail-worker-protocol" }
+types = { version = "0.27.0", package = "opentalk-types", features = ["serde"] }
+types-common = { version = "0.27.0", package = "opentalk-types-common", features = [
   "serde",
 ] }
 

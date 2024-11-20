@@ -2669,9 +2669,9 @@ checksum = "44d11de466f4a3006fe8a5e7ec84e93b79c70cb992ae0aa0eb631ad2df8abfe2"
 
 [[package]]
 name = "opentalk-mail-worker-protocol"
-version = "0.26.0"
+version = "0.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14d8d57c5af6fb3874ecebfffba14042e9813e55f8b4e59afae90d54084ee4b2"
+checksum = "ef020c0c4a72676f46ce6e4ea42edcce6da20514d6da82344d89e3ef9969db11"
 dependencies = [
  "chrono",
  "opentalk-types-common",
@@ -2682,9 +2682,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types"
-version = "0.26.0"
+version = "0.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0348516a7f31e36f9b842cbdabb69c4ffacccd2d2b614d1151eb689bc3c4eb8c"
+checksum = "bb741c9a2303602de8e9154264c926ed25bf870d9b78098a238c919c677e7024"
 dependencies = [
  "base64",
  "bincode",
@@ -2706,9 +2706,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-common"
-version = "0.26.0"
+version = "0.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "88d5b2f66733ebeadae067ebc0cada61f592380d54f50a3e5978e7c0f311aae4"
+checksum = "f84907a0c4038d4f6ac26281c56c8925aee58a4cd5b7adb2a4726c4f903e9c5d"
 dependencies = [
  "chrono",
  "chrono-tz 0.9.0",
@@ -2725,9 +2725,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-signaling"
-version = "0.26.0"
+version = "0.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82efdeb465dc5b282d265b2e4026e6a1586660d4c3798d648ed19cd23101a57b"
+checksum = "c88df094429b59235fabcc686432914aeff5b24d1d6cbc387a2edeed20a9c094"
 dependencies = [
  "derive_more 1.0.0",
  "opentalk-types-common",
