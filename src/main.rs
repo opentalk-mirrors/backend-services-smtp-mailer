@@ -9,6 +9,7 @@ use smtp_mailer::{
     preview::{preview_send_mail, OutputVariant, TemplateVariant},
     run, settings,
 };
+use types_common::users::Language;
 
 #[derive(Parser, Debug)]
 #[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
@@ -36,7 +37,7 @@ enum Commands {
         template: TemplateVariant,
         /// Language Code
         #[clap()]
-        language: String,
+        language: Language,
     },
     PreviewSend {
         /// Template to preview
@@ -70,7 +71,7 @@ async fn main() -> anyhow::Result<()> {
         template,
     }) = &args.command
     {
-        let example_mail = template.render_template(&settings, *type_, language)?;
+        let example_mail = template.render_template(&settings, *type_, language.clone())?;
         print!("{}", example_mail);
 
         exit(0);

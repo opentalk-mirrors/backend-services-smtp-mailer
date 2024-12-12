@@ -46,7 +46,7 @@ lint:doc:
 lint:dependency_check:
   stage: lint
   <<: *default_job_condition
-  script: cargo deny check
+  script: cargo deny check --deny unmatched-skip --deny license-not-encountered --deny advisory-not-detected
 
 lint:licensing:
   stage: lint

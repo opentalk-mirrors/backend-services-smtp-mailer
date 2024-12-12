@@ -8,6 +8,7 @@ use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
 use protocol::v1::UnregisteredEventUpdate;
+use types_common::users::{Language, UserTitle};
 
 use super::{create_ics_attachments, generate_mailbox_name, MailTemplate};
 use crate::{
@@ -15,7 +16,7 @@ use crate::{
     ics::{create_ics_v1, EventStatus},
 };
 
-fn language(obj: &UnregisteredEventUpdate) -> &String {
+fn language(obj: &UnregisteredEventUpdate) -> &Language {
     &obj.inviter.language
 }
 
@@ -71,9 +72,9 @@ impl MailTemplate for UnregisteredEventUpdate {
 
         let language = language(self);
         let lang = if !language.is_empty() {
-            language.parse()?
+            language.as_str().parse()?
         } else {
-            builder.default_language.parse()?
+            builder.default_language.as_str().parse()?
         };
 
         Ok(i18n::LOCALES.lookup_complete(&lang, "event-update-subject", Some(&subject_args)))
@@ -98,7 +99,7 @@ impl MailTemplate for UnregisteredEventUpdate {
     fn generate_to_mbox(&self, _builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
         let mbox = Mailbox::new(
             Some(generate_mailbox_name(
-                "",
+                &UserTitle::new(),
                 &self.invitee.first_name,
                 &self.invitee.last_name,
             )),

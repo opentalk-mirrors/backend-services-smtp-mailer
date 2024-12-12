@@ -8,6 +8,7 @@ use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{Mailbox, SinglePart};
 use mail_worker_protocol as protocol;
 use protocol::v1::RegisteredEventCancellation;
+use types_common::users::Language;
 
 use super::{create_ics_attachments, generate_mailbox_name, MailTemplate};
 use crate::{
@@ -15,7 +16,7 @@ use crate::{
     ics::{create_ics_v1, EventStatus},
 };
 
-fn language(obj: &RegisteredEventCancellation) -> &String {
+fn language(obj: &RegisteredEventCancellation) -> &Language {
     &obj.invitee.language
 }
 
@@ -71,9 +72,9 @@ impl MailTemplate for RegisteredEventCancellation {
 
         let language = language(self);
         let lang = if !language.is_empty() {
-            language.parse()?
+            language.as_str().parse()?
         } else {
-            builder.default_language.parse()?
+            builder.default_language.as_str().parse()?
         };
 
         Ok(i18n::LOCALES.lookup_complete(&lang, "event-cancellation-subject", Some(&subject_args)))
