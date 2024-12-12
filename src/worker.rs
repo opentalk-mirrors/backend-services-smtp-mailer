@@ -6,6 +6,7 @@ use anyhow::Result;
 use futures::stream::StreamExt;
 use lapin::options::BasicRejectOptions;
 use mail_worker_protocol as proto;
+use service_probe::{set_service_state, ServiceState};
 
 use crate::{
     mail::{MailBuilder, MailTemplate},
@@ -39,6 +40,9 @@ where
         let mut rabbitmq = crate::rabbitmq::RabbitMqService::new(settings).await?;
 
         log::info!("Worker started");
+
+        set_service_state(ServiceState::Ready);
+
         // TODO refactor this in a way, that we here have a generic stream.
         // Maybe try the Pipeline Server Pattern from tokio-tower
         while let Some(delivery) = rabbitmq.consumer.next().await {

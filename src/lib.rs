@@ -4,6 +4,8 @@
 
 use anyhow::{Context, Result};
 use lettre::{transport::smtp::authentication::Credentials, AsyncSmtpTransport, Tokio1Executor};
+use service_probe::{start_probe, ServiceState};
+use settings::MonitoringSettings;
 
 use crate::worker::Worker;
 
@@ -21,6 +23,10 @@ pub use worker::send_mail_v1;
 
 /// Entry point of the library part of smtp-mailer
 pub async fn run(settings: settings::Settings) -> Result<()> {
+    if let Some(MonitoringSettings { port, addr }) = settings.monitoring {
+        start_probe(addr, port, ServiceState::Up).await?;
+    }
+
     let smtp_client: AsyncSmtpTransport<Tokio1Executor> =
         settings.smtp.smtp_server.clone().try_into()?;
 

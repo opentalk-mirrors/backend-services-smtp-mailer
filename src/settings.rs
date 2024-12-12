@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 use std::{
+    net::IpAddr,
     path::{Path, PathBuf},
     str::FromStr,
 };
@@ -30,6 +31,9 @@ pub struct Settings {
 
     #[serde(default)]
     pub languages: Languages,
+
+    #[serde(default)]
+    pub monitoring: Option<MonitoringSettings>,
 
     pub support_contact: Option<SupportContact>,
 }
@@ -77,6 +81,31 @@ fn rabbitmq_default_url() -> String {
 
 fn rabbitmq_default_queue_name() -> String {
     "opentalk_mailer".to_owned()
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct MonitoringSettings {
+    #[serde(default = "default_monitoring_port")]
+    pub port: u16,
+    #[serde(default = "default_monitoring_addr")]
+    pub addr: IpAddr,
+}
+
+impl Default for MonitoringSettings {
+    fn default() -> Self {
+        Self {
+            port: default_monitoring_port(),
+            addr: default_monitoring_addr(),
+        }
+    }
+}
+
+fn default_monitoring_port() -> u16 {
+    11411
+}
+
+fn default_monitoring_addr() -> IpAddr {
+    [0, 0, 0, 0].into()
 }
 
 /// A SMTP URI type
