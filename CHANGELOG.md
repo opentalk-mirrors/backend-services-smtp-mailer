@@ -5,7 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2024-12-12
+
+[0.11.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.10...v0.11.0
+
+### 🚀 New features
+
+- Add liveness endpoint ([!263](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/263))
+
+### 🐛 Bug fixes
+
+- Double quoted font-names inside double quoted style attribute ([!257](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/257))
+
+### 📦 Dependencies
+
+- (deps) Lock file maintenance ([!251](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/251), [!257](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/257), [!265](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/265), [!269](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/269), [!273](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/273), [!283](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/283))
+- (deps) Update alpine docker tag to v3.21 ([!281](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/281))
+- (deps) Update git.opentalk.dev:5050/opentalk/backend/containers/rust docker tag to v1.83.0 ([!274](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/274))
+- (deps) Update opentalk-controller to 0.28.0 ([!287](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/287))
+- (deps) Update rust crate anyhow to v1.0.94 ([!277](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/277))
+- (deps) Update rust crate chrono to v0.4.39 ([!284](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/284))
+- (deps) Update rust crate clap to v4.5.22 ([!278](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/278))
+- (deps) Update rust crate css-inline to v0.14.3 ([!262](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/262))
+- (deps) Update rust crate lettre to v0.11.11 ([!279](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/279))
+- (deps) Update rust crate serde to v1.0.216 ([!285](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/285))
+- (deps) Update rust crate thiserror to v2.0.4 ([!276](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/276))
+- (deps) Update rust crate tokio to v1.42.0 ([!275](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/275))
+- (deps) Update rust crate types to 0.25.0 ([!245](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/245))
+
+### Ci
+
+- (cargo-deny) Fail cargo-deny on warnings ([!287](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/287))
+
 ## [0.10.0]
+
+[0.10.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.9.0...v0.10.0
 
 ### 📦 Dependencies
 
@@ -31,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Introduce changelog bot ([!232](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/232))
 
 ## [0.9.0]
+
+[0.9.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.8.0...v0.9.0
 
 ### 🚀 New features
 
@@ -81,6 +117,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.8.0]
 
+[0.8.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.7.0...v0.8.0
+
 ### 🐛 Bug Fixes
 
 - (deps) Update rust crate async-trait to v0.1.81
@@ -99,6 +137,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a general description and link the protocol docs
 
 ## [0.7.0]
+
+[0.7.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.6.0...v0.7.0
 
 ### 🚀 New features
 
@@ -132,6 +172,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0]
 
+[0.6.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.2...v0.6.0
+
 ### 🚀 New features
 
 - Added previews for: registered-event-update and registered-uninvite
@@ -152,11 +194,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.2]
 
+[0.5.2]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.1...v0.5.2
+
 ### Fixed
 
 - `RUSTSEC-2024-0336` by updating dependencies ([#94](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/94))
 
 ## [0.5.1]
+
+[0.5.1]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.0...v0.5.1
 
 ### Changed
 
@@ -165,11 +211,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.0] - 2024-02-22
 
+[0.5.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/fb7bb1046c6850b5bf8f42f7ab58a4eab68d7ad3...v0.5.0
+
 ### Changed
 
 - Create a proper ICS file for event instance updates ([#60](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/60))
 
 ## [0.4.3] - 2024-01-10
+
+[0.4.3]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.2...v0.4.3
 
 ### Added
 
@@ -181,17 +231,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.2] - 2023-11-02
 
+[0.4.2]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.1...v0.4.2
+
 ### Fixed
 
 - Pin dockerfile build container to Debian Bullseye to fix GLIBC errors ([#72](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/72))
 
 ## [0.4.1] - 2023-11-02
 
+[0.4.1]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.0...v0.4.1
+
 ### Fixed
 
 - Pin build base container to Debian Bullseye to fix GLIBC errors ([#70](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/issues/70))
 
 ## [0.4.0] - 2023-10-30
+
+[0.4.0]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/f51209ff8fc6d709c3df81198bf709b88a64f44d...v0.4.0
 
 ### Added
 
@@ -206,6 +262,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2023-06-27
 
+[0.3.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/25b0d812a39f1cfb6b5dd11598a7be9e20964eda...v0.3.0
+
 ### Added
 
 - Include shared folder URL and password in emails ([#34](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/34))
@@ -218,6 +276,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0] - 2023-05-15
 
+[0.2.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/ffadbb4aacd48a91eb0553dba966745476640941...v0.2.0
+
 ### Changed
 
 - The creator is now referenced via Reply-To instead of From header field, From is configurable ([#33](https://git.opentalk.dev/opentalk/smtp-mailer/-/issues/33))
@@ -228,6 +288,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2023-03-01
 
+[0.1.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/14c20df5d3a54c39332287ebf719ec04b49d4bab...v0.1.0
+
 ### Added
 
 - Add license information
@@ -237,6 +299,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed a bug where environment variables did not overwrite config values
 
 ## [0.0.0-internal-release.4] - 2022-11-10
+
+[0.0.0-internal-release.4]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/7579c621c3b08c086974e7ccf4365345762e69c8...14c20df5d3a54c39332287ebf719ec04b49d4bab
 
 ### Added
 
@@ -254,11 +318,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.0-internal-release.3] - 2022-07-20
 
+[0.0.0-internal-release.3]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/8f7edbcb83ac2b38402ebc951f76b75ddc51043d...7579c621c3b08c086974e7ccf4365345762e69c8
+
 ### Changed
 
 - internal dependency updates
 
 ## [0.0.0-internal-release.2] - 2022-07-20
+
+[0.0.0-internal-release.2]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/5de6fd35a071b05cd05fd03838d436bd9c79db53...8f7edbcb83ac2b38402ebc951f76b75ddc51043d
 
 ### Fixed
 
@@ -270,34 +338,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.0-internal-release.1] - 2022-06-23
 
-initial release candidate
-
-[0.10.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.9.0...v0.10.0
-
-[0.9.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.8.0...v0.9.0
-
-[0.8.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.7.0...v0.8.0
-
-[0.7.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.6.0...v0.7.0
-
-[0.6.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.2...v0.6.0
-
-[0.5.2]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.1...v0.5.2
-[0.5.1]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.5.0...v0.5.1
-[0.5.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/fb7bb1046c6850b5bf8f42f7ab58a4eab68d7ad3...v0.5.0
-
-[0.4.3]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.2...v0.4.3
-[0.4.2]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.1...v0.4.2
-[0.4.1]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.4.0...v0.4.1
-[0.4.0]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/f51209ff8fc6d709c3df81198bf709b88a64f44d...v0.4.0
-
-[0.3.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/25b0d812a39f1cfb6b5dd11598a7be9e20964eda...v0.3.0
-
-[0.2.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/ffadbb4aacd48a91eb0553dba966745476640941...v0.2.0
-
-[0.1.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/14c20df5d3a54c39332287ebf719ec04b49d4bab...v0.1.0
-
-[0.0.0-internal-release.4]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/7579c621c3b08c086974e7ccf4365345762e69c8...14c20df5d3a54c39332287ebf719ec04b49d4bab
-[0.0.0-internal-release.3]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/8f7edbcb83ac2b38402ebc951f76b75ddc51043d...7579c621c3b08c086974e7ccf4365345762e69c8
-[0.0.0-internal-release.2]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/5de6fd35a071b05cd05fd03838d436bd9c79db53...8f7edbcb83ac2b38402ebc951f76b75ddc51043d
 [0.0.0-internal-release.1]: https://git.opentalk.dev/opentalk/smtp-mailer/-/commits/5de6fd35a071b05cd05fd03838d436bd9c79db53
+
+initial release candidate
