@@ -20,6 +20,8 @@ use types_common::{
     rooms::RoomPassword,
     shared_folders::{SharedFolder, SharedFolderAccess},
     streaming::{RoomStreamingTarget, StreamingKey, StreamingTarget, StreamingTargetKind},
+    users::{Language, UserTitle},
+    utils::ExampleData as _,
 };
 use uuid::Uuid;
 
@@ -68,7 +70,7 @@ impl TemplateVariant {
         &self,
         settings: &Settings,
         output: OutputVariant,
-        language: &str,
+        language: Language,
     ) -> anyhow::Result<String> {
         let example_mail = match self {
             TemplateVariant::RegisteredInvite => {
@@ -139,7 +141,7 @@ fn external_invitee(email_address: &Option<String>) -> protocol::v1::ExternalUse
 }
 
 fn registered_invitee(
-    language: &str,
+    language: Language,
     email_address: &Option<String>,
 ) -> protocol::v1::RegisteredUser {
     protocol::v1::RegisteredUser {
@@ -149,13 +151,13 @@ fn registered_invitee(
             .into(),
         first_name: "Ingrid".to_string(),
         last_name: "Invitee".to_string(),
-        title: "Prof.".to_string(),
-        language: language.to_string(),
+        title: UserTitle::from_str("Prof.").expect("Prof. is a valid user title"),
+        language,
     }
 }
 
 fn registered_inviter(
-    language: &str,
+    language: Language,
     email_address: &Option<String>,
 ) -> protocol::v1::RegisteredUser {
     protocol::v1::RegisteredUser {
@@ -165,15 +167,16 @@ fn registered_inviter(
             .into(),
         first_name: "Ernest".to_string(),
         last_name: "Inviter".to_string(),
-        title: "Dr.".to_string(),
-        language: language.to_string(),
+        title: UserTitle::example_data(),
+        language,
     }
 }
 
 pub trait ExampleData: Sized + MailTemplate {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self>;
+    fn generate_example(language: Language, email_address: &Option<String>)
+        -> anyhow::Result<Self>;
 
-    fn preview(settings: &Settings, html: bool, lang: &str) -> anyhow::Result<String> {
+    fn preview(settings: &Settings, html: bool, lang: Language) -> anyhow::Result<String> {
         let mail_builder =
             MailBuilder::new(settings).context("Failed to initialize MailBuilder")?;
 
@@ -270,7 +273,10 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
 }
 
 impl ExampleData for protocol::v1::UnregisteredEventInvite {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
             invitee: unregistered_invitee(email_address),
             event: generate_example_event(EVENT_DESCRIPTION_UNREGISTERED.to_string())?,
@@ -280,7 +286,10 @@ impl ExampleData for protocol::v1::UnregisteredEventInvite {
 }
 
 impl ExampleData for protocol::v1::UnregisteredEventCancellation {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
             invitee: unregistered_invitee(email_address),
             event: generate_example_event(EVENT_DESCRIPTION_UNREGISTERED.to_string())?,
@@ -290,9 +299,12 @@ impl ExampleData for protocol::v1::UnregisteredEventCancellation {
 }
 
 impl ExampleData for protocol::v1::RegisteredEventInvite {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
-            invitee: registered_invitee(language, email_address),
+            invitee: registered_invitee(language.clone(), email_address),
             event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string())?,
             inviter: registered_inviter(language, email_address),
         })
@@ -300,9 +312,12 @@ impl ExampleData for protocol::v1::RegisteredEventInvite {
 }
 
 impl ExampleData for protocol::v1::RegisteredEventUninvite {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
-            invitee: registered_invitee(language, email_address),
+            invitee: registered_invitee(language.clone(), email_address),
             event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string())?,
             inviter: registered_inviter(language, email_address),
         })
@@ -310,9 +325,12 @@ impl ExampleData for protocol::v1::RegisteredEventUninvite {
 }
 
 impl ExampleData for protocol::v1::RegisteredEventUpdate {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
-            invitee: registered_invitee(language, email_address),
+            invitee: registered_invitee(language.clone(), email_address),
             event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string())?,
             inviter: registered_inviter(language, email_address),
             event_exception: None,
@@ -321,9 +339,12 @@ impl ExampleData for protocol::v1::RegisteredEventUpdate {
 }
 
 impl ExampleData for protocol::v1::RegisteredEventCancellation {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
-            invitee: registered_invitee(language, email_address),
+            invitee: registered_invitee(language.clone(), email_address),
             event: generate_example_event(EVENT_DESCRIPTION_REGISTERED.to_string())?,
             inviter: registered_inviter(language, &None),
         })
@@ -331,7 +352,10 @@ impl ExampleData for protocol::v1::RegisteredEventCancellation {
 }
 
 impl ExampleData for protocol::v1::ExternalEventInvite {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
             invitee: external_invitee(email_address),
             event: generate_example_event(EVENT_DESCRIPTION_EXTERNAL.to_string())?,
@@ -342,7 +366,10 @@ impl ExampleData for protocol::v1::ExternalEventInvite {
 }
 
 impl ExampleData for protocol::v1::ExternalEventCancellation {
-    fn generate_example(language: &str, email_address: &Option<String>) -> anyhow::Result<Self> {
+    fn generate_example(
+        language: Language,
+        email_address: &Option<String>,
+    ) -> anyhow::Result<Self> {
         Ok(Self {
             invitee: external_invitee(email_address),
             event: generate_example_event(EVENT_DESCRIPTION_EXTERNAL.to_string())?,
@@ -363,22 +390,23 @@ pub async fn preview_send_mail(
 
     let duration_between_invite_and_cancellation = Duration::from_secs(cancellation_delay);
     let receiver = Some(to);
+    let lang: Language = Language::from_str("en-US")?;
 
     let message = match template {
         TemplateVariant::RegisteredInvite => protocol::v1::Message::RegisteredEventInvite(
-            RegisteredEventInvite::generate_example("en-US", &receiver)
+            RegisteredEventInvite::generate_example(lang, &receiver)
                 .context("Failed to generate example RegisteredEventInvite")?,
         ),
         TemplateVariant::UnregisteredInvite => protocol::v1::Message::UnregisteredEventInvite(
-            UnregisteredEventInvite::generate_example("en-US", &receiver)
+            UnregisteredEventInvite::generate_example(lang, &receiver)
                 .context("Failed to generate example UnregisteredEventInvite")?,
         ),
         TemplateVariant::ExternalInvite => protocol::v1::Message::ExternalEventInvite(
-            ExternalEventInvite::generate_example("en-US", &receiver)
+            ExternalEventInvite::generate_example(lang, &receiver)
                 .context("Failed to generate example ExternalEventInvite")?,
         ),
         TemplateVariant::RegisteredCancellation => {
-            let invite = RegisteredEventInvite::generate_example("en-US", &receiver)
+            let invite = RegisteredEventInvite::generate_example(lang.clone(), &receiver)
                 .context("Failed to generate example RegisteredEventInvite")?;
             let event_id = invite.event.id;
 
@@ -393,13 +421,13 @@ pub async fn preview_send_mail(
             tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
             let mut cancellation =
-                RegisteredEventCancellation::generate_example("en-US", &receiver)
+                RegisteredEventCancellation::generate_example(lang, &receiver)
                     .context("Failed to generate example RegisteredEventCancellation")?;
             cancellation.event.id = event_id;
             protocol::v1::Message::RegisteredEventCancellation(cancellation)
         }
         TemplateVariant::UnregisteredCancellation => {
-            let invite = UnregisteredEventInvite::generate_example("en-US", &receiver)
+            let invite = UnregisteredEventInvite::generate_example(lang.clone(), &receiver)
                 .context("Failed to generate example UnregisteredEventInvite")?;
             let event_id = invite.event.id;
 
@@ -413,14 +441,13 @@ pub async fn preview_send_mail(
 
             tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
-            let mut cancellation =
-                UnregisteredEventCancellation::generate_example("en-US", &receiver)
-                    .context("Failed to generate example UnregisteredEventCancellation")?;
+            let mut cancellation = UnregisteredEventCancellation::generate_example(lang, &receiver)
+                .context("Failed to generate example UnregisteredEventCancellation")?;
             cancellation.event.id = event_id;
             protocol::v1::Message::UnregisteredEventCancellation(cancellation)
         }
         TemplateVariant::ExternalCancellation => {
-            let invite = ExternalEventInvite::generate_example("en-US", &receiver)
+            let invite = ExternalEventInvite::generate_example(lang.clone(), &receiver)
                 .context("Failed to generate example ExternalEventInvite")?;
             let event_id = invite.event.id;
 
@@ -434,17 +461,17 @@ pub async fn preview_send_mail(
 
             tokio::time::sleep(duration_between_invite_and_cancellation).await;
 
-            let mut cancellation = ExternalEventCancellation::generate_example("en-US", &receiver)
+            let mut cancellation = ExternalEventCancellation::generate_example(lang, &receiver)
                 .context("Failed to generate example ExternalEventCancellation")?;
             cancellation.event.id = event_id;
             protocol::v1::Message::ExternalEventCancellation(cancellation)
         }
         TemplateVariant::RegisteredEventUpdate => protocol::v1::Message::RegisteredEventUpdate(
-            RegisteredEventUpdate::generate_example("en-US", &receiver)
+            RegisteredEventUpdate::generate_example(lang, &receiver)
                 .context("Failed to generate example RegisteredEventUpdate")?,
         ),
         TemplateVariant::RegisteredUninvite => protocol::v1::Message::RegisteredEventUninvite(
-            RegisteredEventUninvite::generate_example("en-US", &receiver)
+            RegisteredEventUninvite::generate_example(lang, &receiver)
                 .context("Failed to generate example RegisteredEventUninvite")?,
         ),
     };

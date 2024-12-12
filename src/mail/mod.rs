@@ -16,6 +16,7 @@ use lettre::{
 use mail_worker_protocol as proto;
 use serde_json::{to_value, Value};
 use tera::{try_get_value, Tera};
+use types_common::users::{Language, UserTitle};
 
 use crate::{ics::EventStatus, settings};
 
@@ -139,7 +140,7 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
 pub struct MailBuilder {
     frontend: settings::Frontend,
     builder: settings::TemplateBuilder,
-    default_language: String,
+    default_language: Language,
     support_contact: Option<settings::SupportContact>,
     from_name: String,
     from_email: String,
@@ -231,7 +232,7 @@ impl MailBuilder {
     }
 }
 
-fn generate_mailbox_name(title: &str, first_name: &str, last_name: &str) -> String {
+fn generate_mailbox_name(title: &UserTitle, first_name: &str, last_name: &str) -> String {
     format!("{title} {first_name} {last_name}")
         .trim()
         .to_string()
@@ -381,7 +382,7 @@ fn common_subject_args(
         "inviter-last_name".to_owned(),
         inviter.last_name.clone().into(),
     );
-    args.insert("inviter-title".to_owned(), inviter.title.clone().into());
+    args.insert("inviter-title".to_owned(), inviter.title.to_string().into());
     args.insert("event-name".to_owned(), event.name.to_string().into());
     args
 }
@@ -400,7 +401,7 @@ fn registered_invitee_subject_args(
         "invitee-last_name".to_owned(),
         invitee.last_name.clone().into(),
     );
-    args.insert("invitee-title".to_owned(), invitee.title.clone().into());
+    args.insert("invitee-title".to_owned(), invitee.title.to_string().into());
     args
 }
 

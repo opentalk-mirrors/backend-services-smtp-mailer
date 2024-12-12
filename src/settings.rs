@@ -11,6 +11,7 @@ use std::{
 use config::{Config, ConfigError, Environment, File, FileFormat};
 use percent_encoding::percent_decode_str;
 use serde::{de, Deserialize, Deserializer, Serialize};
+use types_common::users::Language;
 
 #[derive(Debug, Clone, Deserialize, Default)]
 pub struct Settings {
@@ -535,11 +536,11 @@ fn email_default_guest_link_builder() -> String {
 
 /// Language config
 ///
-/// Currently only setting the default_language (a fallback) is suported
+/// Currently only setting the default_language (a fallback) is supported
 #[derive(Debug, Clone, Deserialize)]
 pub struct Languages {
     #[serde(default = "languages_default_default_language")]
-    pub default_language: String,
+    pub default_language: Language,
 }
 
 impl Default for Languages {
@@ -550,8 +551,8 @@ impl Default for Languages {
     }
 }
 
-fn languages_default_default_language() -> String {
-    "en-US".into()
+fn languages_default_default_language() -> Language {
+    Language::from_str("en-US").expect("en-US is a valid language")
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -567,7 +568,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn settings_env_vars_overwite_config() -> Result<(), ConfigError> {
+    fn settings_env_vars_overwrite_config() -> Result<(), ConfigError> {
         // Sanity check
         let settings = Settings::load("./extra/example.toml")?;
         let support_contact = settings.support_contact.unwrap();

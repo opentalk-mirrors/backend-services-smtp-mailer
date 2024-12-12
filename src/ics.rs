@@ -428,6 +428,7 @@ mod test {
     use types_common::{
         rooms::RoomPassword,
         streaming::{RoomStreamingTarget, StreamingKey, StreamingTarget, StreamingTargetKind},
+        users::{Language, UserTitle},
     };
     use uuid::Uuid;
 
@@ -438,10 +439,10 @@ mod test {
     fn test_ics() {
         let user = RegisteredUser {
             email: "klaus@example.org".into(),
-            title: "Dr.".to_owned(),
+            title: UserTitle::from_str("Dr.").expect("Dr. is a valid UserTitle"),
             first_name: "Klaus".to_owned(),
             last_name: "Doktor".to_owned(),
-            language: "de_DE".to_owned(),
+            language: Language::from_str("de_DE").expect("de_DE is valid language"),
         };
 
         let event = Event {
