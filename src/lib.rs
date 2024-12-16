@@ -52,7 +52,7 @@ impl TryFrom<settings::SmtpUri> for AsyncSmtpTransport<Tokio1Executor> {
                     AsyncSmtpTransport::<Tokio1Executor>::starttls_relay(host)?
                 }
             }
-            "smtps" => AsyncSmtpTransport::<Tokio1Executor>::starttls_relay(host)?,
+            "smtps" => AsyncSmtpTransport::<Tokio1Executor>::relay(host)?,
             _ => unreachable!(),
         };
 
