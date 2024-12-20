@@ -2729,6 +2729,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "opentalk-version"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "400926474bcd8fe12aed187053575f27f3d2890391b61fccda18be777ff8d6ba"
+dependencies = [
+ "anyhow",
+ "vergen",
+ "vergen-gix",
+]
+
+[[package]]
 name = "parking"
 version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3783,6 +3794,7 @@ dependencies = [
  "opentalk-mail-worker-protocol",
  "opentalk-types",
  "opentalk-types-common",
+ "opentalk-version",
  "percent-encoding",
  "phonenumber",
  "pretty_assertions",
