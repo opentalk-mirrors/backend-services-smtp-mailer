@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use std::collections::HashMap;
+use std::{borrow::Cow, collections::HashMap};
 
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{Mailbox, SinglePart};
@@ -154,6 +154,6 @@ fn subject_args(
     event: &protocol::v1::Event,
     invitee: &protocol::v1::RegisteredUser,
     inviter: &protocol::v1::RegisteredUser,
-) -> HashMap<String, FluentValue<'static>> {
+) -> HashMap<Cow<'static, str>, FluentValue<'static>> {
     super::registered_invitee_subject_args(event, invitee, inviter)
 }

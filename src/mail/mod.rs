@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use std::collections::HashMap;
+use std::{borrow::Cow, collections::HashMap};
 
 use anyhow::Result;
 use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
@@ -372,18 +372,18 @@ pub fn format_telephone_number_filter(
 fn common_subject_args(
     event: &proto::v1::Event,
     inviter: &proto::v1::RegisteredUser,
-) -> HashMap<String, FluentValue<'static>> {
-    let mut args: HashMap<String, FluentValue<'static>> = HashMap::new();
+) -> HashMap<Cow<'static, str>, FluentValue<'static>> {
+    let mut args: HashMap<Cow<'_, str>, FluentValue<'static>> = HashMap::new();
     args.insert(
-        "inviter-first_name".to_owned(),
+        Cow::from("inviter-first_name"),
         inviter.first_name.clone().into(),
     );
     args.insert(
-        "inviter-last_name".to_owned(),
+        Cow::from("inviter-last_name"),
         inviter.last_name.clone().into(),
     );
-    args.insert("inviter-title".to_owned(), inviter.title.to_string().into());
-    args.insert("event-name".to_owned(), event.name.to_string().into());
+    args.insert(Cow::from("inviter-title"), inviter.title.to_string().into());
+    args.insert(Cow::from("event-name"), event.name.to_string().into());
     args
 }
 
@@ -391,17 +391,17 @@ fn registered_invitee_subject_args(
     event: &proto::v1::Event,
     invitee: &proto::v1::RegisteredUser,
     inviter: &proto::v1::RegisteredUser,
-) -> HashMap<String, FluentValue<'static>> {
+) -> HashMap<Cow<'static, str>, FluentValue<'static>> {
     let mut args = common_subject_args(event, inviter);
     args.insert(
-        "invitee-first_name".to_owned(),
+        Cow::from("invitee-first_name"),
         invitee.first_name.clone().into(),
     );
     args.insert(
-        "invitee-last_name".to_owned(),
+        Cow::from("invitee-last_name"),
         invitee.last_name.clone().into(),
     );
-    args.insert("invitee-title".to_owned(), invitee.title.to_string().into());
+    args.insert(Cow::from("invitee-title"), invitee.title.to_string().into());
     args
 }
 
@@ -409,14 +409,14 @@ fn unregistered_invitee_subject_args(
     event: &proto::v1::Event,
     invitee: &proto::v1::UnregisteredUser,
     inviter: &proto::v1::RegisteredUser,
-) -> HashMap<String, FluentValue<'static>> {
+) -> HashMap<Cow<'static, str>, FluentValue<'static>> {
     let mut args = common_subject_args(event, inviter);
     args.insert(
-        "invitee-first_name".to_owned(),
+        Cow::from("invitee-first_name"),
         invitee.first_name.clone().into(),
     );
     args.insert(
-        "invitee-last_name".to_owned(),
+        Cow::from("invitee-last_name"),
         invitee.last_name.clone().into(),
     );
     args
@@ -425,7 +425,7 @@ fn unregistered_invitee_subject_args(
 fn external_invitee_subject_args(
     event: &proto::v1::Event,
     inviter: &proto::v1::RegisteredUser,
-) -> HashMap<String, FluentValue<'static>> {
+) -> HashMap<Cow<'static, str>, FluentValue<'static>> {
     common_subject_args(event, inviter)
 }
 
