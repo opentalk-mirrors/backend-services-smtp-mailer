@@ -9,26 +9,19 @@ ARG GIT_REF
 ARG VERGEN_GIT_SHA=$GIT_SHA
 ARG VERGEN_GIT_BRANCH=$GIT_REF
 
-WORKDIR /opt
-RUN USER=root cargo new --bin smtp-mailer --vcs none
-RUN apt-get update && apt-get install -y git
+WORKDIR /builds/opentalk/backend/services/smtp-mailer
+ENV CARGO_HOME=/builds/opentalk/backend/services/smtp-mailer/cargo
 
-WORKDIR /opt/smtp-mailer
-COPY ./.cargo/config.toml ./.cargo/config.toml
-COPY ./resources ./resources
-COPY ./Cargo.lock ./Cargo.lock
-COPY ./Cargo.toml ./Cargo.toml
-ADD ./build.rs ./build.rs
-RUN cargo auditable build --release --locked
-RUN rm ./src/*.rs
-RUN rm ./target/release/deps/smtp_mailer*
-ADD ./src ./src
-RUN cargo auditable build --release --locked
+RUN cargo auditable build --release --locked --package opentalk-smtp-mailer
 
 
 FROM debian:bookworm-slim
-WORKDIR /opt/smtp-mailer
-COPY ./resources ./resources
-COPY --from=builder /opt/smtp-mailer/target/release/smtp-mailer .
 
-CMD ["/opt/smtp-mailer/smtp-mailer"]
+RUN apt-get update && apt-get install -y ca-certificates
+
+WORKDIR /opt/opentalk-smtp-mailer
+
+COPY --from=builder /builds/opentalk/backend/services/smtp-mailer/target/release/opentalk-smtp-mailer .
+COPY ./crates/opentalk-smtp-mailer/resources ./resources
+
+CMD ["/opt/opentalk-smtp-mailer/opentalk-smtp-mailer"]

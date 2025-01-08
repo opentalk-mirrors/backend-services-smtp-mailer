@@ -5,11 +5,11 @@
 use std::process::exit;
 
 use clap::{Parser, Subcommand};
-use smtp_mailer::{
+use opentalk_smtp_mailer::{
     preview::{preview_send_mail, OutputVariant, TemplateVariant},
     run, settings,
 };
-use types_common::users::Language;
+use opentalk_types_common::users::Language;
 
 #[derive(Parser, Debug)]
 #[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]

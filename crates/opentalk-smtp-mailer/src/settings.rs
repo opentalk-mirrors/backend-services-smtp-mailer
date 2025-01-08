@@ -9,9 +9,9 @@ use std::{
 };
 
 use config::{Config, ConfigError, Environment, File, FileFormat};
+use opentalk_types_common::users::Language;
 use percent_encoding::percent_decode_str;
 use serde::{de, Deserialize, Deserializer, Serialize};
-use types_common::users::Language;
 
 #[derive(Debug, Clone, Deserialize, Default)]
 pub struct Settings {
@@ -384,87 +384,97 @@ impl Default for Templates {
     }
 }
 
+fn resource_template_path(relative_path: &Path) -> PathBuf {
+    std::env::var("CARGO_MANIFEST_DIR")
+        .map(|s| {
+            Path::new(&s)
+                .join("resources/templates")
+                .join(relative_path)
+        })
+        .unwrap_or_else(|_| Path::new("resources/templates").join(relative_path))
+}
+
 fn template_default_registered_invite() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/registered_invite.txt".into(),
-        html: "resources/templates/registered_invite.html".into(),
+        txt: resource_template_path(Path::new("registered_invite.txt")),
+        html: resource_template_path(Path::new("registered_invite.html")),
     }
 }
 
 fn template_default_unregistered_invite() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/unregistered_invite.txt".into(),
-        html: "resources/templates/unregistered_invite.html".into(),
+        txt: resource_template_path(Path::new("unregistered_invite.txt")),
+        html: resource_template_path(Path::new("unregistered_invite.html")),
     }
 }
 
 fn template_default_external_invite() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/external_invite.txt".into(),
-        html: "resources/templates/external_invite.html".into(),
+        txt: resource_template_path(Path::new("external_invite.txt")),
+        html: resource_template_path(Path::new("external_invite.html")),
     }
 }
 
 fn template_default_event_update() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/registered_event_update.txt".into(),
-        html: "resources/templates/registered_event_update.html".into(),
+        txt: resource_template_path(Path::new("registered_event_update.txt")),
+        html: resource_template_path(Path::new("registered_event_update.html")),
     }
 }
 
 fn template_default_unregistered_event_update() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/unregistered_event_update.txt".into(),
-        html: "resources/templates/unregistered_event_update.html".into(),
+        txt: resource_template_path(Path::new("unregistered_event_update.txt")),
+        html: resource_template_path(Path::new("unregistered_event_update.html")),
     }
 }
 
 fn template_default_external_event_update() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/external_event_update.txt".into(),
-        html: "resources/templates/external_event_update.html".into(),
+        txt: resource_template_path(Path::new("external_event_update.txt")),
+        html: resource_template_path(Path::new("external_event_update.html")),
     }
 }
 
 fn template_default_event_cancellation() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/registered_event_cancellation.txt".into(),
-        html: "resources/templates/registered_event_cancellation.html".into(),
+        txt: resource_template_path(Path::new("registered_event_cancellation.txt")),
+        html: resource_template_path(Path::new("registered_event_cancellation.html")),
     }
 }
 
 fn template_default_unregistered_event_cancellation() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/unregistered_event_cancellation.txt".into(),
-        html: "resources/templates/unregistered_event_cancellation.html".into(),
+        txt: resource_template_path(Path::new("unregistered_event_cancellation.txt")),
+        html: resource_template_path(Path::new("unregistered_event_cancellation.html")),
     }
 }
 
 fn template_default_external_event_cancellation() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/external_event_cancellation.txt".into(),
-        html: "resources/templates/external_event_cancellation.html".into(),
+        txt: resource_template_path(Path::new("external_event_cancellation.txt")),
+        html: resource_template_path(Path::new("external_event_cancellation.html")),
     }
 }
 
 fn template_default_uninvite() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/registered_uninvite.txt".into(),
-        html: "resources/templates/registered_uninvite.html".into(),
+        txt: resource_template_path(Path::new("registered_uninvite.txt")),
+        html: resource_template_path(Path::new("registered_uninvite.html")),
     }
 }
 
 fn template_default_unregistered_uninvite() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/unregistered_uninvite.txt".into(),
-        html: "resources/templates/unregistered_uninvite.html".into(),
+        txt: resource_template_path(Path::new("unregistered_uninvite.txt")),
+        html: resource_template_path(Path::new("unregistered_uninvite.html")),
     }
 }
 
 fn template_default_external_uninvite() -> MailTemplate {
     MailTemplate {
-        txt: "resources/templates/external_uninvite.txt".into(),
-        html: "resources/templates/external_uninvite.html".into(),
+        txt: resource_template_path(Path::new("external_uninvite.txt")),
+        html: resource_template_path(Path::new("external_uninvite.html")),
     }
 }
 
@@ -570,7 +580,7 @@ mod test {
     #[test]
     fn settings_env_vars_overwrite_config() -> Result<(), ConfigError> {
         // Sanity check
-        let settings = Settings::load("./extra/example.toml")?;
+        let settings = Settings::load("../../extra/example.toml")?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, "+49123321123".to_string());
@@ -582,7 +592,7 @@ mod test {
         env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
         env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
 
-        let settings = Settings::load("./extra/example.toml")?;
+        let settings = Settings::load("../../extra/example.toml")?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, env_support_phone);

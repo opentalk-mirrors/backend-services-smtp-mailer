@@ -7,7 +7,7 @@ use std::{str::FromStr as _, time::Duration};
 use anyhow::Context;
 use clap::ValueEnum;
 use lettre::{AsyncSmtpTransport, Tokio1Executor};
-use mail_worker_protocol::{
+use opentalk_mail_worker_protocol::{
     self as protocol,
     v1::{
         ExternalEventCancellation, ExternalEventInvite, RegisteredEventCancellation,
@@ -15,14 +15,14 @@ use mail_worker_protocol::{
         UnregisteredEventCancellation, UnregisteredEventInvite,
     },
 };
-use protocol::v1::{CallIn, Event, Room, Time};
-use types_common::{
+use opentalk_types_common::{
     rooms::RoomPassword,
     shared_folders::{SharedFolder, SharedFolderAccess},
     streaming::{RoomStreamingTarget, StreamingKey, StreamingTarget, StreamingTargetKind},
     users::{Language, UserTitle},
     utils::ExampleData as _,
 };
+use protocol::v1::{CallIn, Event, Room, Time};
 use uuid::Uuid;
 
 use crate::{send_mail_v1, settings::Settings, MailBuilder, MailTemplate};
