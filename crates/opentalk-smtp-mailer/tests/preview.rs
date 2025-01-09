@@ -5,12 +5,12 @@
 use std::str::FromStr as _;
 
 use insta::assert_snapshot;
-use rstest::rstest;
-use smtp_mailer::{
+use opentalk_smtp_mailer::{
     preview::{OutputVariant, TemplateVariant},
     settings::Settings,
 };
-use types_common::users::Language;
+use opentalk_types_common::users::Language;
+use rstest::rstest;
 
 fn snapshot_name(template: TemplateVariant, lang: &str, output: OutputVariant) -> String {
     format!("{:?}-{}-{:?}", template, lang, output)

@@ -489,7 +489,6 @@ dependencies = [
  "chrono",
  "chrono-tz-build 0.3.0",
  "phf 0.11.3",
- "serde",
 ]
 
 [[package]]
@@ -501,6 +500,7 @@ dependencies = [
  "chrono",
  "chrono-tz-build 0.4.0",
  "phf 0.11.3",
+ "serde",
 ]
 
 [[package]]
@@ -2423,9 +2423,9 @@ dependencies = [
 
 [[package]]
 name = "itertools"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
+checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
 dependencies = [
  "either",
 ]
@@ -2756,62 +2756,80 @@ checksum = "44d11de466f4a3006fe8a5e7ec84e93b79c70cb992ae0aa0eb631ad2df8abfe2"
 
 [[package]]
 name = "opentalk-mail-worker-protocol"
-version = "0.28.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f5a6741635fb0a1f62c83fc26bb77f49dd23f0b4b79b02d9b77a36315799fb65"
+version = "0.29.0"
 dependencies = [
  "chrono",
  "opentalk-types-common",
+ "pretty_assertions",
  "serde",
  "serde_json",
+ "utoipa",
  "uuid",
 ]
 
 [[package]]
-name = "opentalk-types"
-version = "0.28.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9cdb0d94389b7ec10c763f0f0bdbfe82140d4a930201d1c7b1d1123b8c669609"
+name = "opentalk-smtp-mailer"
+version = "0.12.0-alpha"
 dependencies = [
- "itertools 0.13.0",
+ "anyhow",
+ "async-trait",
+ "bytes",
+ "chrono",
+ "chrono-tz 0.10.0",
+ "clap",
+ "config",
+ "css-inline",
+ "env_logger",
+ "fluent-templates",
+ "futures",
+ "ics",
+ "ics-chrono-tz",
+ "insta",
+ "lapin",
+ "lettre",
  "log",
- "opentalk-types-signaling",
+ "opentalk-mail-worker-protocol",
+ "opentalk-types-common",
+ "opentalk-version",
+ "percent-encoding",
+ "phonenumber",
+ "pretty_assertions",
+ "rstest",
  "serde",
  "serde_json",
+ "serde_path_to_error",
+ "service-probe",
  "snafu",
- "validator",
+ "tera",
+ "textwrap",
+ "thiserror 2.0.10",
+ "tokio",
+ "tokio-executor-trait",
+ "tokio-reactor-trait",
+ "url",
+ "uuid",
+ "vergen",
+ "vergen-gix",
 ]
 
 [[package]]
 name = "opentalk-types-common"
-version = "0.28.0"
+version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c7addd307975584845ec2e900f9b99e88917376ee5b4a2df63d0d7baecb7caaf"
+checksum = "59f415a0f428c684db1d2d7558429576e14a9afdd8d53255f5e5dc1e601c88fb"
 dependencies = [
  "chrono",
- "chrono-tz 0.9.0",
+ "chrono-tz 0.10.0",
  "derive_more 1.0.0",
  "email_address",
- "itertools 0.13.0",
+ "itertools 0.14.0",
  "serde",
+ "serde_json",
  "serde_with",
  "snafu",
  "strum",
  "url",
- "uuid",
-]
-
-[[package]]
-name = "opentalk-types-signaling"
-version = "0.28.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6b8e8480a1846b8c0e447a063c7bf687c2d3255f249fb8985f0458367f05144"
-dependencies = [
- "derive_more 1.0.0",
- "opentalk-types-common",
- "serde",
- "serde_json",
- "strum",
+ "utoipa",
  "uuid",
 ]
 
@@ -3157,28 +3175,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ecf48c7ca261d60b74ab1a7b20da18bede46776b2e55535cb958eb595c5fa7b"
 dependencies = [
  "toml_edit",
-]
-
-[[package]]
-name = "proc-macro-error-attr2"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "96de42df36bb9bba5542fe9f1a054b8cc87e172759a1868aa05c1f3acc89dfc5"
-dependencies = [
- "proc-macro2",
- "quote",
-]
-
-[[package]]
-name = "proc-macro-error2"
-version = "2.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11ec05c52be0a07b08061f7dd003e7d7092e0472bc731b4af7bb1ef876109802"
-dependencies = [
- "proc-macro-error-attr2",
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -3885,52 +3881,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b7c388c1b5e93756d0c740965c41e8822f866621d41acbdf6336a6a168f8840c"
 
 [[package]]
-name = "smtp-mailer"
-version = "0.12.0-alpha"
-dependencies = [
- "anyhow",
- "async-trait",
- "bytes",
- "chrono",
- "chrono-tz 0.10.0",
- "clap",
- "config",
- "css-inline",
- "env_logger",
- "fluent-templates",
- "futures",
- "ics",
- "ics-chrono-tz",
- "insta",
- "lapin",
- "lettre",
- "log",
- "opentalk-mail-worker-protocol",
- "opentalk-types",
- "opentalk-types-common",
- "opentalk-version",
- "percent-encoding",
- "phonenumber",
- "pretty_assertions",
- "rstest",
- "serde",
- "serde_json",
- "serde_path_to_error",
- "service-probe",
- "snafu",
- "tera",
- "textwrap",
- "thiserror 2.0.10",
- "tokio",
- "tokio-executor-trait",
- "tokio-reactor-trait",
- "url",
- "uuid",
- "vergen",
- "vergen-gix",
-]
-
-[[package]]
 name = "snafu"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4611,6 +4561,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 
 [[package]]
+name = "utoipa"
+version = "5.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "435c6f69ef38c9017b4b4eea965dfb91e71e53d869e896db40d1cf2441dd75c0"
+dependencies = [
+ "indexmap 2.7.0",
+ "serde",
+ "serde_json",
+ "utoipa-gen",
+]
+
+[[package]]
+name = "utoipa-gen"
+version = "5.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a77d306bc75294fd52f3e99b13ece67c02c1a2789190a6f31d32f736624326f7"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+ "url",
+ "uuid",
+]
+
+[[package]]
 name = "uuid"
 version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4618,36 +4593,6 @@ checksum = "f8c5f0a0af699448548ad1a2fbf920fb4bee257eae39953ba95cb84891a0446a"
 dependencies = [
  "getrandom",
  "serde",
-]
-
-[[package]]
-name = "validator"
-version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0b4a29d8709210980a09379f27ee31549b73292c87ab9899beee1c0d3be6303"
-dependencies = [
- "idna",
- "once_cell",
- "regex",
- "serde",
- "serde_derive",
- "serde_json",
- "url",
- "validator_derive",
-]
-
-[[package]]
-name = "validator_derive"
-version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bac855a2ce6f843beb229757e6e570a42e837bcb15e5f449dd48d5747d41bf77"
-dependencies = [
- "darling",
- "once_cell",
- "proc-macro-error2",
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -4847,7 +4792,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.48.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]

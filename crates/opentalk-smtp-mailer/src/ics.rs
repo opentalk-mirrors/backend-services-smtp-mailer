@@ -17,8 +17,8 @@ use ics::{
     Event, ICalendar,
 };
 use ics_chrono_tz::ToIcsTimeZone;
-use mail_worker_protocol::v1::{self, EventException, Time};
-use types_common::shared_folders::SharedFolder;
+use opentalk_mail_worker_protocol::v1::{self, EventException, Time};
+use opentalk_types_common::shared_folders::SharedFolder;
 use uuid::Uuid;
 
 #[derive(Clone, Copy)]
@@ -424,8 +424,8 @@ mod test {
     use std::str::FromStr as _;
 
     use chrono::{TimeZone, Utc};
-    use mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
-    use types_common::{
+    use opentalk_mail_worker_protocol::v1::{CallIn, Event, RegisteredUser, Room, Time};
+    use opentalk_types_common::{
         rooms::RoomPassword,
         streaming::{RoomStreamingTarget, StreamingKey, StreamingTarget, StreamingTargetKind},
         users::{Language, UserTitle},

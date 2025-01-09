@@ -13,10 +13,10 @@ use lettre::{
     },
     Message,
 };
-use mail_worker_protocol as proto;
+use opentalk_mail_worker_protocol as proto;
+use opentalk_types_common::users::{Language, UserTitle};
 use serde_json::{to_value, Value};
 use tera::{try_get_value, Tera};
-use types_common::users::{Language, UserTitle};
 
 use crate::{ics::EventStatus, settings};
 
@@ -34,6 +34,10 @@ mod unregistered_invite;
 mod unregistered_uninvite;
 
 pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Tera> {
+    let base_path = std::env::var("CARGO_MANIFEST_DIR")
+        .map(|p| format!("{p}/"))
+        .unwrap_or_default();
+
     let mut tera = Tera::default();
     tera.add_raw_template(
         "macros.html",
@@ -64,23 +68,23 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         include_str!("../../resources/templates/shared_folder_html.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/quick_guide_txt.include",
+        format!("{base_path}resources/templates/quick_guide_txt.include"),
         Some("quick_guide_txt.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/quick_guide_html.include",
+        format!("{base_path}resources/templates/quick_guide_html.include"),
         Some("quick_guide_html.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/data_protection_txt.include",
+        format!("{base_path}resources/templates/data_protection_txt.include"),
         Some("data_protection_txt.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/data_protection_html.include",
+        format!("{base_path}resources/templates/data_protection_html.include"),
         Some("data_protection_html.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/data_protection_ics.include",
+        format!("{base_path}resources/templates/data_protection_ics.include"),
         Some("data_protection_ics.include"),
     )?;
     tera.add_raw_template(
@@ -88,32 +92,32 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         include_str!("../../resources/templates/ics_description.txt"),
     )?;
     tera.add_template_file(
-        "resources/templates/adhoc_txt.include",
+        format!("{base_path}resources/templates/adhoc_txt.include"),
         Some("adhoc_txt.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/adhoc_html.include",
+        format!("{base_path}resources/templates/adhoc_html.include"),
         Some("adhoc_html.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/streaming_links_txt.include",
+        format!("{base_path}resources/templates/streaming_links_txt.include"),
         Some("streaming_links_txt.include"),
     )?;
     tera.add_template_file(
-        "resources/templates/streaming_links_html.include",
+        format!("{base_path}resources/templates/streaming_links_html.include"),
         Some("streaming_links_html.include"),
     )?;
     tera.add_template_files(vec![
         (
-            "resources/templates/external_details_html.include",
+            format!("{base_path}resources/templates/external_details_html.include"),
             Some("external_details_html.include"),
         ),
         (
-            "resources/templates/unregistered_details_html.include",
+            format!("{base_path}resources/templates/unregistered_details_html.include"),
             Some("unregistered_details_html.include"),
         ),
         (
-            "resources/templates/registered_details_html.include",
+            format!("{base_path}resources/templates/registered_details_html.include"),
             Some("registered_details_html.include"),
         ),
     ])?;
@@ -242,21 +246,21 @@ macro_rules! forward {
     ($self:ident, $fn:ident, $($arg:ident),*) => {
         match $self {
             // Invites
-            ::mail_worker_protocol::v1::Message::RegisteredEventInvite(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::UnregisteredEventInvite(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::ExternalEventInvite(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::RegisteredEventInvite(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::UnregisteredEventInvite(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::ExternalEventInvite(x) => x.$fn($($arg)*),
             // Updates
-            ::mail_worker_protocol::v1::Message::RegisteredEventUpdate(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::UnregisteredEventUpdate(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::ExternalEventUpdate(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::RegisteredEventUpdate(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::UnregisteredEventUpdate(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::ExternalEventUpdate(x) => x.$fn($($arg)*),
             // Cancellations
-            ::mail_worker_protocol::v1::Message::RegisteredEventCancellation(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::UnregisteredEventCancellation(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::ExternalEventCancellation(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::RegisteredEventCancellation(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::UnregisteredEventCancellation(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::ExternalEventCancellation(x) => x.$fn($($arg)*),
             // Uninvites
-            ::mail_worker_protocol::v1::Message::RegisteredEventUninvite(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::UnregisteredEventUninvite(x) => x.$fn($($arg)*),
-            ::mail_worker_protocol::v1::Message::ExternalEventUninvite(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::RegisteredEventUninvite(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::UnregisteredEventUninvite(x) => x.$fn($($arg)*),
+            ::opentalk_mail_worker_protocol::v1::Message::ExternalEventUninvite(x) => x.$fn($($arg)*),
         }
     };
 }

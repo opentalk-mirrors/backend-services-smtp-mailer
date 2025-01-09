@@ -6,9 +6,8 @@ use std::{borrow::Cow, collections::HashMap};
 
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{Mailbox, SinglePart};
-use mail_worker_protocol as protocol;
-use protocol::v1::ExternalEventCancellation;
-use types_common::users::Language;
+use opentalk_mail_worker_protocol::{self as protocol, v1::RegisteredEventCancellation};
+use opentalk_types_common::users::Language;
 
 use super::{create_ics_attachments, generate_mailbox_name, MailTemplate};
 use crate::{
@@ -16,12 +15,12 @@ use crate::{
     ics::{create_ics_v1, EventStatus},
 };
 
-fn language(obj: &ExternalEventCancellation) -> &Language {
-    &obj.inviter.language
+fn language(obj: &RegisteredEventCancellation) -> &Language {
+    &obj.invitee.language
 }
 
 fn build_template_context(
-    obj: &ExternalEventCancellation,
+    obj: &RegisteredEventCancellation,
     builder: &super::MailBuilder,
 ) -> tera::Context {
     let mut context = tera::Context::new();
@@ -36,18 +35,23 @@ fn build_template_context(
     context.insert("invitee", &obj.invitee);
     context.insert("inviter", &obj.inviter);
     context.insert("event", &obj.event);
+    context.insert("join_link", &builder.create_join_link(&obj.event));
+    context.insert(
+        "event_link",
+        &builder.create_dashboard_event_link(&obj.event),
+    );
     context.insert("support", &builder.support_contact);
     context.insert("data_protection_url", &builder.frontend.data_protection_url);
     context
 }
 
-impl MailTemplate for ExternalEventCancellation {
+impl MailTemplate for RegisteredEventCancellation {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
         builder
             .tera
-            .render("external_event_cancellation.txt", &context)
+            .render("registered_event_cancellation.txt", &context)
             .map_err(Into::into)
     }
 
@@ -56,14 +60,14 @@ impl MailTemplate for ExternalEventCancellation {
 
         let html = builder
             .tera
-            .render("external_event_cancellation.html", &context)?;
+            .render("registered_event_cancellation.html", &context)?;
 
         let inliner = css_inline::CSSInliner::options().build();
         inliner.inline(&html).map_err(Into::into)
     }
 
     fn generate_subject(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
-        let subject_args = subject_args(&self.event, &self.inviter);
+        let subject_args = subject_args(&self.event, &self.invitee, &self.inviter);
 
         let language = language(self);
         let lang = if !language.is_empty() {
@@ -92,7 +96,14 @@ impl MailTemplate for ExternalEventCancellation {
     }
 
     fn generate_to_mbox(&self, _builder: &super::MailBuilder) -> anyhow::Result<Mailbox> {
-        let mbox = Mailbox::new(None, self.invitee.email.as_ref().parse()?);
+        let mbox = Mailbox::new(
+            Some(generate_mailbox_name(
+                &self.invitee.title,
+                &self.invitee.first_name,
+                &self.invitee.last_name,
+            )),
+            self.invitee.email.as_ref().parse()?,
+        );
 
         Ok(mbox)
     }
@@ -108,13 +119,18 @@ impl MailTemplate for ExternalEventCancellation {
         };
 
         let mut context = tera::Context::new();
+        context.insert("meeting_link", &builder.create_join_link(&self.event));
         context.insert("language", &language);
         context.insert("event", &self.event);
         context.insert("data_protection_url", &builder.frontend.data_protection_url);
 
         let description = builder.tera.render("ics_description.txt", &context)?;
 
-        let invitee = crate::ics::Invitee::WithoutName(self.invitee.email.as_ref());
+        let name = format!("{} {}", &self.invitee.first_name, &self.invitee.last_name);
+        let invitee = crate::ics::Invitee::WithName {
+            email: self.invitee.email.as_ref(),
+            name: &name,
+        };
 
         let ics = create_ics_v1(
             &self.inviter,
@@ -135,7 +151,8 @@ impl MailTemplate for ExternalEventCancellation {
 
 fn subject_args(
     event: &protocol::v1::Event,
+    invitee: &protocol::v1::RegisteredUser,
     inviter: &protocol::v1::RegisteredUser,
 ) -> HashMap<Cow<'static, str>, FluentValue<'static>> {
-    super::external_invitee_subject_args(event, inviter)
+    super::registered_invitee_subject_args(event, invitee, inviter)
 }

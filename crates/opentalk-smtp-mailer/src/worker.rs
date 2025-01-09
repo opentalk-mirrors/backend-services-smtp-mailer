@@ -5,7 +5,7 @@
 use anyhow::Result;
 use futures::stream::StreamExt;
 use lapin::options::BasicRejectOptions;
-use mail_worker_protocol as proto;
+use opentalk_mail_worker_protocol as proto;
 use service_probe::{set_service_state, ServiceState};
 
 use crate::{

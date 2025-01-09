@@ -6,9 +6,8 @@ use std::{borrow::Cow, collections::HashMap};
 
 use fluent_templates::{fluent_bundle::FluentValue, Loader};
 use lettre::message::{Mailbox, SinglePart};
-use mail_worker_protocol as protocol;
-use protocol::v1::UnregisteredEventUninvite;
-use types_common::users::{Language, UserTitle};
+use opentalk_mail_worker_protocol::{self as protocol, v1::UnregisteredEventUpdate};
+use opentalk_types_common::users::{Language, UserTitle};
 
 use super::{create_ics_attachments, generate_mailbox_name, MailTemplate};
 use crate::{
@@ -16,12 +15,12 @@ use crate::{
     ics::{create_ics_v1, EventStatus},
 };
 
-fn language(obj: &UnregisteredEventUninvite) -> &Language {
+fn language(obj: &UnregisteredEventUpdate) -> &Language {
     &obj.inviter.language
 }
 
 fn build_template_context(
-    obj: &UnregisteredEventUninvite,
+    obj: &UnregisteredEventUpdate,
     builder: &super::MailBuilder,
 ) -> tera::Context {
     let mut context = tera::Context::new();
@@ -46,13 +45,13 @@ fn build_template_context(
     context
 }
 
-impl MailTemplate for UnregisteredEventUninvite {
+impl MailTemplate for UnregisteredEventUpdate {
     fn generate_email_plain(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
         let context = build_template_context(self, builder);
 
         builder
             .tera
-            .render("unregistered_uninvite.txt", &context)
+            .render("unregistered_event_update.txt", &context)
             .map_err(Into::into)
     }
 
@@ -61,7 +60,7 @@ impl MailTemplate for UnregisteredEventUninvite {
 
         let html = builder
             .tera
-            .render("unregistered_uninvite.html", &context)?;
+            .render("unregistered_event_update.html", &context)?;
 
         let inliner = css_inline::CSSInliner::options().build();
         inliner.inline(&html).map_err(Into::into)
@@ -77,7 +76,7 @@ impl MailTemplate for UnregisteredEventUninvite {
             builder.default_language.as_str().parse()?
         };
 
-        Ok(i18n::LOCALES.lookup_complete(&lang, "event-uninvite-subject", Some(&subject_args)))
+        Ok(i18n::LOCALES.lookup_complete(&lang, "event-update-subject", Some(&subject_args)))
     }
 
     fn generate_reply_to_mbox(
@@ -136,14 +135,14 @@ impl MailTemplate for UnregisteredEventUninvite {
         let ics = create_ics_v1(
             &self.inviter,
             &self.event,
-            None,
+            self.event_exception.as_ref(),
             invitee,
             &description,
-            EventStatus::Cancelled,
+            EventStatus::Updated,
         )?;
 
         if let Some(ics) = ics {
-            return Ok(create_ics_attachments(ics, EventStatus::Cancelled));
+            return Ok(create_ics_attachments(ics, EventStatus::Updated));
         }
 
         Ok(vec![])
