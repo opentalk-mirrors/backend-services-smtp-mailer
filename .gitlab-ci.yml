@@ -11,6 +11,7 @@ variables:
 
 stages:
   - lint
+  - check
   - test
   - build
   - package
@@ -116,6 +117,37 @@ test:cargo_test:
     - rustup component add rustfmt
   script:
     - cargo test --workspace --locked
+
+check:mail-worker-protocol-schema-and-examples:
+  stage: check
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  artifacts:
+    paths:
+      - target/docs/temporary/opentalk-mail-worker-protocol
+  script:
+    - ci/docs-generate-mail-worker-protocol-schema-and-examples.sh
+
+check:docs-generated-parts:
+  stage: check
+  image:
+    name: git.opentalk.dev:5050/opentalk/tools/opentalk-ci-doc-updater:v0.1.0
+    entrypoint: ['']
+  needs:
+    - job: check:mail-worker-protocol-schema-and-examples
+      artifacts: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  before_script:
+    - apt-get update && apt-get install -y git
+  script:
+    - ci/docs-update-generated-parts.sh
+    - |
+      if ! git diff --exit-code; then
+        echo "Generated parts of documentation changed, run ci/docs-update-generated-parts.sh and commit the result"
+        exit 1
+      fi
 
 package:mailer-container-mr:
   stage: package
