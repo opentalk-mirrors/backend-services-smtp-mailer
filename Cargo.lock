@@ -971,7 +971,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "33d852cb9b869c2a9b3df2f71a3074817f01e1844f839a144f5fcef059a4eb5d"
 dependencies = [
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -2457,7 +2457,7 @@ dependencies = [
  "portable-atomic",
  "portable-atomic-util",
  "serde",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3284,7 +3284,7 @@ dependencies = [
  "once_cell",
  "socket2 0.5.8",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3565,7 +3565,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.4.15",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3970,7 +3970,7 @@ dependencies = [
  "cfg-if",
  "libc",
  "psm",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -4173,7 +4173,7 @@ dependencies = [
  "getrandom",
  "once_cell",
  "rustix 0.38.43",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -4752,9 +4752,9 @@ dependencies = [
 
 [[package]]
 name = "vergen"
-version = "9.0.3"
+version = "9.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5874b280b7018290bee73c03ff2437bcfcc25f637d6a74927790d309698963ed"
+checksum = "e0d2f179f8075b805a43a2a21728a46f0cc2921b3c58695b28fa8817e103cd9a"
 dependencies = [
  "anyhow",
  "cargo_metadata",
@@ -4768,9 +4768,9 @@ dependencies = [
 
 [[package]]
 name = "vergen-gix"
-version = "1.0.4"
+version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a90879ed549cdfc606e156c8d17a113af4c515553d39de0c99203de8e3192100"
+checksum = "2b218ac3c56c2c31227bd7813735bfa51eb0dc5212e6d4bab6eac7c8208e5b66"
 dependencies = [
  "anyhow",
  "derive_builder",
@@ -4947,7 +4947,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
