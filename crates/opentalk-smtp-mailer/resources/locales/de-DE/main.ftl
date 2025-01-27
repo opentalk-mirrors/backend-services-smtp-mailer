@@ -64,7 +64,7 @@ quick-guide-hint-html = Neu bei OpenTalk? Eine Kurzanleitung finden Sie hier: <a
 data-protection-hint = Hinweis zum Datenschutz: Uns ist der Schutz Ihrer Daten besonders wichtig. Auch bei der Verwendung der Videokonferenzlösung können personenbezogene Daten ausgetauscht werden. Erfahren Sie mehr zum Umgang mit Ihren Daten auf unserer Internetseite unter { $link }
 
 adhoc-meeting-info-hours =
-        Dies ist ein Adhoc meeting, diese werden nach { $retentiontime ->
+        Dies ist ein Ad-hoc-Meeting, diese werden nach { $retentiontime ->
                 [1] einer Stunde
                 [2] zwei Stunden
                 [3] drei Stunden
@@ -80,7 +80,7 @@ adhoc-meeting-info-hours =
                *[other] { $retentiontime } Stunden
         } automatisch gelöscht.
 adhoc-meeting-info-minutes =
-        Dies ist ein Adhoc meeting, diese werden nach { $retentiontime ->
+        Dies ist ein Ad-hoc-Meeting, diese werden nach { $retentiontime ->
                 [1] einer Minute
                 [2] zwei Minuten
                 [3] drei Minuten

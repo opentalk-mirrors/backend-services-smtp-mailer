@@ -64,12 +64,12 @@ quick-guide-hint-html = New to OpenTalk? Read our quick guide here: <a href="htt
 data-protection-hint = Note for data protection: The protection of your data is important to us. Personal data can also be exchanged when using the video conference solution. For more information on how we handle your personal data, please visit { $link }
 
 adhoc-meeting-info-hours =
-        This is an adhoc meeting, it will be automatically deleted after { $retentiontime ->
+        This is an ad-hoc meeting, it will be automatically deleted after { $retentiontime ->
                 [one] one hour
                *[other] { $retentiontime } hours
         }.
 adhoc-meeting-info-minutes =
-        This is an adhoc meeting, it will be automatically deleted after { $retentiontime ->
+        This is an ad-hoc meeting, it will be automatically deleted after { $retentiontime ->
                 [one] one minute
                *[other] { $retentiontime } minutes
         }.
