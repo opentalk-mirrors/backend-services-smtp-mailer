@@ -10,7 +10,7 @@ resolver = "2"
 authors = ["OpenTalk Team <mail@opentalk.eu>"]
 homepage = "https://opentalk.eu/"
 repository = "https://gitlab.opencode.de/opentalk/smtp-mailer"
-version = "0.12.0-alpha"
+version = "0.12.0"
 
 [workspace.dependencies]
 opentalk-mail-worker-protocol = { path = "crates/opentalk-mail-worker-protocol", version = "0.30.0" }
