@@ -88,13 +88,13 @@ exceptions = [
   ], name = "opentalk-mail-worker-protocol" },
   { allow = [
     "EUPL-1.2",
-  ], name = "opentalk-types" },
-  { allow = [
-    "EUPL-1.2",
   ], name = "opentalk-types-common" },
   { allow = [
     "EUPL-1.2",
-  ], name = "opentalk-types-signaling" },
+  ], name = "opentalk-types-common-identifiers" },
+  { allow = [
+    "EUPL-1.2",
+  ], name = "opentalk-types-common-macros" },
 ]
 
 [[licenses.clarify]]
