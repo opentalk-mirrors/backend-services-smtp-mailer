@@ -17,7 +17,10 @@ RUN cargo auditable build --release --locked --package opentalk-smtp-mailer
 
 FROM ubuntu:noble
 
-RUN apt-get update && apt-get full-upgrade -y && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get full-upgrade -y && \
+    apt-get install -y --no-install-recommends ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/opentalk-smtp-mailer
 
