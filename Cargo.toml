@@ -13,7 +13,7 @@ repository = "https://gitlab.opencode.de/opentalk/smtp-mailer"
 version = "0.13.0-alpha"
 
 [workspace.dependencies]
-opentalk-mail-worker-protocol = { path = "crates/opentalk-mail-worker-protocol", version = "0.31.0" }
+opentalk-mail-worker-protocol = { path = "crates/opentalk-mail-worker-protocol", version = "0.32.0" }
 
 anyhow = "1.0.57"
 async-trait = "0.1.53"
