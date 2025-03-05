@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] - 2025-03-05
+
+[0.13.0]: https://git.opentalk.dev/opentalk/smtp-mailer/-/compare/v0.12.0...v0.13.0
+
+### 🚀 New features
+
+- Add ubuntu noble based container image ([!364](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/364))
+
+### 🐛 Bug fixes
+
+- Reduce container size and attack surface ([!364](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/364))
+
+### 🔨 Refactor
+
+- (ci) Clean up install step in Dockerfiles ([!364](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/364))
+
+### 📦 Dependencies
+
+- (deps) Lock file maintenance ([!351](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/351))
+- (deps) Update rust crate clap to v4.5.28 ([!353](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/353))
+- (deps) Update rust crate uuid to v1.13.1 ([!354](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/354))
+- (deps) Update rust crate bytes to v1.10.0 ([!352](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/352))
+- (deps) Lock file maintenance ([!356](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/356))
+- (deps) Update rust crate config to v0.15.8 ([!357](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/357))
+- (deps) Update rust crate clap to v4.5.29 ([!358](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/358))
+- (deps) Lock file maintenance ([!359](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/359))
+- (deps) Update rust crate opentalk-types-common to v0.31.1 ([!365](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/365))
+- (deps) Update rust crate uuid to v1.13.2 ([!363](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/363))
+- (deps) Update rust crate clap to v4.5.30 ([!362](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/362))
+- (deps) Update rust crate lettre to v0.11.13 ([!360](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/360))
+- (deps) Update rust crate serde to v1.0.218 ([!368](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/368))
+- (deps) Update rust crate serde_json to v1.0.139 ([!366](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/366))
+- (deps) Update rust crate log to v0.4.26 ([!370](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/370))
+- (deps) Update rust crate uuid to v1.14.0 ([!369](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/369))
+- (deps) Lock file maintenance ([!372](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/372))
+- (deps) Update rust crate uuid to v1.15.0 ([!375](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/375))
+- (deps) Update rust crate uuid to v1.15.1 ([!378](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/378))
+- (deps) Update git.opentalk.dev:5050/opentalk/backend/containers/rust docker tag to v1.85.0 ([!377](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/377))
+- (deps) Update rust crate chrono to v0.4.40 ([!376](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/376))
+- (deps) Update rust crate opentalk-types-common to 0.32 ([!379](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/379))
+- (deps) Lock file maintenance ([!383](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/383))
+- (deps) Lock file maintenance ([!388](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/388))
+- (deps) Update rust crate serde_json to v1.0.140 ([!389](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/389))
+- (deps) Update rust crate rstest to 0.25.0 ([!382](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/382))
+- (deps) Update rust crate textwrap to v0.16.2 ([!391](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/391))
+- (deps) Update rust crate config to v0.15.9 ([!392](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/392))
+- (deps) Update rust crate bytes to v1.10.1 ([!393](https://git.opentalk.dev/opentalk/smtp-mailer/-/merge_requests/393))
+
 ## [0.12.0] - 2025-01-31
 
 [0.12.0]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.11.0...v0.12.0

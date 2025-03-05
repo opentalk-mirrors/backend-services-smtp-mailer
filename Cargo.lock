@@ -2778,7 +2778,7 @@ dependencies = [
 
 [[package]]
 name = "opentalk-smtp-mailer"
-version = "0.13.0-alpha"
+version = "0.13.0"
 dependencies = [
  "anyhow",
  "async-trait",
