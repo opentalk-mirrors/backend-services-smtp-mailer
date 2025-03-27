@@ -3,13 +3,17 @@
 # SPDX-License-Identifier: EUPL-1.2
 
 ---
+# For setup instructions see the backend onboarding doc.
+# https://git.opentalk.dev/a.weiche/the-knowledge/-/blob/main/backend-onboarding.md?ref_type=heads#pre-commit
+exclude: target/|.*\.snap
+
 repos:
   # These are "general" hooks provided by the pre-commit devs
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
     hooks:
-      # - id: trailing-whitespace
-      # - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
       - id: check-added-large-files
   # A repo containing hooks for certain cargo subcommands
   # Used for tools that don't bring official hooks
@@ -69,5 +73,3 @@ repos:
     hooks:
       - id: commitlint
         stages: [commit-msg]
-
-exclude: target/|.*\.snap
