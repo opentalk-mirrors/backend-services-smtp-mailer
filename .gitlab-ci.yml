@@ -52,7 +52,12 @@ lint:doc:
 lint:dependency_check:
   stage: lint
   <<: *default_job_condition
-  script: cargo deny check --deny unmatched-skip --deny license-not-encountered --deny advisory-not-detected
+  script:
+    - cargo deny check
+      --deny unmatched-skip
+      --deny license-not-encountered
+      --deny advisory-not-detected
+      --hide-inclusion-graph
 
 lint:licensing:
   stage: lint
