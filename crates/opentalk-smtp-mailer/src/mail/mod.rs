@@ -8,8 +8,8 @@ use anyhow::Result;
 use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
 use lettre::{
     message::{
-        header::{self, ContentDisposition, ContentTransferEncoding, ContentType},
-        Mailbox, MultiPart, SinglePart,
+        header::{ContentDisposition, ContentTransferEncoding, ContentType},
+        Attachment, Mailbox, MultiPart, SinglePart,
     },
     Message,
 };
@@ -198,6 +198,9 @@ impl MailBuilder {
     }
 
     pub(crate) fn generate_email(&self, message: &proto::v1::Message) -> Result<Message> {
+        const OPENTALK_LOGO_CONTENT_ID: &str = "opentalk-logo";
+        const OPENTALK_LOGO: &[u8] = include_bytes!("../../resources/images/opentalk_logo.png");
+
         let from_mb = generate_from_mbox(self.from_name.clone(), self.from_email.as_ref())?;
 
         let reply_to_mb = message.generate_reply_to_mbox(self)?;
@@ -209,15 +212,14 @@ impl MailBuilder {
 
         let mut mail_parts = MultiPart::mixed().multipart(
             MultiPart::alternative()
-                .singlepart(
-                    SinglePart::builder()
-                        .header(header::ContentType::TEXT_PLAIN)
-                        .body(txt),
-                )
-                .singlepart(
-                    SinglePart::builder()
-                        .header(header::ContentType::TEXT_HTML)
-                        .body(html),
+                .singlepart(SinglePart::plain(txt))
+                .multipart(
+                    MultiPart::related()
+                        .singlepart(SinglePart::html(html))
+                        .singlepart(
+                            Attachment::new_inline(OPENTALK_LOGO_CONTENT_ID.to_string())
+                                .body(OPENTALK_LOGO.to_vec(), mime::IMAGE_PNG.into()),
+                        ),
                 ),
         );
 

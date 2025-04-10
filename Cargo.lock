@@ -3036,6 +3036,7 @@ dependencies = [
  "lapin",
  "lettre",
  "log",
+ "mime",
  "opentalk-mail-worker-protocol",
  "opentalk-types-common",
  "opentalk-version",
