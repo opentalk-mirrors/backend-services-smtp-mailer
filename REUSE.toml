@@ -26,3 +26,9 @@ path = [
   "renovate.json",
 ]
 precedence = "aggregate"
+
+[[annotations]]
+SPDX-FileCopyrightText = "OpenTalk GmbH <mail@opentalk.eu>"
+SPDX-License-Identifier = "CC-BY-NC-ND-4.0"
+path = ["crates/opentalk-smtp-mailer/resources/images/**.png"]
+precedence = "aggregate"

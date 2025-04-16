@@ -54,6 +54,7 @@ lettre = { workspace = true, default-features = false, features = [
   "tokio1",
   "tokio1-rustls-tls",
 ] }
+mime = "0.3.17"
 opentalk-version.workspace = true
 service-probe.workspace = true
 textwrap.workspace = true
