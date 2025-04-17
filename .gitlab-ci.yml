@@ -294,49 +294,38 @@ package:mailer-container-create-and-push-tags:
         "docker://${CI_REGISTRY_IMAGE}:$FLAVOR-${CI_COMMIT_SHA:0:8}" "docker://${CI_REGISTRY_IMAGE}:$tag"
       done
 
-package:mailer-container-scanning:
+read-trivy-ignore-file:
   parallel:
     matrix:
       - FLAVOR: !reference [.template_vars, FLAVORS]
   stage: package
-  image: git.opentalk.dev:5050/opentalk/opentalk-devops/containers/container-scanner:latest
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'schedule'
+  script:
+    - echo "TRIVY_IGNORE_STR_$FLAVOR=$(
+         cat $CI_PROJECT_DIR/.trivyignore-$FLAVOR | sed -n 'H;${x;s/^\n//;s/\n/\\n/g;p}'
+      )"  > package.env
+  artifacts:
+    reports:
+      dotenv: package.env
+
+container-scanning:
+  parallel:
+    matrix:
+      - FLAVOR: !reference [.template_vars, FLAVORS]
   needs:
     - package:mailer-container-build
+    - read-trivy-ignore-file
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      changes:
-        - .trivyignore-*
-        - Dockerfile-*
     - if: $CI_PIPELINE_SOURCE == 'schedule'
-  allow_failure: false
+  stage: package
   variables:
-    FULL_IMAGE_NAME: $CI_REGISTRY_IMAGE:$FLAVOR-${CI_COMMIT_SHA:0:8}
-    GITLAB_URL: https://git.opentalk.dev
-    GITLAB_ACCESS_TOKEN: $API_TOKEN_RW
-    GITLAB_PROJECT_WITH_NAMESPACE: $CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
-  script:
-    - trivy --version
-    - trivy registry login --password ${CI_REGISTRY_PASSWORD} --username ${CI_REGISTRY_USER} $CI_REGISTRY
-    - trivy clean --scan-cache
-    - trivy image --exit-code 0 --cache-dir .trivycache/ --format template
-        --template "@/contrib/gitlab.tpl" --no-progress
-        --ignorefile "$CI_PROJECT_DIR/.trivyignore-$FLAVOR"
-        --output "$CI_PROJECT_DIR/gl-container-scanning-report.json" "$CI_REGISTRY_IMAGE:$FLAVOR-${CI_COMMIT_SHA:0:8}"
-    - trivy image --exit-code 0 --no-progress
-        --ignorefile "$CI_PROJECT_DIR/.trivyignore-$FLAVOR"
-        --cache-dir .trivycache/ "$CI_REGISTRY_IMAGE:$FLAVOR-${CI_COMMIT_SHA:0:8}"
-    - trivy image --exit-code 0 --no-progress
-        --ignorefile "$CI_PROJECT_DIR/.trivyignore-$FLAVOR"
-        --cache-dir .trivycache/ -f json -o scan-results.json "$CI_REGISTRY_IMAGE:$FLAVOR-${CI_COMMIT_SHA:0:8}"
-    - parse_trivy_results_and_create_issues_if_needed.py -gat $API_TOKEN_RW -j scan-results.json
-    - trivy image --exit-code 1 --cache-dir .trivycache/ --no-progress
-        --ignorefile "$CI_PROJECT_DIR/.trivyignore-$FLAVOR"
-        --severity CRITICAL "$CI_REGISTRY_IMAGE:$FLAVOR-${CI_COMMIT_SHA:0:8}"
-  cache:
-    paths:
-      - .trivycache/
-  # Enables https://docs.gitlab.com/ee/user/application_security/container_scanning/
-  artifacts:
-    when: always
-    reports:
-      container_scanning: gl-container-scanning-report.json
+    PIPELINE_FULL_IMAGE_NAME: $CI_REGISTRY_IMAGE:latest-$FLAVOR
+    PIPELINE_PROJECT_WITH_NAMESPACE: $CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
+    PIPELINE_ADDITIONAL_LABELS: team::conference management
+    PIPELINE_TRIVY_IGNORE_FILE_STR_VAR: TRIVY_IGNORE_STR_${FLAVOR}
+  trigger:
+    project: opentalk/opentalk-devops/scan-container
+    strategy: depend
+    forward:
+      pipeline_variables: true
