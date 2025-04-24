@@ -4,12 +4,16 @@
 
 use std::{path::PathBuf, process::exit};
 
+use build_info::BuildInfo;
 use clap::{Parser, Subcommand};
 use opentalk_smtp_mailer::{
     preview::{preview_send_mail, OutputVariant, TemplateVariant},
     run, settings,
 };
 use opentalk_types_common::users::Language;
+use opentalk_version::InfoArgs;
+
+mod license;
 
 #[derive(Parser, Debug)]
 #[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
@@ -30,8 +34,8 @@ pub(crate) struct Args {
     #[clap(subcommand)]
     command: Option<Commands>,
 
-    #[clap(long, short('V'), help = "Print version information")]
-    version: bool,
+    #[command(flatten)]
+    info: InfoArgs,
 }
 
 #[derive(Debug, Subcommand)]
@@ -66,8 +70,11 @@ opentalk_version::build_info!();
 async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
-    if args.version {
-        println!("{}", build_info::BuildInfo::new());
+    if args.info.should_print() {
+        let build_info = BuildInfo::with_license(license::LICENSE.to_owned());
+        if let Some(text) = build_info.format(&args.info) {
+            println!("{text}");
+        }
 
         return Ok(());
     }
