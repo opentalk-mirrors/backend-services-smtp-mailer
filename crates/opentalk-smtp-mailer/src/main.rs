@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use std::process::exit;
+use std::{path::PathBuf, process::exit};
 
 use clap::{Parser, Subcommand};
 use opentalk_smtp_mailer::{
@@ -14,9 +14,18 @@ use opentalk_types_common::users::Language;
 #[derive(Parser, Debug)]
 #[clap(author, about = env!("CARGO_PKG_DESCRIPTION"), long_about = None)]
 pub(crate) struct Args {
-    /// Name of the person to greet
-    #[clap(short, long, default_value = "config.toml")]
-    config: String,
+    /// Path of the configuration file.
+    ///
+    /// If present, exactly this config file will be used.
+    ///
+    /// If absent, `smtp-mailer` looks for a config file in these locations and uses the first one that is found:
+    ///
+    /// - `config.toml` in the current directory (deprecated, for backwards compatiblity only)
+    /// - `smtp-mailer.toml` in the current directory
+    /// - `<XDG_CONFIG_HOME>/opentalk/smtp-mailer.toml` (where `XDG_CONFIG_HOME` is usually `~/.config`)
+    /// - `/etc/opentalk/smtp-mailer.toml`
+    #[clap(short, long, verbatim_doc_comment)]
+    config: Option<PathBuf>,
 
     #[clap(subcommand)]
     command: Option<Commands>,
@@ -63,9 +72,13 @@ async fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    env_logger::init();
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("warn")).init();
 
-    let settings = settings::Settings::load(&args.config)?;
+    let settings = if let Some(settings_path) = &args.config {
+        settings::Settings::load_from_path(settings_path)?
+    } else {
+        settings::Settings::load_from_standard_paths()?
+    };
 
     if let Some(Commands::Preview {
         type_,

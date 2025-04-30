@@ -9,6 +9,8 @@ use std::{
 };
 
 use config::{Config, ConfigError, Environment, File, FileFormat};
+use dirs::config_dir;
+use itertools::Itertools as _;
 use opentalk_types_common::users::Language;
 use percent_encoding::percent_decode_str;
 use serde::{de, Deserialize, Deserializer, Serialize};
@@ -42,9 +44,9 @@ pub struct Settings {
 impl Settings {
     /// Creates a new Settings instance from the provided TOML file.
     /// Specific fields can be set or overwritten with environment variables (See struct level docs for more details).
-    pub fn load(file_name: &str) -> Result<Settings, ConfigError> {
+    pub fn load_from_path(file_path: &Path) -> Result<Settings, ConfigError> {
         let settings = Config::builder()
-            .add_source(File::new(file_name, FileFormat::Toml))
+            .add_source(File::from(file_path).format(FileFormat::Toml))
             .add_source(
                 Environment::with_prefix("MAILER")
                     .prefix_separator("_")
@@ -52,8 +54,78 @@ impl Settings {
             )
             .build()?
             .try_deserialize()?;
+        log::info!("Settings loaded from \"{}\".", file_path.to_string_lossy());
 
         Ok(settings)
+    }
+
+    pub fn load_from_standard_paths() -> Result<Settings, ConfigError> {
+        let paths = Self::build_standard_search_paths();
+        for ConfigSearchPath { path, deprecated } in &paths {
+            if path.exists() {
+                if *deprecated {
+                    let supported_paths = paths
+                        .iter()
+                        .filter_map(ConfigSearchPath::display_non_deprecated)
+                        .join(", ");
+                    log::warn!("You're using the deprecated configuration path \"{}\", please use one of these instead: {}.",
+                    path.to_string_lossy(),
+                    supported_paths
+                    );
+                }
+                return Settings::load_from_path(path);
+            }
+        }
+
+        Err(ConfigError::Message(format!(
+            "Couldn't find a configuration file. Searched: {}.",
+            paths
+                .iter()
+                .map(|ConfigSearchPath { path, .. }| format!("\"{}\"", path.to_string_lossy()))
+                .join(", ")
+        )))
+    }
+
+    fn build_standard_search_paths() -> Vec<ConfigSearchPath> {
+        let mut paths = vec![];
+
+        paths.push(ConfigSearchPath {
+            path: "config.toml".into(),
+            deprecated: true,
+        });
+
+        paths.push(ConfigSearchPath {
+            path: "smtp-mailer.toml".into(),
+            deprecated: false,
+        });
+
+        if let Some(config_dir) = config_dir() {
+            paths.push(ConfigSearchPath {
+                path: config_dir.join("opentalk/smtp-mailer.toml"),
+                deprecated: false,
+            });
+        }
+
+        paths.push(ConfigSearchPath {
+            path: "/etc/opentalk/smtp-mailer.toml".into(),
+            deprecated: false,
+        });
+
+        paths
+    }
+}
+
+struct ConfigSearchPath {
+    path: PathBuf,
+    deprecated: bool,
+}
+
+impl ConfigSearchPath {
+    fn display_non_deprecated(&self) -> Option<String> {
+        if self.deprecated {
+            return None;
+        }
+        Some(format!("\"{}\"", self.path.to_string_lossy()))
     }
 }
 
@@ -580,7 +652,7 @@ mod test {
     #[test]
     fn settings_env_vars_overwrite_config() -> Result<(), ConfigError> {
         // Sanity check
-        let settings = Settings::load("../../extra/example.toml")?;
+        let settings = Settings::load_from_path(Path::new("../../extra/example.toml"))?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, "+49123321123".to_string());
@@ -592,7 +664,7 @@ mod test {
         env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
         env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
 
-        let settings = Settings::load("../../extra/example.toml")?;
+        let settings = Settings::load_from_path(Path::new("../../extra/example.toml"))?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, env_support_phone);
