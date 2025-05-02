@@ -50,9 +50,9 @@ MAILER_RABBIT_MQ__MAIL_TASK_QUEUE=opentalk_mailer
 
 ## Example configuration file
 
-This file can be found in the source code distribution under `extra/example.toml`
+This file can be found in the source code distribution under `example/smtp-mailer.toml`
 
-<!-- begin:fromfile:toml:config/example.toml -->
+<!-- begin:fromfile:toml:config/smtp-mailer.toml -->
 
 ```toml
 # SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
@@ -115,4 +115,4 @@ phone = "+49123321123"
 mail = "support@example.com"
 ```
 
-<!-- end:fromfile:toml:config/example.toml -->
+<!-- end:fromfile:toml:config/smtp-mailer.toml -->
