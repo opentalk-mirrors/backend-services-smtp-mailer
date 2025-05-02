@@ -19,9 +19,11 @@ chrono = { workspace = true, features = ["serde"] }
 chrono-tz.workspace = true
 clap = { workspace = true, features = ["derive"] }
 config = { workspace = true, default-features = false, features = ["toml"] }
+dirs.workspace = true
 env_logger.workspace = true
 futures.workspace = true
 ics-chrono-tz.workspace = true
+itertools.workspace = true
 lapin = { workspace = true, default-features = false }
 log.workspace = true
 opentalk-mail-worker-protocol.workspace = true
