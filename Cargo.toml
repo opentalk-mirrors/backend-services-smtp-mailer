@@ -34,7 +34,7 @@ itertools = "0.14"
 lapin = { version = "2.1.1", default-features = false }
 lettre = { version = "0.11.0", features = ["mime03"], default-features = false }
 log = "0.4.17"
-opentalk-types-common = "0.34"
+opentalk-types-common = "0.35"
 opentalk-version = "0.1.1"
 percent-encoding = "2.1"
 phonenumber = "0.3"
