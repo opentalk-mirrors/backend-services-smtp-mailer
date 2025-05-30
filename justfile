@@ -34,7 +34,7 @@ _check_git_cliff:
 # Prepare a release
 prepare-release VERSION: _check_cargo_set_version
     # Set the version number for all packages in the workspace
-    cargo set-version --workspace {{ VERSION }}
+    cargo set-version --workspace {{ VERSION }} --exclude opentalk-mail-worker-protocol
     # Regenerate the lockfile
     cargo check
 
