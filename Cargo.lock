@@ -3105,14 +3105,14 @@ checksum = "44d11de466f4a3006fe8a5e7ec84e93b79c70cb992ae0aa0eb631ad2df8abfe2"
 
 [[package]]
 name = "opentalk-mail-worker-protocol"
-version = "0.32.0"
+version = "0.36.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "98ce5dae305c534c7a74a840108c7846eb3f68f1a5ca7f351a5a045dcb8c5fbb"
 dependencies = [
  "chrono",
  "opentalk-types-common",
- "pretty_assertions",
  "serde",
  "serde_json",
- "utoipa",
  "uuid",
 ]
 
@@ -3159,6 +3159,7 @@ dependencies = [
  "tokio-executor-trait",
  "tokio-reactor-trait",
  "url",
+ "utoipa",
  "uuid",
  "vergen",
  "vergen-gix",
@@ -3178,12 +3179,10 @@ dependencies = [
  "opentalk-types-common-identifiers",
  "opentalk-types-common-macros",
  "serde",
- "serde_json",
  "serde_with",
  "snafu",
  "strum 0.27.1",
  "url",
- "utoipa",
  "uuid",
 ]
 
@@ -3195,10 +3194,8 @@ checksum = "ab029b9f30fe933d46d389b2e1914d84a43a8810603c6373210758f87b5588d9"
 dependencies = [
  "derive_more 2.0.1",
  "serde",
- "serde_json",
  "serde_with",
  "snafu",
- "utoipa",
 ]
 
 [[package]]
@@ -4818,9 +4815,9 @@ dependencies = [
 
 [[package]]
 name = "tower-http"
-version = "0.6.4"
+version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fdb0c213ca27a9f57ab69ddb290fd80d970922355b83ae380b395d3986b8a2e"
+checksum = "5cc2d9e086a412a451384326f521c8123a99a466b329941a9403696bff9b0da2"
 dependencies = [
  "bitflags 2.9.1",
  "bytes",
@@ -5081,8 +5078,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
- "url",
- "uuid",
 ]
 
 [[package]]

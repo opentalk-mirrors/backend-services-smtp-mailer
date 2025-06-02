@@ -2,60 +2,73 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-[workspace]
-members = ["crates/*"]
-resolver = "2"
-
-[workspace.package]
-authors = ["OpenTalk Team <mail@opentalk.eu>"]
-homepage = "https://opentalk.eu/"
-repository = "https://gitlab.opencode.de/opentalk/smtp-mailer"
+[package]
+build = "build.rs"
+default-run = "opentalk-smtp-mailer"
+description = "Mail Worker that takes mail send tasks from a queue, renders them, and sends them out via SMTP"
+edition = "2021"
+name = "opentalk-smtp-mailer"
+publish = false
 version = "0.14.0"
 
-[workspace.dependencies]
-opentalk-mail-worker-protocol = { path = "crates/opentalk-mail-worker-protocol", version = "0.32.0" }
-
+[dependencies]
 anyhow = "1.0.57"
 async-trait = "0.1.53"
 bytes = "1.1.0"
-chrono = "0.4"
+chrono = { version = "0.4", features = ["serde"] }
 chrono-tz = "0.10"
-clap = "4.5"
-config = { version = "0.15", default-features = false }
+clap = { version = "4.5", features = ["derive"] }
+config = { version = "0.15", default-features = false, features = ["toml"] }
 css-inline = "0.14.0"
 dirs = "6"
 env_logger = "0.11"
-fluent-templates = "0.13.0"
+fluent-templates = { version = "0.13.0", features = ["tera"] }
 futures = "0.3.21"
 ics = "0.5"
 ics-chrono-tz = "0.4"
-insta = "1.40.0"
 itertools = "0.14"
 lapin = { version = "2.1.1", default-features = false }
-lettre = { version = "0.11.0", features = ["mime03"], default-features = false }
+lettre = { version = "0.11.0", default-features = false, features = [
+  "builder",
+  "hostname",
+  "mime03",
+  "smtp-transport",
+  "tokio1",
+  "tokio1-rustls-tls",
+] }
 log = "0.4.17"
-opentalk-types-common = "0.35"
-opentalk-version = "0.1.1"
+opentalk-mail-worker-protocol = "0.36.0"
+opentalk-types-common = { version = "0.35", features = ["serde"] }
 percent-encoding = "2.1"
 phonenumber = "0.3"
-pretty_assertions = "1.2.1"
-rstest = "0.25.0"
-serde = "1.0.137"
+serde = { version = "1.0.137", features = ["derive"] }
 serde_json = "1.0.81"
 serde_path_to_error = "0.1.4"
 service-probe = "0.2.0"
-snafu = "0.8.4"
-tera = "1.15.0"
+tera = { version = "1.15.0", features = ["builtins"] }
 textwrap = "0.16.0"
 thiserror = "2.0.0"
-tokio = { version = "1.18.2", default-features = false }
+tokio = { version = "1.18.2", default-features = false, features = [
+  "macros",
+  "rt-multi-thread",
+  "signal",
+] }
 tokio-executor-trait = "2"
 tokio-reactor-trait = "1"
-url = "2.2.2"
+url = { version = "2.2.2", features = ["serde"] }
 utoipa = "5"
-uuid = "1"
-vergen = "9"
-vergen-gix = "1"
+uuid = { version = "1", features = ["serde", "v4"] }
 
-[workspace.lints.clippy]
-self_named_module_files = "deny"
+mime = "0.3.17"
+opentalk-version = "0.1.1"
+
+[dev-dependencies]
+insta = "1.40.0"
+pretty_assertions = "1.2.1"
+rstest = "0.25.0"
+
+[build-dependencies]
+opentalk-version = "0.1.1"
+snafu = "0.8.4"
+vergen = { version = "9", features = ["build", "cargo", "rustc"] }
+vergen-gix = "1"

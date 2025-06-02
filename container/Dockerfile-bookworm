@@ -24,7 +24,7 @@ RUN apt-get update && \
 WORKDIR /opt/smtp-mailer
 
 COPY --from=builder /builds/opentalk/backend/services/smtp-mailer/target/release/opentalk-smtp-mailer .
-COPY ./crates/opentalk-smtp-mailer/resources ./resources
+COPY ./resources ./resources
 
 ENV USERID=1000
 ENV GROUPID=1000

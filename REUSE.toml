@@ -15,20 +15,20 @@ path = [
   "CHANGELOG.md",
   "Cargo.lock",
   "config.toml.example",
-  "crates/opentalk-smtp-mailer/resources/locales/**/**.ftl",
-  "crates/opentalk-smtp-mailer/resources/templates/**.css",
-  "crates/opentalk-smtp-mailer/resources/templates/**.html",
-  "crates/opentalk-smtp-mailer/resources/templates/**.include",
-  "crates/opentalk-smtp-mailer/resources/templates/**.txt",
-  "crates/opentalk-smtp-mailer/resources/templates/README.md",
-  "crates/opentalk-smtp-mailer/tests/snapshots/**",
   "docs/**.md",
   "renovate.json",
+  "resources/locales/**/**.ftl",
+  "resources/templates/**.css",
+  "resources/templates/**.html",
+  "resources/templates/**.include",
+  "resources/templates/**.txt",
+  "resources/templates/README.md",
+  "tests/snapshots/**",
 ]
 precedence = "aggregate"
 
 [[annotations]]
 SPDX-FileCopyrightText = "OpenTalk GmbH <mail@opentalk.eu>"
 SPDX-License-Identifier = "CC-BY-NC-ND-4.0"
-path = ["crates/opentalk-smtp-mailer/resources/images/**.png"]
+path = ["resources/images/**.png"]
 precedence = "aggregate"
