@@ -14,7 +14,6 @@ ENV CARGO_HOME=/builds/opentalk/backend/services/smtp-mailer/cargo
 
 RUN cargo auditable build --release --locked --package opentalk-smtp-mailer
 
-
 FROM ubuntu:noble
 
 RUN apt-get update && \
@@ -25,7 +24,7 @@ RUN apt-get update && \
 WORKDIR /opt/smtp-mailer
 
 COPY --from=builder /builds/opentalk/backend/services/smtp-mailer/target/release/opentalk-smtp-mailer .
-COPY ./crates/opentalk-smtp-mailer/resources ./resources
+COPY ./resources ./resources
 
 ENV USERID=1000
 ENV GROUPID=1000

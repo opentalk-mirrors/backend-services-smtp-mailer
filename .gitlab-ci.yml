@@ -128,25 +128,11 @@ test:cargo_test:
   script:
     - cargo test --workspace --locked
 
-check:mail-worker-protocol-schema-and-examples:
-  stage: check
-  needs: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  artifacts:
-    paths:
-      - target/docs/temporary/opentalk-mail-worker-protocol
-  script:
-    - ci/docs-generate-mail-worker-protocol-schema-and-examples.sh
-
 check:docs-generated-parts:
   stage: check
   image:
     name: git.opentalk.dev:5050/opentalk/tools/opentalk-ci-doc-updater:v0.1.0
     entrypoint: ['']
-  needs:
-    - job: check:mail-worker-protocol-schema-and-examples
-      artifacts: true
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
@@ -226,7 +212,7 @@ package:mailer-container-mr:
       --context $CI_PROJECT_DIR
       --build-arg=GIT_SHA=$CI_COMMIT_SHA
       --build-arg=GIT_REF=$CI_COMMIT_REF_NAME
-      --dockerfile $CI_PROJECT_DIR/Dockerfile
+      --dockerfile $CI_PROJECT_DIR/container/Dockerfile
       --destination $CI_REGISTRY_IMAGE:$IMAGE_TAG
       --force
 
@@ -259,7 +245,7 @@ package:mailer-container-build:
       --context $CI_PROJECT_DIR
       --build-arg=GIT_SHA=$CI_COMMIT_SHA
       --build-arg=GIT_REF=$CI_COMMIT_REF_NAME
-      --dockerfile $CI_PROJECT_DIR/Dockerfile-$FLAVOR
+      --dockerfile $CI_PROJECT_DIR/container/Dockerfile-$FLAVOR
       --destination "$CI_REGISTRY_IMAGE:$FLAVOR-${CI_COMMIT_SHA:0:8}"
       --force
 

@@ -652,7 +652,7 @@ mod test {
     #[test]
     fn settings_env_vars_overwrite_config() -> Result<(), ConfigError> {
         // Sanity check
-        let settings = Settings::load_from_path(Path::new("../../example/smtp-mailer.toml"))?;
+        let settings = Settings::load_from_path(Path::new("./example/smtp-mailer.toml"))?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, "+49123321123".to_string());
@@ -664,7 +664,7 @@ mod test {
         env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
         env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
 
-        let settings = Settings::load_from_path(Path::new("../../example/smtp-mailer.toml"))?;
+        let settings = Settings::load_from_path(Path::new("./example/smtp-mailer.toml"))?;
         let support_contact = settings.support_contact.unwrap();
 
         assert_eq!(support_contact.phone, env_support_phone);
