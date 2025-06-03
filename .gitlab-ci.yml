@@ -59,6 +59,14 @@ lint:dependency_check:
       --deny advisory-not-detected
       --hide-inclusion-graph
 
+lint:unnecessary_dependencies:
+  stage: lint
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  before_script: if ! cargo machete --version; then cargo install cargo-machete; fi
+  script: cargo machete --with-metadata
+
 lint:licensing:
   stage: lint
   <<: *default_job_condition
