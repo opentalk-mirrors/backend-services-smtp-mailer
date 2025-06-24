@@ -37,6 +37,7 @@ lettre = { version = "0.11.0", default-features = false, features = [
 log = "0.4.17"
 opentalk-mail-worker-protocol = "0.36.0"
 opentalk-types-common = { version = "0.35", features = ["serde"] }
+opentalk-version = "0.2.0"
 percent-encoding = "2.1"
 phonenumber = "0.3"
 serde = { version = "1.0.137", features = ["derive"] }
@@ -57,14 +58,13 @@ url = { version = "2.2.2", features = ["serde"] }
 uuid = { version = "1", features = ["serde", "v4"] }
 
 mime = "0.3.17"
-opentalk-version = "0.1.1"
 
 [dev-dependencies]
 insta = "1.40.0"
 rstest = "0.25.0"
 
 [build-dependencies]
-opentalk-version = "0.1.1"
+opentalk-version = "0.2.0"
 snafu = "0.8.4"
 
 [package.metadata.cargo-machete]
