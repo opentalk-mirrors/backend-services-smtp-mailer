@@ -188,7 +188,7 @@ fn create_event_object<'a>(
 
     match invitee {
         Invitee::WithName { email, name } => {
-            let mut attendee_property = Attendee::new(format!("mailto:{}", email));
+            let mut attendee_property = Attendee::new(format!("mailto:{email}"));
 
             attendee_property.append(parameters!(
                 "CUTYPE" => "INDIVIDUAL";
@@ -202,7 +202,7 @@ fn create_event_object<'a>(
             event_obj.push(attendee_property);
         }
         Invitee::WithoutName(email) => {
-            let mut attendee_property = Attendee::new(format!("mailto:{}", email));
+            let mut attendee_property = Attendee::new(format!("mailto:{email}"));
 
             attendee_property.append(parameters!(
                 "CUTYPE" => "INDIVIDUAL";
@@ -318,7 +318,7 @@ fn create_exception_event_object<'a>(
 
     match invitee {
         Invitee::WithName { email, name } => {
-            let mut attendee_property = Attendee::new(format!("mailto:{}", email));
+            let mut attendee_property = Attendee::new(format!("mailto:{email}"));
 
             attendee_property.append(parameters!(
                 "CUTYPE" => "INDIVIDUAL";
@@ -332,7 +332,7 @@ fn create_exception_event_object<'a>(
             event_obj.push(attendee_property);
         }
         Invitee::WithoutName(email) => {
-            let mut attendee_property = Attendee::new(format!("mailto:{}", email));
+            let mut attendee_property = Attendee::new(format!("mailto:{email}"));
 
             attendee_property.append(parameters!(
                 "CUTYPE" => "INDIVIDUAL";
