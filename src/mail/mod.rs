@@ -363,11 +363,11 @@ pub fn format_telephone_number_filter(
     let formatted_telephone_number = match result {
         Ok(Ok(number)) => number.format().mode(mode).to_string(),
         e if mode == phonenumber::Mode::Rfc3966 => {
-            log::warn!(" Failed to parse phone number {:?}", e);
+            log::warn!(" Failed to parse phone number {e:?}");
             format!("tel:{input}")
         }
         e => {
-            log::warn!(" Failed to parse phone number {:?}", e);
+            log::warn!(" Failed to parse phone number {e:?}");
             input
         }
     };

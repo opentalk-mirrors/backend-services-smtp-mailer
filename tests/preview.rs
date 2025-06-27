@@ -13,7 +13,7 @@ use opentalk_types_common::users::Language;
 use rstest::rstest;
 
 fn snapshot_name(template: TemplateVariant, lang: &str, output: OutputVariant) -> String {
-    format!("{:?}-{}-{:?}", template, lang, output)
+    format!("{template:?}-{lang}-{output:?}")
 }
 
 #[rstest]

@@ -94,7 +94,7 @@ async fn main() -> anyhow::Result<()> {
     }) = &args.command
     {
         let example_mail = template.render_template(&settings, *type_, language.clone())?;
-        print!("{}", example_mail);
+        print!("{example_mail}");
 
         exit(0);
     } else if let Some(Commands::PreviewSend {
