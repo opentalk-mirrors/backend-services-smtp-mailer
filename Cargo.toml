@@ -61,7 +61,7 @@ mime = "0.3.17"
 
 [dev-dependencies]
 insta = "1.40.0"
-rstest = "0.25.0"
+rstest = "0.26.0"
 
 [build-dependencies]
 opentalk-version = "0.2.0"
