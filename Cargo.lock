@@ -3155,7 +3155,6 @@ dependencies = [
  "snafu",
  "tera",
  "textwrap",
- "thiserror 2.0.12",
  "tokio",
  "tokio-executor-trait",
  "tokio-reactor-trait",

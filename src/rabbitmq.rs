@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 use anyhow::{Context, Result};
-use thiserror::Error;
 use tokio_executor_trait::Tokio as TokioExecutor;
 use tokio_reactor_trait::Tokio as TokioReactor;
 
@@ -45,14 +44,4 @@ impl RabbitMqService {
             consumer,
         })
     }
-}
-
-#[derive(Error, Debug)]
-pub enum RabbitMqError {
-    #[error(transparent)]
-    Json(#[from] serde_path_to_error::Error<serde_json::Error>),
-    #[error(transparent)]
-    JsonWithoutPath(#[from] serde_json::Error),
-    #[error(transparent)]
-    Lapin(#[from] lapin::Error),
 }
