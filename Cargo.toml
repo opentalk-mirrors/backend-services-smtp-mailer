@@ -46,7 +46,6 @@ serde_path_to_error = "0.1.4"
 service-probe = "0.2.0"
 tera = { version = "1.15.0", features = ["builtins"] }
 textwrap = "0.16.0"
-thiserror = "2.0.0"
 tokio = { version = "1.18.2", default-features = false, features = [
   "macros",
   "rt-multi-thread",
