@@ -32,9 +32,12 @@ _check_git_cliff:
     fi
 
 # Prepare a release
-prepare-release VERSION: _check_cargo_set_version
+prepare-release VERSION: (set-version VERSION) (update-changelog VERSION)
+
+# Sets the version in the Cargo.toml and updates the Cargo.lock
+set-version VERSION: _check_cargo_set_version
     # Set the version number for all packages in the workspace
-    cargo set-version --workspace {{ VERSION }} --exclude opentalk-mail-worker-protocol
+    cargo set-version --workspace {{ VERSION }}
     # Regenerate the lockfile
     cargo check
 
