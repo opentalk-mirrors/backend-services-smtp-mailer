@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0] - 2025-08-21
+
+[0.15.0]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.14.0...v0.15.0
+
+### 🚀 New features
+
+- Print license information ([!438](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/438))
+
+### 📦 Dependencies
+
+- (deps) Lock file maintenance ([!463](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/463), [!469](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/469), [!473](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/473), [!477](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/477), [!479](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/479), [!482](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/482), [!486](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/486), [!491](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/491), [!497](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/497), [!502](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/502), [!510](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/510), [!519](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/519))
+- (deps) Update alpine docker tag to v3.22 ([!462](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/462))
+- (deps) Update git.opentalk.dev:5050/opentalk/backend/containers/rust docker tag to v1.89.0 ([!507](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/507), [!478](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/478))
+- (deps) Update pre-commit hook adrienverge/yamllint to v1.37.1 ([!488](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/488))
+- (deps) Update pre-commit hook embarkstudios/cargo-deny to v0.18.4 ([!517](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/517), [!487](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/487))
+- (deps) Update pre-commit hook pre-commit/pre-commit-hooks to v6 ([!509](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/509))
+- (deps) Update rust crate anyhow to v1.0.99 ([!513](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/513))
+- (deps) Update rust crate clap to v4.5.45 ([!514](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/514), [!512](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/512), [!505](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/505), [!499](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/499), [!485](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/485), [!470](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/470))
+- (deps) Update rust crate config to v0.15.14 ([!515](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/515), [!484](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/484), [!483](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/483))
+- (deps) Update rust crate css-inline to 0.17.0 ([!496](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/496), [!489](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/489), [!476](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/476))
+- (deps) Update rust crate lapin to v2.5.4 ([!493](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/493))
+- (deps) Update rust crate lettre to v0.11.18 ([!498](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/498))
+- (deps) Update opentalk-types rust crates ([!506](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/506), [!492](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/492), [!503](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/503), [!504](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/504))
+- (deps) Update rust crate rstest to 0.26.0 ([!495](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/495))
+- (deps) Update rust crate serde_json to v1.0.143 ([!520](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/520), [!500](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/500))
+- (deps) Update rust crate snafu to v0.8.7 ([!521](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/521))
+- (deps) Update rust crate tokio to v1.46.0 ([!480](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/480))
+- (deps) Update rust crate uuid to v1.18.0 ([!511](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/511))
+
+### ⚙ Miscellaneous
+
+- Move back to single crate structure ([!464](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/464))
+- Add cargo-machete to ci and pre-commit ([!466](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/466))
+- (justfile) Include the update-changelog job in prepare-release ([!522](https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/merge_requests/522))
+
 ## [0.14.0] - 2025-05-29
 
 [0.14.0]: https://git.opentalk.dev/opentalk/backend/services/smtp-mailer/-/compare/v0.13.2...v0.14.0

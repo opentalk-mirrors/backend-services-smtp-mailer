@@ -9,7 +9,7 @@ description = "Mail Worker that takes mail send tasks from a queue, renders them
 edition = "2021"
 name = "opentalk-smtp-mailer"
 publish = false
-version = "0.14.0"
+version = "0.15.0"
 
 [dependencies]
 anyhow = "1.0.57"
