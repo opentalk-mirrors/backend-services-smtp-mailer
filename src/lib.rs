@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 use anyhow::{Context, Result};
-use lettre::{transport::smtp::authentication::Credentials, AsyncSmtpTransport, Tokio1Executor};
-use service_probe::{start_probe, ServiceState};
+use lettre::{AsyncSmtpTransport, Tokio1Executor, transport::smtp::authentication::Credentials};
+use service_probe::{ServiceState, start_probe};
 use settings::MonitoringSettings;
 
 use crate::worker::Worker;

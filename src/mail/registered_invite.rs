@@ -4,15 +4,15 @@
 
 use std::{borrow::Cow, collections::HashMap};
 
-use fluent_templates::{fluent_bundle::FluentValue, Loader};
+use fluent_templates::{Loader, fluent_bundle::FluentValue};
 use lettre::message::{Mailbox, SinglePart};
 use opentalk_mail_worker_protocol::{self as protocol, v1::RegisteredEventInvite};
 use opentalk_types_common::users::Language;
 
-use super::{create_ics_attachments, generate_mailbox_name, MailTemplate};
+use super::{MailTemplate, create_ics_attachments, generate_mailbox_name};
 use crate::{
     i18n,
-    ics::{create_ics_v1, EventStatus},
+    ics::{EventStatus, create_ics_v1},
 };
 
 fn language(obj: &RegisteredEventInvite) -> &Language {

@@ -7,7 +7,7 @@ use std::{path::PathBuf, process::exit};
 use build_info::BuildInfo;
 use clap::{Parser, Subcommand};
 use opentalk_smtp_mailer::{
-    preview::{preview_send_mail, OutputVariant, TemplateVariant},
+    preview::{OutputVariant, TemplateVariant, preview_send_mail},
     run, settings,
 };
 use opentalk_types_common::users::Language;

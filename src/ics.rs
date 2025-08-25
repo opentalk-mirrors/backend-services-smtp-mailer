@@ -4,17 +4,17 @@
 
 use std::borrow::Cow;
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::{Context, Result, anyhow};
 use chrono::{DateTime, Duration, Utc};
 use chrono_tz::Tz;
 use ics::{
+    Event, ICalendar,
     components::Property,
     escape_text, parameters,
     properties::{
         Attendee, Created, Description, ExDate, LastModified, Method, Organizer, RDate, RRule,
         Sequence, Status, Summary,
     },
-    Event, ICalendar,
 };
 use ics_chrono_tz::ToIcsTimeZone;
 use opentalk_mail_worker_protocol::v1::{self, EventException, Time};
@@ -432,7 +432,7 @@ mod test {
     };
     use uuid::Uuid;
 
-    use super::{create_ics_v1, Invitee};
+    use super::{Invitee, create_ics_v1};
     use crate::ics::EventStatus;
 
     #[test]

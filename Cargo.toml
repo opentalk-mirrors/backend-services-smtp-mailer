@@ -6,7 +6,7 @@
 build = "build.rs"
 default-run = "opentalk-smtp-mailer"
 description = "Mail Worker that takes mail send tasks from a queue, renders them, and sends them out via SMTP"
-edition = "2021"
+edition = "2024"
 name = "opentalk-smtp-mailer"
 publish = false
 version = "0.15.0"
@@ -61,6 +61,7 @@ mime = "0.3.17"
 [dev-dependencies]
 insta = "1.40.0"
 rstest = "0.26.0"
+serial_test = "3"
 
 [build-dependencies]
 opentalk-version = "0.2.0"
