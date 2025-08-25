@@ -2,12 +2,17 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+use std::time::Duration;
+
 use anyhow::{Context, Result};
 use lettre::{AsyncSmtpTransport, Tokio1Executor, transport::smtp::authentication::Credentials};
-use service_probe::{ServiceState, start_probe};
+use log::debug;
+use service_probe::{ServiceState, set_service_state, start_probe};
 use settings::MonitoringSettings;
 
-use crate::worker::Worker;
+use crate::{settings::RabbitMqConfig, worker::Worker};
+
+const TIME_BETWEEN_RABBITMQ_CONNECTION_ATTEMPTS: Duration = Duration::from_secs(1);
 
 pub mod i18n;
 pub(crate) mod mail;
@@ -27,16 +32,49 @@ pub async fn run(settings: settings::Settings) -> Result<()> {
         start_probe(addr, port, ServiceState::Up).await?;
     }
 
+    let mail_builder = MailBuilder::new(&settings)?;
     let smtp_client: AsyncSmtpTransport<Tokio1Executor> =
         settings.smtp.smtp_server.clone().try_into()?;
+    let task_processing_timeout = match settings.rabbit_mq.task_processing_timeout_seconds {
+        0 => None,
+        seconds => Some(Duration::from_secs(seconds)),
+    };
 
-    let worker = Worker::new(smtp_client, &settings)?
-        .start(&settings.rabbit_mq)
+    loop {
+        let next_connection_attempt =
+            std::time::Instant::now() + TIME_BETWEEN_RABBITMQ_CONNECTION_ATTEMPTS;
+        run_worker(
+            &settings.rabbit_mq,
+            &mail_builder,
+            &smtp_client,
+            task_processing_timeout,
+        )
         .await;
+        tokio::time::sleep_until(next_connection_attempt.into()).await;
+    }
+}
 
-    worker.expect("Error initializing worker");
+async fn run_worker(
+    rabbitmq_settings: &RabbitMqConfig,
+    mail_builder: &MailBuilder,
+    smtp_client: &AsyncSmtpTransport<Tokio1Executor>,
+    task_processing_timeout: Option<Duration>,
+) {
+    debug!("Connecting to RabbitMQ channel…");
+    let Ok(rabbitmq_service) = crate::rabbitmq::RabbitMqService::new(rabbitmq_settings)
+        .await
+        .inspect_err(|e| log::warn!("Couldn't connect to RabbitMQ channel: {e}"))
+    else {
+        return;
+    };
+    debug!(
+        "Connection to RabbitMQ channel established, starting processing of mail notification tasks"
+    );
 
-    Ok(())
+    let worker = Worker::new(mail_builder, smtp_client, task_processing_timeout);
+
+    worker.run(rabbitmq_service).await;
+    set_service_state(ServiceState::Up);
 }
 
 impl TryFrom<settings::SmtpUri> for AsyncSmtpTransport<Tokio1Executor> {

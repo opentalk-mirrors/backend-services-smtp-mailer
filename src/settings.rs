@@ -138,6 +138,8 @@ pub struct RabbitMqConfig {
     pub url: String,
     #[serde(default = "rabbitmq_default_queue_name")]
     pub queue_name: String,
+    #[serde(default = "rabbitmq_default_task_processing_timeout_seconds")]
+    pub task_processing_timeout_seconds: u64,
 }
 
 impl Default for RabbitMqConfig {
@@ -145,6 +147,7 @@ impl Default for RabbitMqConfig {
         Self {
             url: rabbitmq_default_url(),
             queue_name: rabbitmq_default_queue_name(),
+            task_processing_timeout_seconds: rabbitmq_default_task_processing_timeout_seconds(),
         }
     }
 }
@@ -155,6 +158,10 @@ fn rabbitmq_default_url() -> String {
 
 fn rabbitmq_default_queue_name() -> String {
     "opentalk_mailer".to_owned()
+}
+
+const fn rabbitmq_default_task_processing_timeout_seconds() -> u64 {
+    60 * 20
 }
 
 #[derive(Debug, Clone, Deserialize)]
