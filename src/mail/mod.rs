@@ -5,18 +5,18 @@
 use std::{borrow::Cow, collections::HashMap};
 
 use anyhow::Result;
-use fluent_templates::{fluent_bundle::FluentValue, FluentLoader};
+use fluent_templates::{FluentLoader, fluent_bundle::FluentValue};
 use lettre::{
-    message::{
-        header::{ContentDisposition, ContentTransferEncoding, ContentType},
-        Attachment, Mailbox, MultiPart, SinglePart,
-    },
     Message,
+    message::{
+        Attachment, Mailbox, MultiPart, SinglePart,
+        header::{ContentDisposition, ContentTransferEncoding, ContentType},
+    },
 };
 use opentalk_mail_worker_protocol as proto;
 use opentalk_types_common::users::{Language, UserTitle};
-use serde_json::{to_value, Value};
-use tera::{try_get_value, Tera};
+use serde_json::{Value, to_value};
+use tera::{Tera, try_get_value};
 
 use crate::{ics::EventStatus, settings};
 

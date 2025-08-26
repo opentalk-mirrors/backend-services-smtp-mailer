@@ -13,7 +13,7 @@ use dirs::config_dir;
 use itertools::Itertools as _;
 use opentalk_types_common::users::Language;
 use percent_encoding::percent_decode_str;
-use serde::{de, Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, de};
 
 #[derive(Debug, Clone, Deserialize, Default)]
 pub struct Settings {
@@ -68,9 +68,10 @@ impl Settings {
                         .iter()
                         .filter_map(ConfigSearchPath::display_non_deprecated)
                         .join(", ");
-                    log::warn!("You're using the deprecated configuration path \"{}\", please use one of these instead: {}.",
-                    path.to_string_lossy(),
-                    supported_paths
+                    log::warn!(
+                        "You're using the deprecated configuration path \"{}\", please use one of these instead: {}.",
+                        path.to_string_lossy(),
+                        supported_paths
                     );
                 }
                 return Settings::load_from_path(path);
@@ -645,12 +646,37 @@ pub struct SupportContact {
 
 #[cfg(test)]
 mod test {
-    use std::env;
+    use std::{collections::BTreeMap, env};
+
+    use serial_test::serial;
 
     use super::*;
 
+    /// Test loading the settings overwritten by env vars.
+    ///
+    /// This test sets and reads environment variables which is inherently unsafe.
+    /// Therefore it is marked as `#[serial]` so that it doesn't interfere with any other
+    /// tests that might run in parallel.
+    ///
+    /// Once the test is finished, all variables are restored.
     #[test]
+    #[serial]
     fn settings_env_vars_overwrite_config() -> Result<(), ConfigError> {
+        // backup current environment variables
+        let backup_vars = backup_env_variables();
+
+        // perform the test which modifies the env variables
+        let result = settings_env_vars_overwrite_config_inner();
+
+        // restore the environment variables from the backup
+        unsafe {
+            restore_env_variables(backup_vars);
+        }
+
+        result
+    }
+
+    fn settings_env_vars_overwrite_config_inner() -> Result<(), ConfigError> {
         // Sanity check
         let settings = Settings::load_from_path(Path::new("./example/smtp-mailer.toml"))?;
         let support_contact = settings.support_contact.unwrap();
@@ -661,8 +687,10 @@ mod test {
         // Set environment variables to overwrite default config file
         let env_support_phone = "+49777666555".to_string();
         let env_support_mail = "support@newexample.com".to_string();
-        env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
-        env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
+        unsafe {
+            env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
+            env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
+        }
 
         let settings = Settings::load_from_path(Path::new("./example/smtp-mailer.toml"))?;
         let support_contact = settings.support_contact.unwrap();
@@ -671,5 +699,22 @@ mod test {
         assert_eq!(support_contact.mail, env_support_mail);
 
         Ok(())
+    }
+
+    fn backup_env_variables() -> BTreeMap<String, String> {
+        env::vars().collect()
+    }
+
+    unsafe fn restore_env_variables(backup_vars: BTreeMap<String, String>) {
+        {
+            for (k, _) in env::vars() {
+                if !backup_vars.contains_key(&k) {
+                    unsafe { env::remove_var(&k) };
+                }
+            }
+            for (k, v) in backup_vars {
+                unsafe { env::set_var(k, v) };
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ use opentalk_types_common::{
 use protocol::v1::{CallIn, Event, Room, Time};
 use uuid::Uuid;
 
-use crate::{send_mail_v1, settings::Settings, MailBuilder, MailTemplate};
+use crate::{MailBuilder, MailTemplate, send_mail_v1, settings::Settings};
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 pub enum OutputVariant {
@@ -174,7 +174,7 @@ fn registered_inviter(
 
 pub trait ExampleData: Sized + MailTemplate {
     fn generate_example(language: Language, email_address: &Option<String>)
-        -> anyhow::Result<Self>;
+    -> anyhow::Result<Self>;
 
     fn preview(settings: &Settings, html: bool, lang: Language) -> anyhow::Result<String> {
         let mail_builder =
