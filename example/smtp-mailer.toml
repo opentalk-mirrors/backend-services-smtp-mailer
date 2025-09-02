@@ -8,6 +8,19 @@ url = "amqp://username:password@localhost/%2F"
 # The queue to subscribe to
 mail_task_queue = "opentalk_mailer"
 
+# The number of seconds after which the processing of a single mailer task will be aborted.
+# In that case, the task will be rejected to RabbitMQ with the requeue flag on, so RabbitMQ
+# will attempt to deliver it again.
+#
+# This should be strictly shorter than the RabbitMQ delivery acknowledge timeout
+# which can be set in the RabbitMQ configuration and defaults to 30 minutes
+# (1800 seconds).
+#
+# When set to 0, no timeout exists and the task will block infinitely if it
+# doesn't finish on its own. This is the same behavior that was implemented in
+# SMTP-Mailer 0.14.0 and earlier.
+#task_processing_timeout_seconds = 1200
+
 [smtp]
 # SMTP Cleartext: smtp://user:pass@mailserver.example.org:1234?disable_starttls=true
 # SMTP with StartTLS: smtp://user:pass@mailserver.example.org:1234

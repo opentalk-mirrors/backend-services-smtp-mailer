@@ -22,3 +22,7 @@ a change in an OpenTalk instance affects them. Typical notifications are:
 
 - [RabbitMQ](rabbitmq.md): OpenTalk SMTP Mailer consumes messages from a
   RabbitMQ queue.
+
+## State diagram
+
+- The [State diagram](statediagram.md) describes the different states of the SMTP mailer.
