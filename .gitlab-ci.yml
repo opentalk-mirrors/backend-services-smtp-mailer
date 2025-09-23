@@ -139,7 +139,7 @@ test:cargo_test:
 check:docs-generated-parts:
   stage: check
   image:
-    name: git.opentalk.dev:5050/opentalk/tools/opentalk-ci-doc-updater:v0.1.0
+    name: git.opentalk.dev:5050/opentalk/tools/opentalk-ci-doc-updater:v0.2.0
     entrypoint: ['']
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
