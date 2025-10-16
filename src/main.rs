@@ -6,6 +6,7 @@ use std::{path::PathBuf, process::exit};
 
 use build_info::BuildInfo;
 use clap::{Parser, Subcommand};
+use log::LevelFilter;
 use opentalk_smtp_mailer::{
     preview::{OutputVariant, TemplateVariant, preview_send_mail},
     run, settings,
@@ -79,7 +80,14 @@ async fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("warn")).init();
+    const DEFAULT_LOG_LEVEL: LevelFilter = LevelFilter::Warn;
+
+    env_logger::Builder::new()
+        .filter_level(DEFAULT_LOG_LEVEL)
+        .filter_module("html5ever", DEFAULT_LOG_LEVEL)
+        .filter_module("selectors", DEFAULT_LOG_LEVEL)
+        .parse_default_env()
+        .init();
 
     let settings = if let Some(settings_path) = &args.config {
         settings::Settings::load_from_path(settings_path)?
