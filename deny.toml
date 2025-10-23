@@ -51,6 +51,36 @@ ignore = [
   # This is a transitive dependency of this project.
   # We need to wait for our dependencies to fix this by switching themselves.
   "RUSTSEC-2024-0384",
+
+  # | `unic-segment` is unmaintained
+  # Transitive dependency, need to wait until e.g. `tera` is updated.
+  # https://github.com/Keats/tera/issues/978
+  "RUSTSEC-2025-0074",
+
+  # | `unic-char-range` is unmaintained
+  # Transitive dependency, need to wait until e.g. `tera` is updated.
+  # https://github.com/Keats/tera/issues/978
+  "RUSTSEC-2025-0075",
+
+  # | `unic-common` is unmaintained
+  # Transitive dependency, need to wait until e.g. `tera` is updated.
+  # https://github.com/Keats/tera/issues/978
+  "RUSTSEC-2025-0080",
+
+  # | `unic-char-property` is unmaintained
+  # Transitive dependency, need to wait until e.g. `tera` is updated.
+  # https://github.com/Keats/tera/issues/978
+  "RUSTSEC-2025-0081",
+
+  # | `unic-ucd-version` is unmaintained
+  # Transitive dependency, need to wait until e.g. `tera` is updated.
+  # https://github.com/Keats/tera/issues/978
+  "RUSTSEC-2025-0098",
+
+  # | `unic-ucd-segment` is unmaintained
+  # Transitive dependency, need to wait until e.g. `tera` is updated.
+  # https://github.com/Keats/tera/issues/978
+  "RUSTSEC-2025-0104",
 ]
 # Threshold for security vulnerabilities, any vulnerability with a CVSS score
 # lower than the range specified will be ignored. Note that ignored advisories
