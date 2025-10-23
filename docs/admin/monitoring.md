@@ -1,6 +1,6 @@
 # Monitoring
 
-The OpenTalk SMTP Mailer provides a simple Http-Server for monitoring purpose.
+The {{ product_name }} SMTP Mailer provides a simple Http-Server for monitoring purpose.
 
 ## Configuration
 

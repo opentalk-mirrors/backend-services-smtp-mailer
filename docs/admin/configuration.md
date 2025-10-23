@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Configuring OpenTalk SMTP Mailer
+# Configuring {{ product_name }} SMTP Mailer
 
 When the SMTP mailer gets started, it loads the configuration from the
 environment. It reads the settings in this order:

@@ -153,6 +153,20 @@ check:docs-generated-parts:
         exit 1
       fi
 
+build:docs:
+  stage: build
+  image:
+    name: git.opentalk.dev:5050/opentalk/backend/containers/mkdocs-material:latest
+    entrypoint: ['']
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  artifacts:
+    paths:
+      - site/
+  script:
+    - mkdocs build --config-file "$CI_PROJECT_DIR"/mkdocs.yml --strict
+
 trigger-docs:
   needs: []
   stage: trigger
