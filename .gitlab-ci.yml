@@ -12,7 +12,7 @@ variables:
   DEFAULT_FLAVOR: trixie
 
 .template_vars:
-  FLAVORS: [trixie, bookworm, noble]
+  FLAVORS: [trixie, bookworm, noble, scratch]
 
 stages:
   - lint
