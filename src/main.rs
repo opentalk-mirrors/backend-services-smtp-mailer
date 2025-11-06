@@ -13,6 +13,8 @@ use opentalk_smtp_mailer::{
 };
 use opentalk_types_common::users::Language;
 use opentalk_version::InfoArgs;
+use service_probe_client::is_ready;
+use url::Url;
 
 mod license;
 
@@ -63,6 +65,11 @@ enum Commands {
         #[clap(default_value_t = 15)]
         cancellation_delay: u64,
     },
+    /// Return the readiness state
+    Health {
+        /// The monitoring endpoint can be provided optionally
+        endpoint: Option<Url>,
+    },
 }
 
 opentalk_version::build_info!();
@@ -95,7 +102,37 @@ async fn main() -> anyhow::Result<()> {
         settings::Settings::load_from_standard_paths()?
     };
 
-    if let Some(Commands::Preview {
+    if let Some(Commands::Health { endpoint }) = args.command {
+        let Some(monitoring_endpoint) = endpoint.or_else(|| {
+            settings.monitoring.as_ref().map(|monitoring_settings| {
+                format!(
+                    "http://{}:{}",
+                    monitoring_settings.addr, monitoring_settings.port
+                )
+                .parse()
+                .expect("valid endpoint can be built from monitoring settings")
+            })
+        }) else {
+            log::warn!("Monitoring not configured and no url endpoint parameter given");
+            exit(1);
+        };
+        return match is_ready(&monitoring_endpoint).await {
+            Ok(is_ready) => match is_ready {
+                true => {
+                    log::info!("READY");
+                    Ok(())
+                }
+                false => {
+                    log::info!("Not Ready");
+                    exit(1)
+                }
+            },
+            Err(err) => {
+                log::error!("Err: {}", err);
+                exit(-1)
+            }
+        };
+    } else if let Some(Commands::Preview {
         type_,
         language,
         template,
