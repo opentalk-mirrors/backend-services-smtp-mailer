@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # SMTP
 
-OpenTalk SMTP Mailer sends emails via a SMTP server. These protocols are supported:
+{{ product_name }} SMTP Mailer sends emails via a SMTP server. These protocols are supported:
 
 - SMTP cleartext
 - SMTP with StartTLS

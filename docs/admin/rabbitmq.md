@@ -4,10 +4,9 @@ sidebar_position: 2
 
 # RabbitMQ
 
-When started up, the OpenTalk SMTP Mailer connects to the configured
+When started up, the {{ product_name }} SMTP Mailer connects to the configured
 [RabbitMQ](https://www.rabbitmq.com/) queue and consumes the messages it
-receives from there. These messages must follow the definition of the
-[OpenTalk Mail Worker Protocol](https://docs.opentalk.eu/developer/controller/mail_worker_protocol/).
+receives from there.
 
 ## Configuration
 
