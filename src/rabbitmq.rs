@@ -20,7 +20,7 @@ impl RabbitMqService {
             &settings.url,
             lapin::ConnectionProperties::default()
                 .with_executor(TokioExecutor::current())
-                .with_reactor(TokioReactor),
+                .with_reactor(TokioReactor::current()),
         )
         .await
         .context("lapin connect")?;
