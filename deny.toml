@@ -40,14 +40,13 @@ yanked = "warn"
 # A list of advisory IDs to ignore. Note that ignored advisories will still
 # output a note when they are encountered.
 ignore = [
-  # | Bincode is unmaintained
-  # | Due to a doxxing and harassment incident, the bincode team has taken the decision to cease development permanently.
-  # | The team considers version 1.3.3 a complete version of bincode that is not in need of any updates.
-  # | Solution: No safe upgrade is available!
+  # atomic-polyfill is unmaintained
   #
-  # Looks like we need to migrate to an alternative (or restructure the code
-  # such that bincode is no longer part of the dependency tree).
-  "RUSTSEC-2025-0141",
+  # atomic polyfill is in our dependency tree phonenumber->postcard->heapless->atomic-polyfill
+  # heapless already removed their dependency on atomic polyfill in 2023, but postcard still depends on a very
+  # old version of heapless. There are multiple issues in the postcard repository regarding the heapless
+  # update, but seems like they are quite hessitant to do the update.
+  "RUSTSEC-2023-0089",
 ]
 # Threshold for security vulnerabilities, any vulnerability with a CVSS score
 # lower than the range specified will be ignored. Note that ignored advisories
