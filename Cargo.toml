@@ -43,7 +43,7 @@ phonenumber = "0.3"
 serde = { version = "1.0.137", features = ["derive"] }
 serde_json = "1.0.81"
 serde_path_to_error = "0.1.4"
-service-probe = "0.3.0"
+service-probe = "0.4.0"
 service-probe-client = "0.4.0"
 tera = { version = "1.15.0", features = ["builtins"] }
 textwrap = "0.16.0"
