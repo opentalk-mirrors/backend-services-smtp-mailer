@@ -37,7 +37,7 @@ lettre = { version = "0.11.0", default-features = false, features = [
 log = "0.4.17"
 opentalk-mail-worker-protocol = "0.38.0"
 opentalk-types-common = { version = "0.37", features = ["serde"] }
-opentalk-version = "0.3.0"
+opentalk-version = "0.4.0"
 percent-encoding = "2.1"
 phonenumber = "0.3"
 serde = { version = "1.0.137", features = ["derive"] }
@@ -65,7 +65,7 @@ rstest = "0.26.0"
 serial_test = "3"
 
 [build-dependencies]
-opentalk-version = "0.3.0"
+opentalk-version = "0.4.0"
 snafu = "0.8.4"
 
 [package.metadata.cargo-machete]
