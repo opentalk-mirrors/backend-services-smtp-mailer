@@ -100,7 +100,7 @@ where
         };
 
         if let Err(e) = result {
-            log::warn!("Error sending E-Mail: {e}");
+            log::error!("Error sending E-Mail: {e}");
 
             let requeue = if let Some(smtp_error) =
                 e.downcast_ref::<lettre::transport::smtp::Error>()
@@ -113,8 +113,6 @@ where
             if let Err(e) = delivery.reject(BasicRejectOptions { requeue }).await {
                 log::error!("Error rejecting the delivery to RabbitMQ: {e}");
             }
-
-            log::warn!("Error handling the mail task: {e}");
 
             return Ok(());
         }
