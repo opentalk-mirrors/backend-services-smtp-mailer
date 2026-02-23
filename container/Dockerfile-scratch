@@ -11,9 +11,13 @@ ARG GIT_REF
 ARG VERGEN_GIT_SHA=$GIT_SHA
 ARG VERGEN_GIT_BRANCH=$GIT_REF
 
+RUN mkdir /smtp-mailer
 WORKDIR /smtp-mailer
 
-ADD . /smtp-mailer
+COPY ./build.rs .
+COPY ./src ./src
+COPY ./Cargo.* .
+COPY ./resources ./resources
 
 RUN cargo auditable build --release --locked --package opentalk-smtp-mailer --target=x86_64-unknown-linux-musl
 

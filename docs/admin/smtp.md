@@ -14,11 +14,11 @@ sidebar_position: 5
 
 The section in the [configuration file](configuration.md) is called `smtp`.
 
-| Field         | Type     | Required | Default value          | Description                                                          |
-| ------------- | -------- | -------- | ---------------------- | -------------------------------------------------------------------- |
-| `smtp_server` | `string` | no       | "smtp://localhost:25"  | The URL of the SMTP server used for sending emails                   |
-| `from_name`   | `string` | no       | "OpenTalk"             | The sender's name written to the `From` field of the emails          |
-| `from_email`  | `string` | no       | "no-reply@example.org" | The sender's email address written to the `From` field of the emails |
+| Field         | Type     | Required | Default value            | Description                                                          |
+| ------------- | -------- | -------- | ------------------------ | -------------------------------------------------------------------- |
+| `smtp_server` | `string` | no       | "smtp://localhost:25"    | The URL of the SMTP server used for sending emails                   |
+| `from_name`   | `string` | no       | "OpenTalk"               | The sender's name written to the `From` field of the emails          |
+| `from_email`  | `string` | no       | "<no-reply@example.org>" | The sender's email address written to the `From` field of the emails |
 
 Note: Encode the `smtp_server` URL properly:
 

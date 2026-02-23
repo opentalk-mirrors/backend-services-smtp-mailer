@@ -26,7 +26,8 @@ The section in the [configuration file](configuration.md) is called `templates`.
 | `external_uninvite`               | `string` | no       | See below     | The template path setting for uninvites to external users               |
 
  To specify the templates, their set of paths must be provided in a certain format. The default template path settings accord with this pattern:
- - `{html = "resources/templates/{field}.html", txt = "resources/templates/{field}.txt"}`
+
+- `{html = "resources/templates/{field}.html", txt = "resources/templates/{field}.txt"}`
 
 ### Example
 
