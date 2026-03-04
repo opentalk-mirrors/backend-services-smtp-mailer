@@ -19,11 +19,12 @@ spec:
       regex: ^\d*$
       default: ''
 ---
-image: git.opentalk.dev:5050/opentalk/backend/containers/rust:1.93.0-trixie
+image:
+  name: git.opentalk.dev:5050/opentalk/backend/containers/rust:1.93.0-trixie
+  pull_policy: if-not-present
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-  KANIKO_IMAGE: git.opentalk.dev:5050/opentalk/opentalk-devops/containers/kaniko:debug-1.25.2
   SKOPEO_IMAGE: quay.io/skopeo/stable:v1
   DEFAULT_FLAVOR: trixie
 
@@ -52,6 +53,17 @@ include:
   - project: opentalk/ci/templates/collect-commit-evidence
     ref: v2
     file: .gitlab-ci-template.yml
+  - project: opentalk/ci/templates/common-lint
+    ref: v1
+    file: .gitlab-ci-template.yml
+  - project: opentalk/ci/templates/rust-lint
+    ref: v1
+    file: .gitlab-ci-template.yml
+  - project: opentalk/ci/templates/rust-container-build
+    ref: v1
+    file: .gitlab-ci-template.yml
+    inputs:
+      dockerfile_dir: $CI_PROJECT_DIR/container
   - project: opentalk/ci/templates/release-creation
     inputs:
       version: $[[ inputs.release_version ]]
@@ -60,116 +72,22 @@ include:
     file: .gitlab-ci-template.yml
 
 
-lint:fmt:
-  stage: lint
-  <<: *default_job_condition
-  script:
-    - cargo +nightly fmt -- --check
-
-lint:clippy:
-  stage: lint
-  <<: *default_job_condition
-  script: cargo clippy --workspace --all-features --tests -- --deny warnings
-
-lint:doc:
-  variables:
-    RUSTDOCFLAGS: -Dwarnings
-  stage: lint
-  <<: *default_job_condition
-  script: cargo doc --workspace --no-deps
-
-lint:dependency_check:
-  stage: lint
-  <<: *default_job_condition
-  script:
-    - cargo deny check
-      --deny unmatched-skip
-      --deny license-not-encountered
-      --deny advisory-not-detected
-      --hide-inclusion-graph
-
-lint:unnecessary_dependencies:
-  stage: lint
+trigger-docs:
   needs: []
+  stage: trigger
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  before_script: if ! cargo machete --version; then cargo install cargo-machete; fi
-  script: cargo machete --with-metadata
-
-lint:licensing:
-  stage: lint
-  <<: *default_job_condition
-  image:
-    name: fsfe/reuse:latest
-    entrypoint: ['']
-  script:
-    - reuse lint
-
-lint:yaml:
-  stage: lint
-  <<: *default_job_condition
-  image: alpine:3.23
-  before_script:
-    - apk add --no-cache yamllint
-  script: yamllint .
-
-lint:toml:
-  stage: lint
-  <<: *default_job_condition
-  script: taplo fmt --check
-
-lint:markdown:
-  stage: lint
-  <<: *default_job_condition
-  image: registry.gitlab.com/pipeline-components/markdownlint:latest
-  script:
-    - mdl --style .markdown_style.rb  --warnings .
-
-lint:commit:
-  allow_failure: true
-  cache: {}
-  image: node:lts-alpine
-  stage: lint
-  <<: *default_job_condition
-  before_script:
-    - apk add --no-cache git
-    - npm install -g @commitlint/cli @commitlint/config-conventional
-  script:
-    - npx commitlint --from $CI_MERGE_REQUEST_DIFF_BASE_SHA --to HEAD --verbose
-
-lint:trigger_changelog_preview:
-  stage: lint
-  needs: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  variables:
-    PIPELINE_PROJECT_PATH: $CI_PROJECT_PATH
-    PIPELINE_MERGE_REQUEST_PROJECT_PATH: $CI_MERGE_REQUEST_SOURCE_PROJECT_PATH
-    PIPELINE_MERGE_REQUEST_SOURCE_BRANCH_NAME: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
-    PIPELINE_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
-  trigger: opentalk/tools/check-changelog
-
-lint:justfile:
-  stage: lint
-  <<: *default_job_condition
-  before_script: if ! just --version; then cargo install just; fi
-  script:
-    # The `--fmt` command-line parameter is still unstable, but valuable anyway.
-    - just --unstable --fmt --check
-
-test:cargo_test:
-  stage: test
-  <<: *default_job_condition
-  before_script:
-    - rustup component add rustfmt
-  script:
-    - cargo test --workspace --locked
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_NAME !~ /^.*canary$/ || $CI_COMMIT_TAG =~ /^v.*$/
+  trigger:
+    project: opentalk/backend/docs
 
 check:docs-generated-parts:
   stage: check
   image:
     name: git.opentalk.dev:5050/opentalk/tools/opentalk-ci-doc-updater:v0.2.0
     entrypoint: ['']
+    pull_policy: if-not-present
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
@@ -182,11 +100,20 @@ check:docs-generated-parts:
         exit 1
       fi
 
+test:cargo_test:
+  stage: test
+  <<: *default_job_condition
+  before_script:
+    - rustup component add rustfmt
+  script:
+    - cargo test --workspace --locked
+
 build:docs:
   stage: build
   image:
     name: git.opentalk.dev:5050/opentalk/backend/containers/mkdocs-material:latest
     entrypoint: ['']
+    pull_policy: if-not-present
   needs: []
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -195,16 +122,6 @@ build:docs:
       - site/
   script:
     - mkdocs build --config-file "$CI_PROJECT_DIR"/mkdocs.yml --strict
-
-trigger-docs:
-  needs: []
-  stage: trigger
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "pipeline"
-      when: never
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PROJECT_NAME !~ /^.*canary$/ || $CI_COMMIT_TAG =~ /^v.*$/
-  trigger:
-    project: opentalk/backend/docs
 
 package:read-tags:
   stage: package
@@ -216,6 +133,7 @@ package:read-tags:
   image:
     name: alpine/git
     entrypoint: ['']
+    pull_policy: if-not-present
   artifacts:
     reports:
       dotenv: package.env
@@ -225,86 +143,6 @@ package:read-tags:
     - TAGS=$(echo "$TAGS" | sort -V | head -n -1 | tr "\n" " ")
     - echo "TAGS=$TAGS" > package.env
 
-package:mailer-container-mr:
-  stage: package
-  needs: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "pipeline"
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      when: manual
-      allow_failure: true
-  image:
-    name: $KANIKO_IMAGE
-    pull_policy: if-not-present
-    entrypoint: ['']
-  script:
-    - mkdir -p /kaniko/.docker
-    - >
-      echo
-      "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" >
-      /kaniko/.docker/config.json
-    # According to https://docs.docker.com/engine/reference/commandline/tag/
-    # the tag may contain lowercase and uppercase letters, digits, underscores,
-    # periods, and hyphens, so we replace everything else by '_'. It cannot start
-    # with a period or hyphen, so we replace those if we find them at the start of a line.
-    # It must be no longer than 128 characters, so we truncate it in addition.
-    #
-    # tr -c means the same as --complement, but busybox tr doesn't have that.
-    #
-    # Some platforms on which this service is deployed allow only 63 characters
-    # for the container tag, so we restrict the length to that.
-    - >
-      IMAGE_TAG=$(
-          echo -n "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" |
-          tr -c '[:alnum:]_.-' '_' |
-          sed 's/^[.-]/_/' |
-          cut -c -63
-      )
-    - >
-      /kaniko/executor
-      --registry-mirror=mirror.gcr.io
-      --context $CI_PROJECT_DIR
-      --build-arg=GIT_SHA=$CI_COMMIT_SHA
-      --build-arg=GIT_REF=$CI_COMMIT_REF_NAME
-      --dockerfile $CI_PROJECT_DIR/container/Dockerfile
-      --destination $CI_REGISTRY_IMAGE:$IMAGE_TAG
-      --force
-
-package:mailer-container-build:
-  parallel:
-    matrix:
-      - FLAVOR: !reference [.template_vars, FLAVORS]
-  stage: package
-  rules:
-    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+.*$/
-    - if: $CI_PIPELINE_SOURCE == "pipeline"
-      when: never
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      changes:
-        - .trivyignore-*
-        - Dockerfile-*
-  image:
-    name: $KANIKO_IMAGE
-    pull_policy: if-not-present
-    entrypoint: ['']
-  script:
-    - mkdir -p /kaniko/.docker
-    - >
-      echo
-      "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" >
-      /kaniko/.docker/config.json
-    - >
-      /kaniko/executor
-      --registry-mirror=mirror.gcr.io
-      --context $CI_PROJECT_DIR
-      --build-arg=GIT_SHA=$CI_COMMIT_SHA
-      --build-arg=GIT_REF=$CI_COMMIT_REF_NAME
-      --dockerfile $CI_PROJECT_DIR/container/Dockerfile-$FLAVOR
-      --destination "$CI_REGISTRY_IMAGE:$FLAVOR-${CI_COMMIT_SHA:0:8}"
-      --force
-
 package:mailer-container-create-and-push-tags:
   parallel:
     matrix:
@@ -313,7 +151,7 @@ package:mailer-container-create-and-push-tags:
   needs:
     - job: package:read-tags
       optional: true
-    - job: package:mailer-container-build
+    - job: package:container-build
   rules:
     - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+.*$/
     - if: $CI_PIPELINE_SOURCE == "pipeline"
@@ -326,6 +164,7 @@ package:mailer-container-create-and-push-tags:
   image:
     name: $SKOPEO_IMAGE
     entrypoint: ['']
+    pull_policy: if-not-present
   script:
     - TAGS_TO_PUSH=$(./ci/create-container-tags.sh "${CI_COMMIT_TAG:-main}" "$TAGS" "$FLAVOR" "$DEFAULT_FLAVOR")
     - |
@@ -382,7 +221,7 @@ container-scanning:
     matrix:
       - FLAVOR: !reference [.template_vars, FLAVORS]
   needs:
-    - package:mailer-container-build
+    - package:container-build
     - read-trivy-ignore-file
   rules:
     - if: $CI_PIPELINE_SOURCE == 'schedule'
