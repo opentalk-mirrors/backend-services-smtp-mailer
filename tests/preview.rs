@@ -39,5 +39,8 @@ fn preview(
         .render_template(&settings, output, lang.clone())
         .expect("Rendering must succeed");
 
-    assert_snapshot!(snapshot_name(template, lang.as_str(), output), example_mail);
+    assert_snapshot!(
+        snapshot_name(template, &lang.to_string(), output),
+        example_mail
+    );
 }

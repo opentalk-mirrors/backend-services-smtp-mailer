@@ -390,7 +390,8 @@ pub async fn preview_send_mail(
 
     let duration_between_invite_and_cancellation = Duration::from_secs(cancellation_delay);
     let receiver = Some(to);
-    let lang: Language = Language::from_str("en-US")?;
+    let lang: Language =
+        Language::from_str("en-US").map_err(|e| anyhow::anyhow!("Invalid language. {}", e))?;
 
     let message = match template {
         TemplateVariant::RegisteredInvite => protocol::v1::Message::RegisteredEventInvite(
