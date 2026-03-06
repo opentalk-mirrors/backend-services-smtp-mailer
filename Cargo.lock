@@ -874,7 +874,7 @@ version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "01203cb8918f5711e73891b347816d932046f95f54207710bda99beaeb423bf4"
 dependencies = [
- "fluent-langneg",
+ "fluent-langneg 0.13.1",
  "fluent-syntax",
  "intl-memoizer",
  "intl_pluralrules",
@@ -891,6 +891,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7eebbe59450baee8282d71676f3bfed5689aeab00b27545e83e5f14b1195e8b0"
 dependencies = [
  "unic-langid",
+]
+
+[[package]]
+name = "fluent-langneg"
+version = "0.14.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d5439a5e4ef14dc761bfe1d6ecbc4ba6fd698814ee65e7e623fa85aa9348dcc"
+dependencies = [
+ "icu_locid",
 ]
 
 [[package]]
@@ -924,7 +933,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56264446a01f404469aef9cc5fd4a4d736f68a0f52482bf6d1a54d6e9bbd9476"
 dependencies = [
  "fluent-bundle",
- "fluent-langneg",
+ "fluent-langneg 0.13.1",
  "fluent-syntax",
  "fluent-template-macros",
  "flume",
@@ -1998,10 +2007,12 @@ dependencies = [
  "css-inline",
  "dirs",
  "env_logger",
+ "fluent-langneg 0.14.2",
  "fluent-templates",
  "futures",
  "ics",
  "ics-chrono-tz",
+ "icu_locid",
  "insta",
  "itertools",
  "lapin",

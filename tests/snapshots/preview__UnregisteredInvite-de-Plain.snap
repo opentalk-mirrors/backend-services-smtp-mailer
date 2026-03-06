@@ -1,38 +1,39 @@
 ---
 source: tests/preview.rs
+assertion_line: 42
 expression: example_mail
 ---
-OpenTalk Meeting Invitation - This is a Preview Event
+Einladung zum OpenTalk-Meeting - This is a Preview Event
 
-Ernest Inviter invites you to an OpenTalk Meeting. You can login now at OpenTalk to view this invitation. https://opentalk.example.org/dashboard/meetings/7dfb7d8d-fb57-49ba-aacc-a76b8d390000
+Ernest Inviter lädt Sie zu einem OpenTalk-Meeting ein. Sie können sich einmalig bei OpenTalk einloggen sind, um diese Einladung dort ansehen zu können. https://opentalk.example.org/dashboard/meetings/7dfb7d8d-fb57-49ba-aacc-a76b8d390000
 
-Meeting Information
-Title: This is a Preview Event
+Meeting-Information
+Titel: This is a Preview Event
 Details: This event is a dummy event, and you should have got this invite as a keycloak user. You can safely ignore this description
-Time: 10.10.2024 15:30-16:10
+Uhrzeit: 10.10.2024 15:30-16:10
 
-Link to Meeting: https://opentalk.example.org/room/7dfb7d8d-fb57-49ba-aacc-a76b8d390001
-Meeting Password: password123
-Participate via Phone:
-You can use your phone to participate in this meeting.
+Link zum Meeting: https://opentalk.example.org/room/7dfb7d8d-fb57-49ba-aacc-a76b8d390001
+Meeting-Passwort: password123
+Beitritt via Telefon:
+Sie können Ihr Telefon verwenden um diesem Meeting beizutreten.
 
-Just dial in the following number and enter the given conference ID and conference PIN, or click the Quick-Dial number on your phone.
+Einfach die unten angegebene Nummer wählen und Konferenzkennung sowie Konferenz-PIN angeben. Alternativ direkt mit dem Mobiltelefon auf die Schnelleinwahl klicken und direkt loslegen.
 
-Number: +49 30 405051330
-Conference ID: 1234 5678 90
-Conference PIN: 1234 5678 90
-Quick-Dial: +4930405051330,,1234567890,,1234567890
+Telefonnummer: +49 30 405051330
+Konferenzkennung: 1234 5678 90
+Konferenz-PIN: 1234 5678 90
+Schnelleinwahl: +4930405051330,,1234567890,,1234567890
 
-Shared Folder: https://www.example.org/read
-Folder Password: ReadSecret
+Geteilter Ordner: https://www.example.org/read
+Ordnerpasswort: ReadSecret
 
-This is a public meeting, the links to the livestreams:
+Dies ist eine öffentliche Sitzung, die Links zu den Livestreams:
 streaming service 1: https://example.com/4385f873-6077-4d2c-8b46-dbec62029ac6
 streaming service 2: https://example.com/f544bef8-aa33-475b-8664-fa17c5ca7f83
 
 
-New to OpenTalk? Read our quick guide here: https://opentalk.eu/en/quick-manual
+Neu bei OpenTalk? Eine Kurzanleitung finden Sie hier: https://opentalk.eu/de/kurzanleitung
 
-Note for data protection: The protection of your data is important to us. Personal data can also
-be exchanged when using the video conference solution. For more information on how we handle your
-personal data, please visit https://opentalk.example.org/dataprotection.
+Hinweis zum Datenschutz: Uns ist der Schutz Ihrer Daten besonders wichtig. Auch bei der Verwendung
+der Videokonferenzlösung können personenbezogene Daten ausgetauscht werden. Erfahren Sie mehr zum
+Umgang mit Ihren Daten auf unserer Internetseite unter https://opentalk.example.org/dataprotection.

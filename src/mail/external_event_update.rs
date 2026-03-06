@@ -11,6 +11,7 @@ use opentalk_types_common::users::Language;
 
 use super::{
     MailTemplate, create_ics_attachments, generate_mailbox_name, get_fluent_language_identifier,
+    negotiate_language,
 };
 use crate::{
     i18n,
@@ -28,6 +29,7 @@ fn build_template_context(
     let mut context = tera::Context::new();
 
     let language = language(obj);
+    let language = negotiate_language(language);
     context.insert("language", &language);
     context.insert("invitee", &obj.invitee);
     context.insert("inviter", &obj.inviter);
@@ -66,7 +68,8 @@ impl MailTemplate for ExternalEventUpdate {
         let subject_args = subject_args(&self.event, &self.inviter);
 
         let language = language(self);
-        let lang = get_fluent_language_identifier(language)?;
+        let language = negotiate_language(language);
+        let lang = get_fluent_language_identifier(&language)?;
 
         Ok(i18n::LOCALES.lookup_complete(&lang, "event-update-subject", Some(&subject_args)))
     }
@@ -98,6 +101,7 @@ impl MailTemplate for ExternalEventUpdate {
         builder: &crate::MailBuilder,
     ) -> anyhow::Result<Vec<SinglePart>> {
         let language = &self.inviter.language;
+        let language = negotiate_language(language);
 
         let mut context = tera::Context::new();
         context.insert(
