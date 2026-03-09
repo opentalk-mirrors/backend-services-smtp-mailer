@@ -1,8 +1,9 @@
 ---
-source: crates/opentalk-smtp-mailer/tests/preview.rs
+source: tests/preview.rs
+assertion_line: 42
 expression: example_mail
 ---
-<!DOCTYPE html><html xml:lang="de" lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" style="margin: 0;padding: 0;font-family: 'OpenTalk', Arial;font-weight: 400;color-scheme: light dark;supported-color-schemes: light dark"><head>
+<!DOCTYPE html><html xml:lang="de-DE" lang="de-DE" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" style="margin: 0;padding: 0;font-family: 'OpenTalk', Arial;font-weight: 400;color-scheme: light dark;supported-color-schemes: light dark"><head>
         <!--[if !mso]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta charset="UTF-8">
@@ -16,45 +17,45 @@ expression: example_mail
             </div>
 
             <div class="meeting-description" id="cta" style="overflow: hidden;text-align: center;background: #F1F3F4;padding: 2.5rem;">
-                <h2 style="margin: 0;padding: 0;font-size: 2.063rem;">OpenTalk Meeting was cancelled - This is a Preview Event</h2>
+                <h2 style="margin: 0;padding: 0;font-size: 2.063rem;">OpenTalk-Meeting wurde abgesagt - This is a Preview Event</h2>
                 <p style="line-height: 1.5;font-weight: 600;">
-                Ernest Inviter cancelled an OpenTalk Meeting.
+                Ernest Inviter hat ein OpenTalk-Meeting abgesagt.
                 </p>
             </div>
 
             <div class="details" id="details" style="margin: 2.5rem;text-align: center;line-height: 1.5;">
-    <h2 style="padding: 0;font-size: 1.375rem;font-weight: 600;">Meeting Information</h2>
+    <h2 style="padding: 0;font-size: 1.375rem;font-weight: 600;">Meeting-Information</h2>
     <p>
         
-        <b>Title:</b> This is a Preview Event
+        <b>Titel:</b> This is a Preview Event
         <br>
         <b>Details:</b> This event is a dummy event, and you should have got this invite as a registered user. You can safely ignore this description
         <br>
         
         
 
-        <b>Time:</b> 10.10.2024 15:30-16:10
+        <b>Uhrzeit:</b> 10.10.2024 15:30-16:10
             <br>
         
-        <b>Link to Meeting:</b> <a class="" href="https://opentalk.example.org/room/7dfb7d8d-fb57-49ba-aacc-a76b8d390001" target="_blank" alt="Click to open" style="color: #1573E6;">
-        Open the conference room in new tab/window
+        <b>Link zum Meeting:</b> <a class="" href="https://opentalk.example.org/room/7dfb7d8d-fb57-49ba-aacc-a76b8d390001" target="_blank" alt="Klicken um zu öffnen" style="color: #1573E6;">
+        Öffne den Raum in einem neuen Tab/Fenster
         </a>
 
         
     </p>
-                    <h2 class="margin-top-40" style="margin-top: 2.5rem;padding: 0;font-size: 1.375rem;font-weight: 600;">Participate via Phone</h2>
+                    <h2 class="margin-top-40" style="margin-top: 2.5rem;padding: 0;font-size: 1.375rem;font-weight: 600;">Beitritt via Telefon</h2>
                     <p>
-                        <b>You can use your phone to participate in this meeting.</b><br>
-                        Just dial in the following number and enter the given conference ID and conference PIN, or click the Quick-Dial number on your phone.
+                        <b>Sie können Ihr Telefon verwenden um diesem Meeting beizutreten.</b><br>
+                        Einfach die unten angegebene Nummer wählen und Konferenzkennung sowie Konferenz-PIN angeben. Alternativ direkt mit dem Mobiltelefon auf die Schnelleinwahl klicken und direkt loslegen.
                     </p>
                     <div>
-                        <b>Number:</b> +49 30 405051330
+                        <b>Telefonnummer:</b> +49 30 405051330
                     </div>
                     <div>
-                        <b>Conference ID:</b> 1234 5678 90
+                        <b>Konferenzkennung:</b> 1234 5678 90
                     </div>
                     <div>
-                        <b>Conference PIN:</b> 1234 5678 90
+                        <b>Konferenz-PIN:</b> 1234 5678 90
                     </div>
 
                     
@@ -63,20 +64,20 @@ expression: example_mail
                     
                     
                     <div>
-                        <b>Quick-Dial:</b> <a href="tel:+49-30-405051330,,1234567890,,1234567890" style="color: #1573E6;">+4930405051330,,1234567890,,1234567890</a>
+                        <b>Schnelleinwahl:</b> <a href="tel:+49-30-405051330,,1234567890,,1234567890" style="color: #1573E6;">+4930405051330,,1234567890,,1234567890</a>
                     </div>
                 
 
                     <div class="margin-top-40" style="margin-top: 2.5rem;">
-                        <b>Shared Folder:</b> <a href="https://www.example.org/read" style="color: #1573E6;">https://www.example.org/read</a>
+                        <b>Geteilter Ordner:</b> <a href="https://www.example.org/read" style="color: #1573E6;">https://www.example.org/read</a>
                     </div>
                     <div>
-                        <b>Folder Password:</b> ReadSecret
+                        <b>Ordnerpasswort:</b> ReadSecret
                     </div>
                 
 
                     <div class="margin-top-40" style="margin-top: 2.5rem;">
-                    This is a public meeting, the links to the livestreams:
+                    Dies ist eine öffentliche Sitzung, die Links zu den Livestreams:
                     streaming service 1: https://example.com/4385f873-6077-4d2c-8b46-dbec62029ac6<br>
                     streaming service 2: https://example.com/f544bef8-aa33-475b-8664-fa17c5ca7f83<br>
                     </div>
@@ -87,19 +88,19 @@ expression: example_mail
 
             <div class="footer" id="footer" style="text-align: center;background: #F1F3F4;padding: 2.5rem;line-height: 1.5;">
                 <p>
-                    If the buttons or links don’t work open your browser and type in the following links:<br>
-                    Join Meeting: https://opentalk.example.org/room/7dfb7d8d-fb57-49ba-aacc-a76b8d390001<br>
+                    Sollten die Buttons oder Links nicht funktionieren, können Sie die folgenden URLs in ihrem Browser eingeben:<br>
+                    Meeting beitreten: https://opentalk.example.org/room/7dfb7d8d-fb57-49ba-aacc-a76b8d390001<br>
                 </p>
             </div>
             <div class="quick_guide" style="margin-top: 1rem;padding-left: 2.5rem;padding-right: 2.5rem;line-height: 1.5;">
                                     <div>
-                        New to OpenTalk? Read our quick guide here: <a href="https://opentalk.eu/en/quick-manual">https://opentalk.eu/en/quick-manual</a>
+                        Neu bei OpenTalk? Eine Kurzanleitung finden Sie hier: <a href="https://opentalk.eu/de/kurzanleitung">https://opentalk.eu/de/kurzanleitung</a>
                     </div>
 
             </div>
             <div class="data_protection" style="margin-top: 1rem;padding-left: 2.5rem;padding-right: 2.5rem;line-height: 1.5;">
                                     <div>
-                        Note for data protection: The protection of your data is important to us. Personal data can also be exchanged when using the video conference solution. For more information on how we handle your personal data, please visit <a href="https://opentalk.example.org/dataprotection">https://opentalk.example.org/dataprotection</a>.
+                        Hinweis zum Datenschutz: Uns ist der Schutz Ihrer Daten besonders wichtig. Auch bei der Verwendung der Videokonferenzlösung können personenbezogene Daten ausgetauscht werden. Erfahren Sie mehr zum Umgang mit Ihren Daten auf unserer Internetseite unter <a href="https://opentalk.example.org/dataprotection">https://opentalk.example.org/dataprotection</a>.
                     </div>
 
             </div>

@@ -2,9 +2,10 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::HashMap, str::FromStr};
 
 use anyhow::Result;
+use fluent_langneg::{NegotiationStrategy, negotiate_languages};
 use fluent_templates::{FluentLoader, fluent_bundle::FluentValue};
 use lettre::{
     Message,
@@ -32,6 +33,9 @@ mod unregistered_event_cancellation;
 mod unregistered_event_update;
 mod unregistered_invite;
 mod unregistered_uninvite;
+
+const AVAILABLE_LANGUAGES: &[icu_locid::LanguageIdentifier] =
+    &[icu_locid::langid!("en-US"), icu_locid::langid!("de-DE")];
 
 pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Tera> {
     let base_path = std::env::var("CARGO_MANIFEST_DIR")
@@ -144,7 +148,7 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
 pub struct MailBuilder {
     frontend: settings::Frontend,
     builder: settings::TemplateBuilder,
-    default_language: Language,
+    _default_language: Language,
     support_contact: Option<settings::SupportContact>,
     from_name: String,
     from_email: String,
@@ -168,7 +172,7 @@ impl MailBuilder {
         Ok(Self {
             frontend: settings.frontend.to_owned(),
             builder: settings.template_builder.to_owned(),
-            default_language: settings.languages.default_language.to_owned(),
+            _default_language: settings.languages.default_language.to_owned(),
             support_contact: settings.support_contact.to_owned(),
             from_name: settings.smtp.from_name.to_owned(),
             from_email: settings.smtp.from_email.to_owned(),
@@ -460,4 +464,37 @@ fn create_ics_attachments(ics: Vec<u8>, event_status: EventStatus) -> Vec<Single
         .body(ics);
 
     vec![calendar_attachment, ics_attachment]
+}
+
+pub fn get_fluent_language_identifier(
+    language: &Language,
+) -> std::result::Result<
+    fluent_templates::LanguageIdentifier,
+    <fluent_templates::LanguageIdentifier as FromStr>::Err,
+> {
+    // Return a corresponding unic_langid_impl::LanguageIdentifier (instead of the
+    // icu_locid::langid::LanguageIdentifier embedded in opentalk_types_common::users::language::Language)
+    language.to_string().parse()
+}
+
+fn negotiate_language(language: &Language) -> Language {
+    const DEFAULT_LANGUAGE: &icu_locid::LanguageIdentifier = &AVAILABLE_LANGUAGES[0];
+
+    let language_identifier = language
+        .to_string()
+        .parse()
+        .unwrap_or_else(|_| DEFAULT_LANGUAGE.clone());
+
+    let requested_languages: &[_] = &[language_identifier];
+
+    let negotiated_languages = negotiate_languages(
+        requested_languages,
+        AVAILABLE_LANGUAGES,
+        None,
+        NegotiationStrategy::Lookup,
+    );
+
+    let selected_language = *negotiated_languages.first().unwrap_or(&DEFAULT_LANGUAGE);
+
+    Language(selected_language.clone())
 }

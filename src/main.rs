@@ -52,7 +52,7 @@ enum Commands {
         #[clap(value_enum)]
         template: TemplateVariant,
         /// Language Code
-        #[clap()]
+        #[clap(value_parser = parse_language)]
         language: Language,
     },
     PreviewSend {
@@ -70,6 +70,11 @@ enum Commands {
         /// The monitoring endpoint can be provided optionally
         endpoint: Option<Url>,
     },
+}
+
+fn parse_language(s: &str) -> anyhow::Result<Language> {
+    s.parse()
+        .map_err(|e| anyhow::anyhow!("Invalid language. {}", e))
 }
 
 opentalk_version::build_info!();

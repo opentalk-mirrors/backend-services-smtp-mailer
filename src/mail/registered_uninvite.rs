@@ -9,7 +9,10 @@ use lettre::message::{Mailbox, SinglePart};
 use opentalk_mail_worker_protocol::{self as protocol, v1::RegisteredEventUninvite};
 use opentalk_types_common::users::Language;
 
-use super::{MailTemplate, create_ics_attachments, generate_mailbox_name};
+use super::{
+    MailTemplate, create_ics_attachments, generate_mailbox_name, get_fluent_language_identifier,
+    negotiate_language,
+};
 use crate::{
     i18n,
     ics::{EventStatus, create_ics_v1},
@@ -26,11 +29,7 @@ fn build_template_context(
     let mut context = tera::Context::new();
 
     let language = language(obj);
-    let language = if !language.is_empty() {
-        language
-    } else {
-        &builder.default_language
-    };
+    let language = negotiate_language(language);
     context.insert("language", &language);
     context.insert("invitee", &obj.invitee);
     context.insert("inviter", &obj.inviter);
@@ -64,15 +63,12 @@ impl MailTemplate for RegisteredEventUninvite {
         inliner.inline(&html).map_err(Into::into)
     }
 
-    fn generate_subject(&self, builder: &super::MailBuilder) -> anyhow::Result<String> {
+    fn generate_subject(&self, _builder: &super::MailBuilder) -> anyhow::Result<String> {
         let subject_args = subject_args(&self.event, &self.invitee, &self.inviter);
 
         let language = language(self);
-        let lang = if !language.is_empty() {
-            language.as_str().parse()?
-        } else {
-            builder.default_language.as_str().parse()?
-        };
+        let language = negotiate_language(language);
+        let lang = get_fluent_language_identifier(&language)?;
 
         Ok(i18n::LOCALES.lookup_complete(&lang, "event-uninvite-subject", Some(&subject_args)))
     }
@@ -110,11 +106,8 @@ impl MailTemplate for RegisteredEventUninvite {
         &self,
         builder: &crate::MailBuilder,
     ) -> anyhow::Result<Vec<SinglePart>> {
-        let language = if !self.inviter.language.is_empty() {
-            &self.inviter.language
-        } else {
-            &builder.default_language
-        };
+        let language = &self.inviter.language;
+        let language = negotiate_language(language);
 
         let mut context = tera::Context::new();
         context.insert("meeting_link", &builder.create_join_link(&self.event));

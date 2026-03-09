@@ -1,5 +1,6 @@
 ---
 source: tests/preview.rs
+assertion_line: 42
 expression: example_mail
 ---
 OpenTalk Meeting Invitation was revoked - This is a Preview Event
