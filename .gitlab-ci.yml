@@ -70,7 +70,9 @@ include:
       issue: $[[ inputs.release_issue]]
     ref: v1
     file: .gitlab-ci-template.yml
-
+  - project: opentalk/ci/templates/changelog
+    ref: v2
+    file: .gitlab-ci-template.yml
 
 trigger-docs:
   needs: []
