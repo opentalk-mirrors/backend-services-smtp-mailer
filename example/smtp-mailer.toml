@@ -6,7 +6,7 @@
 # The URL to use to connect to the rabbit mq broker
 url = "amqp://username:password@localhost/%2F"
 # The queue to subscribe to
-mail_task_queue = "opentalk_mailer"
+queue_name = "opentalk_mailer"
 
 # The number of seconds after which the processing of a single mailer task will be aborted.
 # In that case, the task will be rejected to RabbitMQ with the requeue flag on, so RabbitMQ
