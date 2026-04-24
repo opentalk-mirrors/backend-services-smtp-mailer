@@ -4,7 +4,7 @@
 
 # Enable all rules by default
 ---
-defaukt: true
+default: true
 
 # All unordered lists must use '-' consistently at all levels
 MD004:

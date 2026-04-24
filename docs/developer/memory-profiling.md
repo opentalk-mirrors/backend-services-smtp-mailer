@@ -21,7 +21,6 @@ some tooling that is easily available on most widespread Linux distributions.
     Make sure to use a sandbox E-Mail setup, such as
     [MailCrab](https://github.com/tweedegolf/mailcrab). Sending a lot of automated
     E-Mails in a short period of time can get you banned on your E-Mail provider.
-    
 
 ## Profiling the memory usage
 
