@@ -1938,9 +1938,9 @@ checksum = "44d11de466f4a3006fe8a5e7ec84e93b79c70cb992ae0aa0eb631ad2df8abfe2"
 
 [[package]]
 name = "opentalk-mail-worker-protocol"
-version = "0.43.0"
+version = "0.44.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03a19b7e20a1b08819f08b0932ddc15d2fe59fe43a4eaad866853d96f5471e6c"
+checksum = "e3b858e631afa93f262a6684f88591de913f1d154cdb7f2e1f6a7cf46cba5af4"
 dependencies = [
  "chrono",
  "opentalk-types-common",
@@ -1998,9 +1998,9 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-common"
-version = "0.42.3"
+version = "0.44.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac1665715081e6142523a327c9e206230dc0da81e593602b363a25932d1674e8"
+checksum = "ab91de665be29e0e4d5d28738a405d3c2cf819bd4bf5555e35f963662900d68f"
 dependencies = [
  "chrono",
  "chrono-tz 0.10.0",
@@ -2012,7 +2012,7 @@ dependencies = [
  "opentalk-types-common-macros",
  "serde",
  "serde_with",
- "snafu 0.8.9",
+ "snafu 0.9.0",
  "strum 0.28.0",
  "url",
  "uuid",
@@ -2020,21 +2020,21 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-common-identifiers"
-version = "0.33.0"
+version = "0.34.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48920a374d6fd87ca1bfbe237e966e821f8bb0e0ebf0de1039aed64f6a464222"
+checksum = "36d700a6111121551fa2a357077097fa28e6f8d1baf97dd435420971ac10c343"
 dependencies = [
  "derive_more",
  "serde",
  "serde_with",
- "snafu 0.8.9",
+ "snafu 0.9.0",
 ]
 
 [[package]]
 name = "opentalk-types-common-macros"
-version = "0.32.0"
+version = "0.33.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5aff14ff5815976bbedb0c652565beb6e88e80e6886f15eca25a734deab2d344"
+checksum = "4db3542ad75eaca20ff237188eb424256d43f099f7db94b35d734fce11e08158"
 dependencies = [
  "opentalk-types-common-identifiers",
  "proc-macro-crate",
