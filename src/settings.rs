@@ -45,18 +45,27 @@ impl Settings {
     /// Creates a new Settings instance from the provided TOML file.
     /// Specific fields can be set or overwritten with environment variables (See struct level docs for more details).
     pub fn load_from_path(file_path: &Path) -> Result<Settings, ConfigError> {
-        let settings = Config::builder()
+        let config = Config::builder()
             .add_source(File::from(file_path).format(FileFormat::Toml))
             .add_source(
                 Environment::with_prefix("MAILER")
                     .prefix_separator("_")
                     .separator("__"),
             )
-            .build()?
-            .try_deserialize()?;
+            .build()?;
+
+        let mut warn_unknown_key = Self::warn_unused_key;
+        let ignored_deserializer = serde_ignored::Deserializer::new(config, &mut warn_unknown_key);
+        let settings = serde_path_to_error::deserialize(ignored_deserializer)
+            .map_err(|e| ConfigError::Message(e.to_string()))?;
+
         log::info!("Settings loaded from \"{}\".", file_path.to_string_lossy());
 
         Ok(settings)
+    }
+
+    fn warn_unused_key(path: serde_ignored::Path) {
+        log::warn!("Unknown configuration key: {path}");
     }
 
     pub fn load_from_standard_paths() -> Result<Settings, ConfigError> {
