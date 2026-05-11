@@ -31,7 +31,7 @@ repos:
           - --no-deps
           - --document-private-items
   - repo: https://github.com/EmbarkStudios/cargo-deny
-    rev: 0.19.5
+    rev: 0.19.6
     hooks:
       - id: cargo-deny
         args:
