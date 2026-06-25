@@ -31,7 +31,7 @@ nested fields are separated by two underscores `__`. The pattern looks like
 this:
 
 ```sh
-MAILER_<field>__<nested-field>…
+OPENTALK_MAIL_<field>__<nested-field>…
 ```
 
 ### Limitations
@@ -45,7 +45,7 @@ naming pattern that could identify the index of the entry inside the list.
 In order to set the `rabbit_mq.mail_task_queue` field, this environment variable could be used:
 
 ```sh
-MAILER_RABBIT_MQ__MAIL_TASK_QUEUE=opentalk_mailer
+OPENTALK_MAIL_RABBIT_MQ__MAIL_TASK_QUEUE=opentalk_mailer
 ```
 
 ## Example configuration file

@@ -47,8 +47,15 @@ impl Settings {
     pub fn load_from_path(file_path: &Path) -> Result<Settings, ConfigError> {
         let config = Config::builder()
             .add_source(File::from(file_path).format(FileFormat::Toml))
+            // MAILER is the prefix used up until v0.17 and kept for compatibility reasons
             .add_source(
                 Environment::with_prefix("MAILER")
+                    .prefix_separator("_")
+                    .separator("__"),
+            )
+            // The prefix that is following the same convention as other services
+            .add_source(
+                Environment::with_prefix("OPENTALK_MAIL")
                     .prefix_separator("_")
                     .separator("__"),
             )
@@ -704,8 +711,8 @@ mod test {
         let env_support_phone = "+49777666555".to_string();
         let env_support_mail = "support@newexample.com".to_string();
         unsafe {
-            env::set_var("MAILER_SUPPORT_CONTACT__PHONE", &env_support_phone);
-            env::set_var("MAILER_SUPPORT_CONTACT__MAIL", &env_support_mail);
+            env::set_var("OPENTALK_MAIL_SUPPORT_CONTACT__PHONE", &env_support_phone);
+            env::set_var("OPENTALK_MAIL_SUPPORT_CONTACT__MAIL", &env_support_mail);
         }
 
         let settings = Settings::load_from_path(Path::new("./example/smtp-mailer.toml"))?;
