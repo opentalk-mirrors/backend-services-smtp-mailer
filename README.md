@@ -8,15 +8,6 @@ SPDX-License-Identifier: EUPL-1.2
 
 This is the [OpenTalk](https://opentalk.eu/) SMTP Mailer service. Its main purpose is to send out invites and updates on meetings.
 
-## Development
-
-There are two git submodules you need to checkout as a first step, to do so simply run:
-
-```bash
-git submodule init
-git submodule update
-```
-
 ## Deployment
 
 To deploy the smtp mailer you can either use the Docker images provided here in Gitlab

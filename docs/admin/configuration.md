@@ -52,7 +52,7 @@ OPENTALK_MAIL_RABBIT_MQ__MAIL_TASK_QUEUE=opentalk_mailer
 
 This file can be found in the source code distribution under `example/smtp-mailer.toml`
 
-<!-- begin:fromfile:toml:config/smtp-mailer.toml -->
+<!-- begin:fromfile:config/smtp-mailer.toml.md -->
 
 ```toml
 # SPDX-FileCopyrightText: OpenTalk GmbH <mail@opentalk.eu>
@@ -63,7 +63,20 @@ This file can be found in the source code distribution under `example/smtp-maile
 # The URL to use to connect to the rabbit mq broker
 url = "amqp://username:password@localhost/%2F"
 # The queue to subscribe to
-mail_task_queue = "opentalk_mailer"
+queue_name = "opentalk_mailer"
+
+# The number of seconds after which the processing of a single mailer task will be aborted.
+# In that case, the task will be rejected to RabbitMQ with the requeue flag on, so RabbitMQ
+# will attempt to deliver it again.
+#
+# This should be strictly shorter than the RabbitMQ delivery acknowledge timeout
+# which can be set in the RabbitMQ configuration and defaults to 30 minutes
+# (1800 seconds).
+#
+# When set to 0, no timeout exists and the task will block infinitely if it
+# doesn't finish on its own. This is the same behavior that was implemented in
+# SMTP-Mailer 0.14.0 and earlier.
+#task_processing_timeout_seconds = 1200
 
 [smtp]
 # SMTP Cleartext: smtp://user:pass@mailserver.example.org:1234?disable_starttls=true
@@ -106,6 +119,10 @@ mail_task_queue = "opentalk_mailer"
 [languages]
 #default_language = "de-DE"
 
+[monitoring]
+addr = "0.0.0.0"
+port = 11411
+
 # Optional support contact information
 # Adds a support contact section to the template
 [support_contact]
@@ -115,4 +132,4 @@ phone = "+49123321123"
 mail = "support@example.com"
 ```
 
-<!-- end:fromfile:toml:config/smtp-mailer.toml -->
+<!-- end:fromfile:config/smtp-mailer.toml.md -->
