@@ -19,6 +19,9 @@ set -o pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+DOCS_TEMP_DIR=target/docs/temporary
+CONFIG_DIR="$DOCS_TEMP_DIR"/config
+
 # shellcheck source=ci/include/codify.sh
 source "$SCRIPT_DIR"/include/codify.sh
 
@@ -27,4 +30,8 @@ if ! command -v opentalk-ci-doc-updater; then
   exit 1
 fi
 
-opentalk-ci-doc-updater generate --raw-files-dir target/docs/temporary/ --documentation-dir docs/
+mkdir -p "$CONFIG_DIR"
+
+codify toml < example/smtp-mailer.toml > "$CONFIG_DIR"/smtp-mailer.toml.md
+
+opentalk-ci-doc-updater generate --raw-files-dir "$DOCS_TEMP_DIR" --documentation-dir docs/
