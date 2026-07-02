@@ -19,7 +19,7 @@ COPY ./resources ./resources
 
 RUN cargo auditable build --release --locked --package opentalk-smtp-mailer
 
-FROM ubuntu:noble
+FROM ubuntu:resolute
 
 RUN apt-get update && \
     apt-get full-upgrade -y && \
