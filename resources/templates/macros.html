@@ -1,5 +1,5 @@
 {# Maybe add a button macro using this https://www.litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design/ #}
-{% macro link(fluent_key, lang, href, additional=false, class="") -%}
+{% component link(fluent_key, lang, href, additional=false, class="") -%}
     {% set alt_fluent_key = fluent_key ~ ".alt" -%}
     {% set alt_text =  fluent(key = alt_fluent_key, lang=lang, href=href) -%}
 
@@ -10,4 +10,4 @@
             {{ fluent(key=fluent_key, lang=lang, href=href, additional=additional) }}
         {% endif -%}
     </a>
-{% endmacro input -%}
+{% endcomponent link -%}
