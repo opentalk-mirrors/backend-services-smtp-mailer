@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 use anyhow::{Context, Result};
+use lapin::options::QueueDeclareOptions;
 use tokio_executor_trait::Tokio as TokioExecutor;
 use tokio_reactor_trait::Tokio as TokioReactor;
 
@@ -26,8 +27,13 @@ impl RabbitMqService {
         .context("lapin connect")?;
 
         let channel = conn.create_channel().await?;
+        let options = QueueDeclareOptions {
+            durable: true,
+            exclusive: false,
+            ..Default::default()
+        };
         let queue = channel
-            .queue_declare(&settings.queue_name, Default::default(), Default::default())
+            .queue_declare(&settings.queue_name, options, Default::default())
             .await?;
         let consumer = channel
             .basic_consume(
