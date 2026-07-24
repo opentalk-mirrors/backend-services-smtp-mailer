@@ -1580,6 +1580,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b4baf93f58d4425749ca49a51c50ebab072c5df6994d08fed93541c331481dc"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1910,9 +1919,9 @@ checksum = "44d11de466f4a3006fe8a5e7ec84e93b79c70cb992ae0aa0eb631ad2df8abfe2"
 
 [[package]]
 name = "opentalk-mail-worker-protocol"
-version = "0.44.1"
+version = "0.46.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3b858e631afa93f262a6684f88591de913f1d154cdb7f2e1f6a7cf46cba5af4"
+checksum = "347f537b0ad25aa4aa715894516b5305904c98680eec160396e2ea0a4e35f797"
 dependencies = [
  "chrono",
  "opentalk-types-common",
@@ -1940,7 +1949,7 @@ dependencies = [
  "ics-chrono-tz",
  "icu_locid",
  "insta",
- "itertools",
+ "itertools 0.14.0",
  "lapin",
  "lettre",
  "log",
@@ -1970,16 +1979,16 @@ dependencies = [
 
 [[package]]
 name = "opentalk-types-common"
-version = "0.44.1"
+version = "0.46.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef7a0e9a29c07b2bd0a2927e09353b0920e644a70e6ea85f6e08affb2a64da6c"
+checksum = "27e05bd1830eadedad5adcab8e24034edd6d705ca28e089a2aefc2321fbc7646"
 dependencies = [
  "chrono",
  "chrono-tz 0.10.0",
  "derive_more",
  "email_address",
  "icu_locid",
- "itertools",
+ "itertools 0.15.0",
  "opentalk-types-common-identifiers",
  "opentalk-types-common-macros",
  "serde",
