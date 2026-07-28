@@ -65,7 +65,7 @@ serde_ignored = "0.1"
 [dev-dependencies]
 insta = "1.40.0"
 rstest = "0.26.0"
-serial_test = "3"
+serial_test = "4"
 
 [build-dependencies]
 opentalk-version = "0.4.0"
