@@ -16,8 +16,7 @@ use lettre::{
 };
 use opentalk_mail_worker_protocol as proto;
 use opentalk_types_common::users::{Language, UserTitle};
-use serde_json::{Value, to_value};
-use tera::{Tera, try_get_value};
+use tera::{Kwargs, State, Tera, TeraResult};
 
 use crate::{ics::EventStatus, settings};
 
@@ -43,6 +42,17 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         .unwrap_or_default();
 
     let mut tera = Tera::default();
+
+    // Functions, filters and components are validated at the time a template is added, so
+    // everything the templates rely on has to be registered before adding them.
+    tera.register_function("fluent", FluentLoader::new(&*crate::i18n::LOCALES));
+
+    tera.register_filter("wrap_text", wrap_text_filter);
+    tera.register_filter("build_link", build_link);
+    tera.register_filter("space_groups", space_groups_filter);
+    tera.register_filter("format_telephone_number", format_telephone_number_filter);
+    tera.register_filter("date", tera_contrib::dates::date);
+
     tera.add_raw_template(
         "macros.html",
         include_str!("../../resources/templates/macros.html"),
@@ -91,10 +101,6 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
         format!("{base_path}resources/templates/data_protection_ics.include"),
         Some("data_protection_ics.include"),
     )?;
-    tera.add_raw_template(
-        "ics_description.txt",
-        include_str!("../../resources/templates/ics_description.txt"),
-    )?;
     tera.add_template_file(
         format!("{base_path}resources/templates/adhoc_txt.include"),
         Some("adhoc_txt.include"),
@@ -110,6 +116,13 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
     tera.add_template_file(
         format!("{base_path}resources/templates/streaming_links_html.include"),
         Some("streaming_links_html.include"),
+    )?;
+    // `ics_description.txt` includes `streaming_links_txt.include` and
+    // `data_protection_ics.include`. Includes are validated when the template is added, so it has
+    // to come after its dependencies.
+    tera.add_raw_template(
+        "ics_description.txt",
+        include_str!("../../resources/templates/ics_description.txt"),
     )?;
     tera.add_template_files(vec![
         (
@@ -132,14 +145,6 @@ pub(crate) fn create_template_engine(settings: &settings::Settings) -> Result<Te
             .iter()
             .map(|(path, name)| (path, Some(name))),
     )?;
-    tera.build_inheritance_chains()?;
-
-    tera.register_function("fluent", FluentLoader::new(&*crate::i18n::LOCALES));
-
-    tera.register_filter("wrap_text", wrap_text_filter);
-    tera.register_filter("build_link", build_link);
-    tera.register_filter("space_groups", space_groups_filter);
-    tera.register_filter("format_telephone_number", format_telephone_number_filter);
 
     Ok(tera)
 }
@@ -301,34 +306,22 @@ impl MailTemplate for proto::v1::Message {
     }
 }
 
-pub fn wrap_text_filter(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
-    let s = try_get_value!("wrap_text", "value", String, value);
+pub fn wrap_text_filter(value: &str, kwargs: Kwargs, _: &State) -> TeraResult<String> {
+    let width = kwargs.get("width")?.unwrap_or(80);
 
-    let width = match args.get("width") {
-        Some(width) => try_get_value!("wrap_text", "width", usize, width),
-        None => 80,
-    };
-
-    let wrapped_string = textwrap::fill(s.as_str(), width);
-    Ok(to_value(wrapped_string).unwrap())
+    let wrapped_string = textwrap::fill(value, width);
+    Ok(wrapped_string)
 }
 
-pub fn build_link(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
-    let s = try_get_value!("build_link", "value", String, value);
+pub fn build_link(value: &str, kwargs: Kwargs, _: &State) -> TeraResult<String> {
+    let caption = kwargs.get("caption")?.unwrap_or(value);
 
-    let caption = match args.get("caption") {
-        Some(caption) => try_get_value!("build_link", "caption", String, caption),
-        None => s.clone(),
-    };
-
-    let link_string = format!("<a href=\"{s}\">{caption}</a>");
-    Ok(to_value(link_string).unwrap())
+    let link_string = format!("<a href=\"{value}\">{caption}</a>");
+    Ok(link_string)
 }
 
-pub fn space_groups_filter(value: &Value, _: &HashMap<String, Value>) -> tera::Result<Value> {
-    let s = try_get_value!("space_groups", "value", String, value);
-
-    let grouped_string = s
+pub fn space_groups_filter(value: &str, _: Kwargs, _: &State) -> TeraResult<String> {
+    let grouped_string = value
         .chars()
         .enumerate()
         .fold(String::new(), |mut acc, (index, c)| {
@@ -339,20 +332,16 @@ pub fn space_groups_filter(value: &Value, _: &HashMap<String, Value>) -> tera::R
 
             acc
         });
-    Ok(to_value(grouped_string).unwrap())
+
+    Ok(grouped_string)
 }
 
 pub fn format_telephone_number_filter(
-    value: &Value,
-    args: &HashMap<String, Value>,
-) -> tera::Result<Value> {
-    let input = try_get_value!("format_telephone_number", "value", String, value);
-
-    let mode = match args.get("mode") {
-        Some(val) => try_get_value!("format_telephone_number", "mode", String, val),
-        None => "e164".to_owned(),
-    };
-
+    value: &str,
+    kwargs: Kwargs,
+    _: &State,
+) -> TeraResult<String> {
+    let mode = kwargs.get("mode")?.unwrap_or_else(|| "e164".to_owned());
     let mode = match mode.as_str() {
         "international" => phonenumber::Mode::International,
         "national" => phonenumber::Mode::National,
@@ -361,22 +350,21 @@ pub fn format_telephone_number_filter(
         _ => phonenumber::Mode::E164,
     };
 
-    let number = input.clone();
-    let result = std::panic::catch_unwind(move || phonenumber::parse(None, number));
+    let result = std::panic::catch_unwind(move || phonenumber::parse(None, value));
 
     let formatted_telephone_number = match result {
         Ok(Ok(number)) => number.format().mode(mode).to_string(),
         e if mode == phonenumber::Mode::Rfc3966 => {
             log::warn!(" Failed to parse phone number {e:?}");
-            format!("tel:{input}")
+            format!("tel:{value}")
         }
         e => {
             log::warn!(" Failed to parse phone number {e:?}");
-            input
+            value.to_owned()
         }
     };
 
-    Ok(to_value(formatted_telephone_number).unwrap())
+    Ok(formatted_telephone_number)
 }
 
 fn common_subject_args(
