@@ -121,7 +121,7 @@ impl MailTemplate for UnregisteredEventInvite {
 
         let description = builder.tera.render("ics_description.txt", &context)?;
 
-        let name = format!("{} {}", &self.invitee.first_name, &self.invitee.last_name);
+        let name = format!("{} {}", self.invitee.first_name, self.invitee.last_name);
         let invitee = crate::ics::Invitee::WithName {
             email: self.invitee.email.as_ref(),
             name: &name,
