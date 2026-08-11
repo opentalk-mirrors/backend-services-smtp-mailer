@@ -469,6 +469,7 @@ mod test {
             description: "Very descriptive".parse().expect("Example must be valid"),
             room: Room {
                 id: Uuid::from_u128(3),
+                alias: None,
                 password: Some(RoomPassword::from_str("ddd").expect("Invalid room password")),
             },
             revision: 0,

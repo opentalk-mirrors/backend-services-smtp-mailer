@@ -187,9 +187,17 @@ impl MailBuilder {
 
     fn create_join_link(&self, event: &proto::v1::Event) -> String {
         let template = &self.builder.join_link_builder;
+        // Use the room alias if present, otherwise fall back to the room ID
+        let room_alias_or_id = event
+            .room
+            .alias
+            .as_ref()
+            .map(ToString::to_string)
+            .unwrap_or_else(|| event.room.id.to_string());
+
         template
             .replace("{base_url}", &self.frontend.base_url)
-            .replace("{room_id}", &event.room.id.to_string())
+            .replace("{room_id}", &room_alias_or_id)
     }
 
     fn create_dashboard_event_link(&self, event: &proto::v1::Event) -> String {
@@ -485,4 +493,47 @@ fn negotiate_language(language: &Language) -> Language {
     let selected_language = *negotiated_languages.first().unwrap_or(&DEFAULT_LANGUAGE);
 
     Language(selected_language.clone())
+}
+
+#[cfg(test)]
+mod tests {
+    use insta::assert_snapshot;
+    use opentalk_mail_worker_protocol::v1::{Event, Room};
+    use opentalk_types_common::{rooms::RoomAlias, utils::ExampleData};
+    use uuid::Uuid;
+
+    use super::MailBuilder;
+    use crate::settings::Settings;
+
+    #[test]
+    fn create_join_link_uses_alias_if_present() {
+        let builder = MailBuilder::new(&Settings::default()).unwrap();
+        let event = Event {
+            room: Room {
+                id: Uuid::nil(),
+                alias: Some(RoomAlias::example_data()),
+                password: None,
+            },
+            ..Event::example_data()
+        };
+
+        let produced = builder.create_join_link(&event);
+        assert_snapshot!(produced, @"https://opentalk.example.org/room/personal-room-name_0000000000000000");
+    }
+
+    #[test]
+    fn create_join_link_falls_back_to_room_id() {
+        let builder = MailBuilder::new(&Settings::default()).unwrap();
+        let event = Event {
+            room: Room {
+                id: Uuid::nil(),
+                alias: None,
+                password: None,
+            },
+            ..Event::example_data()
+        };
+
+        let produced = builder.create_join_link(&event);
+        assert_snapshot!(produced, @"https://opentalk.example.org/room/00000000-0000-0000-0000-000000000000");
+    }
 }
