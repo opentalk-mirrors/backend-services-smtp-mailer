@@ -211,6 +211,7 @@ fn generate_example_event(description: String) -> anyhow::Result<Event> {
         description: description.parse()?,
         room: Room {
             id: Uuid::from_u128(0x7dfb7d8d_fb57_49ba_aacc_a76b8d390001),
+            alias: None,
             password: Some(
                 RoomPassword::from_str("password123")
                     .context("Example room password was invalid")?,
