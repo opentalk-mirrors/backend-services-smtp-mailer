@@ -55,6 +55,7 @@ update-changelog VERSION: _check_opentalk_git_cliff
     GITLAB_REPO=opentalk/backend/services/smtp-mailer \
     opentalk-git-cliff \
         --unreleased \
+        --use-branch-tags \
         --tag "v{{ VERSION }}" \
         --prepend CHANGELOG.md
 
@@ -62,6 +63,6 @@ update-changelog VERSION: _check_opentalk_git_cliff
 commit-release: _check_yq
     #!/usr/bin/env bash
     set -eu -o pipefail
-    VERSION=$(cat Cargo.toml | yq -ptoml ".workspace.package.version")
+    VERSION=$(cat Cargo.toml | yq -ptoml ".package.version")
     git commit -a -m "chore(release): prepare release ${VERSION}"
     git log HEAD^..HEAD
